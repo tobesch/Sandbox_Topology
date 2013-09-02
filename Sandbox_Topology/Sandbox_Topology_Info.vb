@@ -1,6 +1,6 @@
 ﻿Imports Grasshopper.Kernel
 
-Public Class SandboxInfo
+Public Class Sandbox_Topology_Info
     Inherits GH_AssemblyInfo
 
     Public Overrides ReadOnly Property AssemblyName() As String
