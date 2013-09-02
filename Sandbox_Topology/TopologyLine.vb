@@ -30,7 +30,7 @@ Public Class TopologyLine
     ''' </summary>
     Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
         pManager.AddPointParameter("List of points", "P", "Ordered list of unique points", GH_ParamAccess.list)
-        pManager.AddIntegerParameter("Line-point structure", "LP", "For each line list both points indices connected to it", GH_ParamAccess.tree)
+        pManager.AddIntegerParameter("Line-point structure", "LP", "For each line list both end points indices", GH_ParamAccess.tree)
         pManager.AddIntegerParameter("Point-Line structure", "PL", "For each point list all line indices connected to it", GH_ParamAccess.tree)
     End Sub
 
@@ -54,16 +54,15 @@ Public Class TopologyLine
         If (Not _T > 0) Then Return
 
         '4. Do something useful.
-        Dim _lineList As List(Of Line) = _L
 
         '4.1. get topology
-        Dim _ptDict As Dictionary(Of String, Point3d) = getPointDict(_lineList, _T)
-        Dim _lineDict As Dictionary(Of String, List(Of String)) = getLineDict(_lineList, _ptDict, _T)
-        Dim _ptLineDict As Dictionary(Of String, List(Of String)) = getPointLineDict(_lineDict, _ptDict)
+        Dim _ptList As List(Of PointTopological) = getPointDict(_L, _T)
+        Dim _lineList As List(Of LineTopological) = getLineDict(_L, _ptList, _T)
+        Dim _ptLineDict As Dictionary(Of String, List(Of String)) = getPointLineDict(_lineList, _ptList)
 
         ' 4.2: return results
         Dim _PValues As New List(Of Point3d)
-        For Each _pair As KeyValuePair(Of String, Point3d) In _ptDict
+        For Each _pair As KeyValuePair(Of String, Point3d) In _ptList
             _PValues.Add(_pair.Value)
         Next
 
@@ -105,10 +104,10 @@ Public Class TopologyLine
 
     End Function
 
-    Private Function containsPoint(ByVal _points As Dictionary(Of String, Point3d), ByVal _check As Point3d, ByVal _T As Double) As Boolean
+    Private Function containsPoint(ByVal _points As List(Of PointTopological), ByVal _check As Point3d, ByVal _T As Double) As Boolean
 
-        For Each _pt As Point3d In _points.Values
-            If _pt.DistanceTo(_check) < _T Then
+        For Each _item As PointTopological In _points
+            If _item.Point.DistanceTo(_check) < _T Then
                 'consider it the same point
                 Return True
             End If
@@ -148,9 +147,9 @@ Public Class TopologyLine
 
     End Function
 
-    Private Function getLineDict(ByVal L As List(Of Line), ByVal _ptDict As Dictionary(Of String, Point3d), ByVal _T As Double) As Dictionary(Of String, List(Of String))
+    Private Function getLineDict(ByVal L As List(Of Line), ByVal _ptDict As List(Of PointTopological), ByVal _T As Double) As List(Of LineTopological)
 
-        Dim _lDict As New Dictionary(Of String, List(Of String))
+        Dim _lDict As New List(Of LineTopological)
 
         Dim _count As Int32 = 0
         For Each _line As Line In L
@@ -163,11 +162,11 @@ Public Class TopologyLine
 
             Dim _values As New List(Of String)
 
-            For i As Int32 = 0 To UBound(_points)
+            For i As Int32 = 0 To 1
 
-                For Each _key As String In _ptDict.Keys
-                    If _ptDict.Item(_key).DistanceTo(_points(i)) < _T Then
-                        _values.Add(_key)
+                For Each _item As PointTopological In _ptDict
+                    If _item.Point.DistanceTo(_points(i)) < _T Then
+                        _values.Add(_item.Index)
                         Exit For
                     End If
                 Next
@@ -184,9 +183,9 @@ Public Class TopologyLine
 
     End Function
 
-    Private Function getPointDict(ByVal L As List(Of Line), ByVal _T As Double) As Dictionary(Of String, Point3d)
+    Private Function getPointDict(ByVal L As List(Of Line), ByVal _T As Double) As List(Of PointTopological)
 
-        Dim _ptDict As New Dictionary(Of String, Point3d)
+        Dim _ptList As New List(Of PointTopological)
 
         Dim _count As Int32 = 0
         For Each _line As Line In L
@@ -198,10 +197,10 @@ Public Class TopologyLine
             For i As Int32 = 0 To UBound(_points)
 
                 ' check if point exists in _ptDict already
-                If Not containsPoint(_ptDict, _points(i), _T) Then
+                If Not containsPoint(_ptList, _points(i), _T) Then
                     Dim _key As String = "P" & _count
                     Dim _value As Point3d = _points(i)
-                    _ptDict.Add(_key, _value)
+                    _ptList.Add(New PointTopological(_points(i), _count))
                     _count = _count + 1
                 End If
 
@@ -209,7 +208,7 @@ Public Class TopologyLine
 
         Next
 
-        Return _ptDict
+        Return _ptList
 
     End Function
 

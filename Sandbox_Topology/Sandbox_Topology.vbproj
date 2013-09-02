@@ -74,18 +74,12 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CurveInterpreter.vb" />
-    <Compile Include="LabelElements.vb" />
+    <Compile Include="LineTopological.vb" />
+    <Compile Include="PointTopological.vb" />
     <Compile Include="TopologyLine.vb" />
     <Compile Include="FilterPolygonVertices.vb" />
-    <Compile Include="NCGeneration.vb" />
-    <Compile Include="NCSettings.vb" />
-    <Compile Include="NC_3X_Contour.vb" />
-    <Compile Include="NC_3X_Drilling.vb" />
-    <Compile Include="NC_Polygonalize.vb" />
-    <Compile Include="PolygonPlanarize.vb" />
     <Compile Include="TopologyPolygon.vb" />
-    <Compile Include="SandboxInfo.vb" />
+    <Compile Include="Sandbox_Topology_Info.vb" />
     <Compile Include="TopologyPlate.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -103,7 +97,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="TopologyPlateSorted.vb" />
-    <Compile Include="ToolpathUnfold.vb" />
     <Compile Include="TopologyPolygonEdge.vb" />
   </ItemGroup>
   <ItemGroup>

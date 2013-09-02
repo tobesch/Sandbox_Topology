@@ -17,7 +17,7 @@ Imports Rhino.PlugIns
 <Assembly: ComVisible(False)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("cc73f3d8-5b1c-45af-a4b1-ca797ada22af")> ' This will also be the Guid of the Rhino plug-in
+<Assembly: Guid("2eee9563-1816-41ed-9d23-29106e616953")>  ' This will also be the Guid of the Rhino plug-in
 
 ' Version information for an assembly consists of the following four values:
 '
