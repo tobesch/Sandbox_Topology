@@ -98,7 +98,7 @@
     </Compile>
     <Compile Include="TopologyPlateSorted.vb" />
     <Compile Include="TopologyPolygonEdge.vb" />
-    <Compile Include="TopoplogyLineFilter.vb" />
+    <Compile Include="TopologyLineFilter.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
