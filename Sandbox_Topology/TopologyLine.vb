@@ -30,8 +30,9 @@ Public Class TopologyLine
     ''' </summary>
     Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
         pManager.AddPointParameter("List of points", "P", "Ordered list of unique points", GH_ParamAccess.list)
-        pManager.AddIntegerParameter("Line-point structure", "LP", "For each line list both end points indices", GH_ParamAccess.tree)
-        pManager.AddIntegerParameter("Point-Line structure", "PL", "For each point list all line indices connected to it", GH_ParamAccess.tree)
+        pManager.AddIntegerParameter("Line-Point structure", "LP", "For each line list both end points indices", GH_ParamAccess.tree)
+        pManager.AddIntegerParameter("Point-Point structure", "PP", "For each point list all point indices connected to it", GH_ParamAccess.tree)
+        pManager.AddLineParameter("Point-Line structure", "PL", "For each point list all lines connected to it", GH_ParamAccess.tree)
     End Sub
 
     ''' <summary>
@@ -56,36 +57,49 @@ Public Class TopologyLine
         '4. Do something useful.
 
         '4.1. get topology
-        Dim _ptList As List(Of PointTopological) = getPointDict(_L, _T)
-        Dim _lineList As List(Of LineTopological) = getLineDict(_L, _ptList, _T)
-        Dim _ptLineDict As Dictionary(Of String, List(Of String)) = getPointLineDict(_lineList, _ptList)
+        Dim _ptList As List(Of PointTopological) = getPointTopo(_L, _T)
+        Dim _lineList As List(Of LineTopological) = getLineTopo(_L, _ptList, _T)
+        Call setPointLineTopo(_lineList, _ptList)
 
         ' 4.2: return results
         Dim _PValues As New List(Of Point3d)
-        For Each _pair As KeyValuePair(Of String, Point3d) In _ptList
-            _PValues.Add(_pair.Value)
+        For Each _ptTopo As PointTopological In _ptList
+            _PValues.Add(_ptTopo.Point)
         Next
 
         Dim _LPValues As New Grasshopper.DataTree(Of Int32)
-        For Each _ptList As List(Of String) In _lineDict.Values
+        For Each _lineTopo As LineTopological In _lineList
             Dim _path As New GH_Path(_LPValues.BranchCount)
-            For Each _item As String In _ptList
-                _LPValues.Add(_item.Substring(1), _path)
+            _LPValues.Add(_lineTopo.Startindex, _path)
+            _LPValues.Add(_lineTopo.Endindex, _path)
+        Next
+
+        Dim _PLValues As New Grasshopper.DataTree(Of Line)
+        For Each _ptTopo As PointTopological In _ptList
+            Dim _path As New GH_Path(_PLValues.BranchCount)
+            For Each _lineTopo As LineTopological In _ptTopo.Lines
+                _PLValues.Add(_L.Item(_lineTopo.Index), _path)
             Next
         Next
 
-        Dim _PLValues As New Grasshopper.DataTree(Of Int32)
-        For Each _fList As List(Of String) In _ptLineDict.Values
-            Dim _path As New GH_Path(_PLValues.BranchCount)
-            For Each _item As String In _fList
-                _PLValues.Add(_item.Substring(1), _path)
+        Dim _PPValues As New Grasshopper.DataTree(Of Int32)
+        For Each _ptTopo As PointTopological In _ptList
+            Dim _path As New GH_Path(_PPValues.BranchCount)
+            For Each _lineTopo As LineTopological In _ptTopo.Lines
+                If _ptTopo.Index = _lineTopo.Startindex Then
+                    _PPValues.Add(_lineTopo.Endindex, _path)
+                ElseIf _ptTopo.Index = _lineTopo.Endindex Then
+                    _PPValues.Add(_lineTopo.Startindex, _path)
+                End If
             Next
         Next
 
 
         DA.SetDataList(0, _PValues)
         DA.SetDataTree(1, _LPValues)
-        DA.SetDataTree(2, _PLValues)
+        DA.SetDataTree(2, _PPValues)
+        DA.SetDataTree(3, _PLValues)
+
 
     End Sub
 
@@ -117,37 +131,29 @@ Public Class TopologyLine
 
     End Function
 
-    Private Function getPointLineDict(ByVal _lineDict As Dictionary(Of String, List(Of String)), ByVal _ptDict As Dictionary(Of String, Point3d)) As Dictionary(Of String, List(Of String))
+    Private Sub setPointLineTopo(ByVal _lineList As List(Of LineTopological), ByVal _pointList As List(Of PointTopological))
 
-        Dim _ptLineDict As New Dictionary(Of String, List(Of String))
+        For Each _pt As PointTopological In _pointList
 
-        For Each _ptID As String In _ptDict.Keys
+            Dim _lList As New List(Of LineTopological)
 
-            Dim _lList As New List(Of String)
+            For Each _l As LineTopological In _lineList
 
-            'For i As Int32 = 0 To _fDict.Values.Count - 1
-            'For Each _values As List(Of String) In _fDict.Values
-            For Each _key As String In _lineDict.Keys
-                Dim _values As List(Of String) = _lineDict.Item(_key)
-
-                For j As Int32 = 0 To _values.Count - 1
-                    If _ptID = _values.Item(j) Then
-                        _lList.Add(_key)
-                        '_string = _string & (_fDict.Keys(i)) & ", "
-                    End If
-                Next
+                If _pt.Index = _l.Startindex Then
+                    _lList.Add(_l)
+                ElseIf _pt.Index = _l.Endindex Then
+                    _lList.Add(_l)
+                End If
 
             Next
 
-            _ptLineDict.Add(_ptID, _lList)
+            _pt.Lines = _lList
 
         Next
 
-        Return _ptLineDict
+    End Sub
 
-    End Function
-
-    Private Function getLineDict(ByVal L As List(Of Line), ByVal _ptDict As List(Of PointTopological), ByVal _T As Double) As List(Of LineTopological)
+    Private Function getLineTopo(ByVal L As List(Of Line), ByVal _ptDict As List(Of PointTopological), ByVal _T As Double) As List(Of LineTopological)
 
         Dim _lDict As New List(Of LineTopological)
 
@@ -160,20 +166,20 @@ Public Class TopologyLine
             _points(0) = _line.PointAt(0)
             _points(1) = _line.PointAt(1)
 
-            Dim _values As New List(Of String)
+            Dim _indices As New List(Of String)
 
             For i As Int32 = 0 To 1
 
                 For Each _item As PointTopological In _ptDict
                     If _item.Point.DistanceTo(_points(i)) < _T Then
-                        _values.Add(_item.Index)
+                        _indices.Add(_item.Index)
                         Exit For
                     End If
                 Next
 
             Next
 
-            _lDict.Add(_Lkey, _values)
+            _lDict.Add(New LineTopological(_indices.Item(0), _indices.Item(1), _count))
 
             _count = _count + 1
 
@@ -183,7 +189,7 @@ Public Class TopologyLine
 
     End Function
 
-    Private Function getPointDict(ByVal L As List(Of Line), ByVal _T As Double) As List(Of PointTopological)
+    Private Function getPointTopo(ByVal L As List(Of Line), ByVal _T As Double) As List(Of PointTopological)
 
         Dim _ptList As New List(Of PointTopological)
 

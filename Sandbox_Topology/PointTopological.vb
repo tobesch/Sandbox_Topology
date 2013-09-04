@@ -3,7 +3,7 @@
 Public Class PointTopological
 
     Private _p As Point3d
-    Private _i As Int32
+    Private _i As Int32     'internal indexing of the points
     Private _l As List(Of LineTopological) = Nothing
     Private _endIndex As Int32
 
@@ -29,7 +29,10 @@ Public Class PointTopological
         End Get
     End Property
 
-    Public ReadOnly Property Lines As List(Of LineTopological)
+    Public Property Lines As List(Of LineTopological)
+        Set(ByVal value As List(Of LineTopological))
+            _l = value
+        End Set
         Get
             Return _l
         End Get
