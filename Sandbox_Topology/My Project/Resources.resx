@@ -124,18 +124,6 @@
   <data name="Echinoid_1_TopologySorted" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Echinoid_1_TopologySorted.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Echinoid_2_EdgeDispatch" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Echinoid_2_EdgeDispatch.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Echinoid_3_Interpreter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Echinoid_3_Interpreter.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Echinoid_3_NC" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Echinoid_3_NC.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Echinoid_3_NCSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Echinoid_3_NCSettings.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Sandbox_Labels" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Sandbox_Labels.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -158,10 +146,37 @@
     <value>..\Resources\Sandbox_Unfold.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="TopologyBrep" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TopologyBrep.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TopologyBrepFilterEdges" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TopologyBrepFilterEdges.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TopologyBrepFilterPoints" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TopologyBrepFilterPoints.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="TopologyLine" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TopologyLine.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TopologyLineFilter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TopologyLineFilter.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TopologyMesh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TopologyMesh.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TopologyMeshFilterEdges" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TopologyMeshFilterEdges.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TopologyMeshFilterPoints" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TopologyMeshFilterPoints.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TopologyPoly" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TopologyPoly.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TopologyPolyFilterEdges" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TopologyPolyFilterEdges.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TopologyPolyFilterPoints" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TopologyPolyFilterPoints.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

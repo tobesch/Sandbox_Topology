@@ -188,6 +188,42 @@
     <None Include="Resources\Sandbox_Polygonalize.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Echinoid_2_EdgeDispatch1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Echinoid_3_Interpreter1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Echinoid_3_NC1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyBrep.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyBrepFilterEdges.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyBrepFilterPoints.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyMesh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyMeshFilterEdges.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyMeshFilterPoints.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyPoly.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyPolyFilterEdges.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyPolyFilterPoints.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\TopologyLine.png" />
   </ItemGroup>
   <ItemGroup>
