@@ -33,6 +33,7 @@ Public Class TopologyMeshEdge
     ''' Registers all the output parameters for this component.
     ''' </summary>
     Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
+        pManager.AddLineParameter("List of edges", "E", "Ordered list of mesh edges", GH_ParamAccess.list)
         pManager.AddIntegerParameter("Face-Face structure", "FF", "For each face the list of adjacent face indices", GH_ParamAccess.tree)
         pManager.AddIntegerParameter("Edge-Face structure", "EF", "For each edge the list of adjacent face indices", GH_ParamAccess.tree)
     End Sub
@@ -81,8 +82,14 @@ Public Class TopologyMeshEdge
             _EFVAlues.AddRange(_faces, ef_path)
         Next
 
-        DA.SetDataTree(0, _FFVAlues)
-        DA.SetDataTree(1, _EFVAlues)
+        Dim _EList As New List(Of Line)
+        For _eIndex As Int32 = 0 To _edgeList.Count - 1
+            _EList.Add(_edgeList.EdgeLine(_eIndex))
+        Next
+
+        DA.SetDataList(0, _EList)
+        DA.SetDataTree(1, _FFVAlues)
+        DA.SetDataTree(2, _EFVAlues)
 
     End Sub
 
@@ -93,7 +100,7 @@ Public Class TopologyMeshEdge
     Protected Overrides ReadOnly Property Icon() As System.Drawing.Bitmap
         Get
             'You can add image files to your project resources and access them like this:
-            Return My.Resources.TopologyMesh
+            Return My.Resources.TopologyMeshEdge
             'Return Nothing
         End Get
     End Property

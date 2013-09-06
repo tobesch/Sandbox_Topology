@@ -109,23 +109,30 @@ Namespace My.Resources
             End Get
         End Property
         
-        Public ReadOnly Property TopologyBrep() As System.Drawing.Bitmap
+        Public ReadOnly Property TopologyBrepEdge() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("TopologyBrep", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("TopologyBrepEdge", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
-        Public ReadOnly Property TopologyBrepFilterEdges() As System.Drawing.Bitmap
+        Public ReadOnly Property TopologyBrepEdgeFilter() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("TopologyBrepFilterEdges", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("TopologyBrepEdgeFilter", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
-        Public ReadOnly Property TopologyBrepFilterPoints() As System.Drawing.Bitmap
+        Public ReadOnly Property TopologyBrepPoint() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("TopologyBrepFilterPoints", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("TopologyBrepPoint", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Public ReadOnly Property TopologyBrepPointFilter() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("TopologyBrepPointFilter", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -144,44 +151,58 @@ Namespace My.Resources
             End Get
         End Property
         
-        Public ReadOnly Property TopologyMesh() As System.Drawing.Bitmap
+        Public ReadOnly Property TopologyMeshEdge() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("TopologyMesh", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("TopologyMeshEdge", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
-        Public ReadOnly Property TopologyMeshFilterEdges() As System.Drawing.Bitmap
+        Public ReadOnly Property TopologyMeshEdgeFilter() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("TopologyMeshFilterEdges", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("TopologyMeshEdgeFilter", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
-        Public ReadOnly Property TopologyMeshFilterPoints() As System.Drawing.Bitmap
+        Public ReadOnly Property TopologyMeshPoint() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("TopologyMeshFilterPoints", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("TopologyMeshPoint", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
-        Public ReadOnly Property TopologyPoly() As System.Drawing.Bitmap
+        Public ReadOnly Property TopologyMeshPointFilter() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("TopologyPoly", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("TopologyMeshPointFilter", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
-        Public ReadOnly Property TopologyPolyFilterEdges() As System.Drawing.Bitmap
+        Public ReadOnly Property TopologyPolyEdge() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("TopologyPolyFilterEdges", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("TopologyPolyEdge", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
         
-        Public ReadOnly Property TopologyPolyFilterPoints() As System.Drawing.Bitmap
+        Public ReadOnly Property TopologyPolyEdgeFilter() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("TopologyPolyFilterPoints", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("TopologyPolyEdgeFilter", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Public ReadOnly Property TopologyPolyPoint() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("TopologyPolyPoint", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Public ReadOnly Property TopologyPolyPointFilter() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("TopologyPolyPointFilter", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

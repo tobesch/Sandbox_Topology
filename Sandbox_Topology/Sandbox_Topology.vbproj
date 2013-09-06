@@ -74,6 +74,8 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TopologyMeshVertexFilter.vb" />
+    <Compile Include="TopologyMeshEdgeFilter.vb" />
     <Compile Include="TopologyMeshVertex.vb" />
     <Compile Include="TopologyMeshEdge.vb" />
     <Compile Include="TopologyBrepVertexFilter.vb" />
@@ -229,10 +231,46 @@
     <None Include="Resources\TopologyPolyFilterPoints.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\TopologyBrepEdge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyBrepEdgeFilter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyBrepPoint.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyBrepPointFilter.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\TopologyLine.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\TopologyLineFilter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyMeshEdge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyMeshEdgeFilter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyMeshPoint.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyMeshPointFilter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyPolyEdge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyPolyEdgeFilter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyPolyPoint.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyPolyPointFilter.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

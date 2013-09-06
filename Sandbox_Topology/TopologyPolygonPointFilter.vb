@@ -88,7 +88,7 @@ Public Class TopologyPolygonPointFilter
     Protected Overrides ReadOnly Property Icon() As System.Drawing.Bitmap
         Get
             'You can add image files to your project resources and access them like this:
-            Return My.Resources.TopologyPolyFilterPoints
+            Return My.Resources.TopologyPolyPointFilter
         End Get
     End Property
 

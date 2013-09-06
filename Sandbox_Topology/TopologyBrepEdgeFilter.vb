@@ -84,7 +84,7 @@ Public Class TopologyBrepEdgeFilter
     Protected Overrides ReadOnly Property Icon() As System.Drawing.Bitmap
         Get
             'You can add image files to your project resources and access them like this:
-            Return My.Resources.TopologyBrepFilterEdges
+            Return My.Resources.TopologyBrepEdgeFilter
         End Get
     End Property
 

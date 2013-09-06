@@ -106,7 +106,7 @@ Public Class TopologyPolygonPoint
         Get
             'You can add image files to your project resources and access them like this:
             ' return Resources.IconForThisComponent;
-            Return My.Resources.TopologyPoly
+            Return My.Resources.TopologyPolyPoint
         End Get
     End Property
 

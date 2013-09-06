@@ -6,14 +6,14 @@ Imports Grasshopper.Kernel.Types
 Imports Grasshopper.Kernel.Data
 
 
-Public Class TopologyBrepVertexFilter
+Public Class TopologyMeshEdgeFilter
     Inherits GH_Component
     ''' <summary>
     ''' Initializes a new instance of the NakedPolygonVertices class.
     ''' </summary>
     Public Sub New()
-        MyBase.New("Brep Topology Vertex Filter", "Brep Topo Vertex Filter", _
-           "Filter the vertices of a brep based on their connectivity", _
+        MyBase.New("Mesh Topology Edge Filter", "Mesh Topo Edge Filter", _
+           "Filter the edges of a mesh based on their valency", _
            "Sandbox", "Topology")
     End Sub
 
@@ -21,17 +21,17 @@ Public Class TopologyBrepVertexFilter
     ''' Registers all the input parameters for this component.
     ''' </summary>
     Protected Overrides Sub RegisterInputParams(ByVal pManager As GH_Component.GH_InputParamManager)
-        pManager.AddPointParameter("Vertex list", "V", "Ordered list of points", GH_ParamAccess.list)
-        pManager.AddIntegerParameter("Vertex-Face structure", "VF", "For each vertex the list of adjacent face indices", GH_ParamAccess.tree)
-        pManager.AddIntegerParameter("Valency filter", "Val", "Filter vertices with the specified number of adjacent faces", GH_ParamAccess.item, 1)
+        pManager.AddLineParameter("Edge list", "E", "Ordered list of edges", GH_ParamAccess.list)
+        pManager.AddIntegerParameter("Edge-Face structure", "EF", "For each edge the list of adjacent face indices", GH_ParamAccess.tree)
+        pManager.AddIntegerParameter("Valency filter", "V", "Filter edges with the specified number of adjacent faces", GH_ParamAccess.item, 1)
     End Sub
 
     ''' <summary>
     ''' Registers all the output parameters for this component.
     ''' </summary>
     Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
-        pManager.AddTextParameter("List of vertex IDs", "I", "List of vertex indices matching the valency criteria", GH_ParamAccess.list)
-        pManager.AddPointParameter("List of vertices", "P", "List of vertices matching the valency criteria", GH_ParamAccess.tree)
+        pManager.AddTextParameter("List of edge IDs", "I", "List of edge indices matching the valency criteria", GH_ParamAccess.list)
+        pManager.AddLineParameter("List of edges", "E", "List of edges matching the valency criteria", GH_ParamAccess.tree)
     End Sub
 
     ''' <summary>
@@ -42,40 +42,38 @@ Public Class TopologyBrepVertexFilter
 
         '1. Declare placeholder variables and assign initial invalid data.
         '   This way, if the input parameters fail to supply valid data, we know when to abort.
-        Dim _P As New List(Of GH_Point)
-        Dim _PF As GH_Structure(Of GH_Integer) = Nothing
-        Dim _V As Int32 = 0
+        Dim _E As New List(Of GH_Line)
+        Dim _EF As GH_Structure(Of GH_Integer) = Nothing
+        Dim _C As Int32 = 0
 
         '2. Retrieve input data.
-        If (Not DA.GetDataList(0, _P)) Then Return
-        If (Not DA.GetDataTree(1, _PF)) Then Return
-        If (Not DA.GetData(2, _V)) Then Return
+        If (Not DA.GetDataList(0, _E)) Then Return
+        If (Not DA.GetDataTree(1, _EF)) Then Return
+        If (Not DA.GetData(2, _C)) Then Return
 
         '3. Abort on invalid inputs.
         '3.1. get the number of branches in the trees
-        If (Not _P.Count > 0) Then Return
-        If (Not _PF.PathCount > 0) Then Return
-        If (Not _V > 0) Then Return
+        If (Not _E.Count > 0) Then Return
+        If (Not _EF.PathCount > 0) Then Return
+        If (Not _C > 0) Then Return
 
         '4. Do something useful.
-        'Dim _ptList As List(Of Point3d) = _P
-        Dim _pfTree As GH_Structure(Of GH_Integer) = _PF
 
         Dim _idList As New List(Of Int32)
-        For i As Int32 = 0 To _PF.Branches.Count - 1
-            Dim _branch As List(Of GH_Integer) = _PF.Branches(i)
-            If _branch.Count = _V Then
+        For i As Int32 = 0 To _EF.Branches.Count - 1
+            Dim _branch As List(Of GH_Integer) = _EF.Branches(i)
+            If _branch.Count = _C Then
                 _idList.Add(i)
             End If
         Next
 
-        Dim _ptList As New List(Of Point3d)
+        Dim _eList As New List(Of Line)
         For Each _id As Int32 In _idList
-            _ptList.Add(_P.Item(_id).Value)
+            _eList.Add(_E.Item(_id).Value)
         Next
 
         DA.SetDataList(0, _idList)
-        DA.SetDataList(1, _ptList)
+        DA.SetDataList(1, _eList)
 
     End Sub
 
@@ -86,7 +84,7 @@ Public Class TopologyBrepVertexFilter
     Protected Overrides ReadOnly Property Icon() As System.Drawing.Bitmap
         Get
             'You can add image files to your project resources and access them like this:
-            Return My.Resources.TopologyBrepPointFilter
+            Return My.Resources.TopologyMeshEdgeFilter
         End Get
     End Property
 
@@ -95,13 +93,13 @@ Public Class TopologyBrepVertexFilter
     ''' </summary>
     Public Overrides ReadOnly Property ComponentGuid() As Guid
         Get
-            Return New Guid("{f3fc318d-6774-4556-b1f8-34342a5e3b92}")
+            Return New Guid("{cfce17e4-0501-4a94-82f1-63b5bfcb0aa6}")
         End Get
     End Property
 
     Public Overrides ReadOnly Property Exposure As Grasshopper.Kernel.GH_Exposure
         Get
-            Return GH_Exposure.tertiary
+            Return GH_Exposure.quarternary
         End Get
     End Property
 End Class

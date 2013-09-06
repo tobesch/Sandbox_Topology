@@ -109,7 +109,7 @@ Public Class TopologyBrepVertex
     Protected Overrides ReadOnly Property Icon() As System.Drawing.Bitmap
         Get
             'You can add image files to your project resources and access them like this:
-            Return My.Resources.TopologyBrepFilterPoints
+            Return My.Resources.TopologyBrepPoint
             'Return Nothing
         End Get
     End Property

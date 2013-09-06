@@ -33,6 +33,7 @@ Public Class TopologyMeshVertex
     ''' Registers all the output parameters for this component.
     ''' </summary>
     Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
+        pManager.AddPointParameter("List of mesh vertices", "V", "Ordered list of mesh vertices", GH_ParamAccess.list)
         pManager.AddIntegerParameter("Vertex-Vertex structure", "VV", "For each vertex the list of adjacent vertex indices", GH_ParamAccess.tree)
         pManager.AddIntegerParameter("Vertex-Face structure", "VF", "For each vertex the list of adjacent face indices", GH_ParamAccess.tree)
     End Sub
@@ -69,9 +70,9 @@ Public Class TopologyMeshVertex
 
         Dim _vertexList As Collections.MeshVertexList = _mesh.Vertices()
         For _vIndex As Int32 = 0 To _vertexList.Count - 1
-            Dim _vertices As Int32() = _vertexList.GetConnectedVertices(_vIndex)
+            Dim _indices As Int32() = _vertexList.GetConnectedVertices(_vIndex)
             Dim vv_path As New GH_Path(_VVValues.BranchCount)
-            For Each _vertex As Int32 In _vertices
+            For Each _vertex As Int32 In _indices
                 If _vertex <> _vIndex Then _VVValues.Add(_vertex, vv_path)
             Next
         Next
@@ -82,8 +83,13 @@ Public Class TopologyMeshVertex
             _VFValues.AddRange(_faces, vf_path)
         Next
 
-        DA.SetDataTree(0, _VVValues)
-        DA.SetDataTree(1, _VFVAlues)
+        Dim _VList As New List(Of Point3d)
+        Dim _vertices As Point3d() = _vertexList.ToPoint3dArray
+        _VList.AddRange(_vertices)
+
+        DA.SetDataList(0, _VList)
+        DA.SetDataTree(1, _VVValues)
+        DA.SetDataTree(2, _VFValues)
 
     End Sub
 
@@ -94,8 +100,7 @@ Public Class TopologyMeshVertex
     Protected Overrides ReadOnly Property Icon() As System.Drawing.Bitmap
         Get
             'You can add image files to your project resources and access them like this:
-            Return My.Resources.TopologyMeshFilterPoints
-            'Return Nothing
+            Return My.Resources.TopologyMeshPoint
         End Get
     End Property
 

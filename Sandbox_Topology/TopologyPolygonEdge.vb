@@ -233,7 +233,7 @@ Public Class TopologyPolygonEdge
     Protected Overrides ReadOnly Property Icon() As System.Drawing.Bitmap
         Get
             'You can add image files to your project resources and access them like this:
-            Return My.Resources.TopologyPolyFilterEdges
+            Return My.Resources.TopologyPolyEdge
         End Get
     End Property
 

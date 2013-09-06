@@ -6,14 +6,14 @@ Imports Grasshopper.Kernel.Types
 Imports Grasshopper.Kernel.Data
 
 
-Public Class TopologyBrepVertexFilter
+Public Class TopologyMeshVertexFilter
     Inherits GH_Component
     ''' <summary>
     ''' Initializes a new instance of the NakedPolygonVertices class.
     ''' </summary>
     Public Sub New()
-        MyBase.New("Brep Topology Vertex Filter", "Brep Topo Vertex Filter", _
-           "Filter the vertices of a brep based on their connectivity", _
+        MyBase.New("Mesh Topology Vertex Filter", "Mesh Topo Vertex Filter", _
+           "Filter the vertices of a mesh based on their connectivity", _
            "Sandbox", "Topology")
     End Sub
 
@@ -58,9 +58,6 @@ Public Class TopologyBrepVertexFilter
         If (Not _V > 0) Then Return
 
         '4. Do something useful.
-        'Dim _ptList As List(Of Point3d) = _P
-        Dim _pfTree As GH_Structure(Of GH_Integer) = _PF
-
         Dim _idList As New List(Of Int32)
         For i As Int32 = 0 To _PF.Branches.Count - 1
             Dim _branch As List(Of GH_Integer) = _PF.Branches(i)
@@ -86,7 +83,7 @@ Public Class TopologyBrepVertexFilter
     Protected Overrides ReadOnly Property Icon() As System.Drawing.Bitmap
         Get
             'You can add image files to your project resources and access them like this:
-            Return My.Resources.TopologyBrepPointFilter
+            Return My.Resources.TopologyMeshPointFilter
         End Get
     End Property
 
@@ -95,13 +92,13 @@ Public Class TopologyBrepVertexFilter
     ''' </summary>
     Public Overrides ReadOnly Property ComponentGuid() As Guid
         Get
-            Return New Guid("{f3fc318d-6774-4556-b1f8-34342a5e3b92}")
+            Return New Guid("{0d5dea63-930b-4842-92d6-6a81d9ea3fc9}")
         End Get
     End Property
 
     Public Overrides ReadOnly Property Exposure As Grasshopper.Kernel.GH_Exposure
         Get
-            Return GH_Exposure.tertiary
+            Return GH_Exposure.quarternary
         End Get
     End Property
 End Class
