@@ -60,20 +60,6 @@ Namespace My.Resources
             End Set
         End Property
         
-        Public ReadOnly Property Echinoid_1_Topology() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("Echinoid_1_Topology", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        Public ReadOnly Property Echinoid_1_TopologySorted() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("Echinoid_1_TopologySorted", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
         Public ReadOnly Property Sandbox_Labels() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("Sandbox_Labels", resourceCulture)

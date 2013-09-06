@@ -12,7 +12,7 @@ Public Class TopologyPolygonEdge
     ''' Initializes a new instance of the TopologyPolygonEdge class.
     ''' </summary>
     Public Sub New()
-        MyBase.New("Polygon Edge Topology", "Poly Edge Topo", _
+        MyBase.New("Polygon Topology Edge", "Poly Topo Edge", _
      "Analyses the edge topology of a curve network consisting of closed polylines", _
      "Sandbox", "Topology")
     End Sub
@@ -30,8 +30,8 @@ Public Class TopologyPolygonEdge
     ''' </summary>
     Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
         pManager.AddLineParameter("List of edges", "E", "Ordered list of unique polyline edges", GH_ParamAccess.list)
-        pManager.AddIntegerParameter("Face-Edge collection", "FE", "Edge indeces grouped by face index", GH_ParamAccess.tree)
-        pManager.AddIntegerParameter("Edge-Face collection", "EF", "Face indeces grouped by edge index", GH_ParamAccess.tree)
+        pManager.AddIntegerParameter("Loop-Edge structure", "LE", "For each polyline lists edge indices belonging to polyline", GH_ParamAccess.tree)
+        pManager.AddIntegerParameter("Edge-Loop structure", "EL", "For each edge lists adjacent polyline indices", GH_ParamAccess.tree)
     End Sub
 
     ''' <summary>

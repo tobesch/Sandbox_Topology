@@ -74,13 +74,20 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TopologyMeshVertex.vb" />
+    <Compile Include="TopologyMeshEdge.vb" />
+    <Compile Include="TopologyBrepVertexFilter.vb" />
+    <Compile Include="TopologyBrepEdgeFilter.vb" />
+    <Compile Include="TopologyBrepVertex.vb" />
+    <Compile Include="TopologyPolygonEdgeFilter.vb" />
+    <Compile Include="PLineTopological.vb" />
     <Compile Include="LineTopological.vb" />
     <Compile Include="PointTopological.vb" />
     <Compile Include="TopologyLine.vb" />
-    <Compile Include="FilterPolygonVertices.vb" />
-    <Compile Include="TopologyPolygon.vb" />
+    <Compile Include="TopologyPolygonPointFilter.vb" />
+    <Compile Include="TopologyPolygonPoint.vb" />
     <Compile Include="Sandbox_Topology_Info.vb" />
-    <Compile Include="TopologyPlate.vb" />
+    <Compile Include="TopologyBrepEdge.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -96,9 +103,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="TopologyPlateSorted.vb" />
     <Compile Include="TopologyPolygonEdge.vb" />
     <Compile Include="TopologyLineFilter.vb" />
+    <Compile Include="TopologyShared.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -109,8 +116,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>

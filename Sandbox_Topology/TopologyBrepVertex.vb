@@ -6,7 +6,7 @@ Imports Grasshopper.Kernel.Types
 Imports Rhino.Geometry
 
 
-Public Class TopologyPlate
+Public Class TopologyBrepVertex
     Inherits GH_Component
 
     ''' <summary>
@@ -17,8 +17,8 @@ Public Class TopologyPlate
     ''' new tabs/panels will automatically be created.
     ''' </summary>
     Public Sub New()
-        MyBase.New("Plate Topology", "Topo", _
-           "Analyses the topology of a Brep", _
+        MyBase.New("Brep Topology Vertex", "Brep Topo Vertex", _
+           "Analyses the vertex topology of a Brep", _
            "Sandbox", "Topology")
     End Sub
 
@@ -33,8 +33,8 @@ Public Class TopologyPlate
     ''' Registers all the output parameters for this component.
     ''' </summary>
     Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
-        pManager.AddIntegerParameter("Faces", "F", "List of adjacent face indices by edge", GH_ParamAccess.tree)
-        pManager.AddIntegerParameter("Edges", "E", "List of adjacent edge indices by face", GH_ParamAccess.tree)
+        pManager.AddIntegerParameter("Face-Vertex structure", "FV", "For each face list vertex indices belonging to face", GH_ParamAccess.tree)
+        pManager.AddIntegerParameter("Vertex-Face structure", "VF", "For each vertex list adjacent face indices", GH_ParamAccess.tree)
     End Sub
 
     ''' <summary>
@@ -46,50 +46,59 @@ Public Class TopologyPlate
 
         '1. Declare placeholder variables and assign initial invalid data.
         '   This way, if the input parameters fail to supply valid data, we know when to abort.
-        Dim brep As Rhino.Geometry.Brep = Nothing
+        Dim _brep As Brep = Nothing
 
         '2. Retrieve input data.
-        If (Not DA.GetData(0, brep)) Then Return
+        If (Not DA.GetData(0, _brep)) Then Return
 
         '3. Abort on invalid inputs.
-        If (Not brep.IsValid) Then Return
+        If (Not _brep.IsValid) Then Return
 
         '4. Check for non-manifold Breps
-        If (Not brep.IsManifold) Then Return
+        If (Not _brep.IsManifold) Then Return
 
         '5. Check if the topology is valid
         Dim log As String = String.Empty
-        If (Not brep.IsValidTopology(log)) Then Return
+        If (Not _brep.IsValidTopology(log)) Then Return
 
         '6. Now do something productive
-        Dim face As BrepFace = Nothing
-        Dim e_tree As New Grasshopper.DataTree(Of Int32)
+        Dim _polyList As New List(Of Polyline)
 
-        For i As Int32 = 0 To brep.Faces.Count - 1
-            face = brep.Faces.Item(i)
-            Dim edges As Int32() = face.AdjacentEdges()
+        For Each _loop As BrepLoop In _brep.Loops
+            Dim _poly As Polyline = Nothing
+            If Not _loop.To3dCurve.TryGetPolyline(_poly) Then Return
+            _polyList.Add(_poly)
+        Next
 
-            Dim e_path As New GH_Path(i)
-            For j As Int32 = 0 To UBound(edges)
-                e_tree.Add(edges(j), e_path)
+        '4.2. get topology
+        Dim _T As Double = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance
+        Dim _ptList As New List(Of PointTopological)
+        For Each _vertex As BrepVertex In _brep.Vertices
+            _ptList.Add(New PointTopological(_vertex.Location, _ptList.Count))
+        Next
+        'Dim _ptList As List(Of PointTopological) = getPointTopo(_polyList, _T)
+        Dim _fList As List(Of PLineTopological) = getPLineTopo(_polyList, _ptList, _T)
+        Call setPointPLineTopo(_fList, _ptList)
+
+        ' 4.3: return results
+        Dim _FV As New Grasshopper.DataTree(Of Int32)
+        For Each _lineTopo As PLineTopological In _fList
+            Dim _path As New GH_Path(_FV.BranchCount)
+            For Each _index As Int32 In _lineTopo.PointIndices
+                _FV.Add(_index, _path)
             Next
         Next
 
-        Dim edge As BrepEdge = Nothing
-        Dim f_tree As New Grasshopper.DataTree(Of Int32)
-
-        For i As Int32 = 0 To brep.Edges.Count - 1
-            edge = brep.Edges.Item(i)
-            Dim faces As Int32() = edge.AdjacentFaces()
-
-            Dim path As New GH_Path(i)
-            For j As Int32 = 0 To UBound(faces)
-                f_tree.Add(faces(j), path)
+        Dim _VF As New Grasshopper.DataTree(Of Int32)
+        For Each _ptTopo As PointTopological In _ptList
+            Dim _path As New GH_Path(_VF.BranchCount)
+            For Each _lineTopo As PLineTopological In _ptTopo.PLines
+                _VF.Add(_lineTopo.Index, _path)
             Next
         Next
 
-        DA.SetDataTree(0, f_tree)
-        DA.SetDataTree(1, e_tree)
+        DA.SetDataTree(0, _FV)
+        DA.SetDataTree(1, _VF)
 
     End Sub
 
@@ -100,7 +109,7 @@ Public Class TopologyPlate
     Protected Overrides ReadOnly Property Icon() As System.Drawing.Bitmap
         Get
             'You can add image files to your project resources and access them like this:
-            Return My.Resources.Echinoid_1_Topology
+            Return My.Resources.TopologyBrepFilterPoints
             'Return Nothing
         End Get
     End Property
@@ -118,7 +127,7 @@ Public Class TopologyPlate
     ''' </summary>
     Public Overrides ReadOnly Property ComponentGuid() As Guid
         Get
-            Return New Guid("{9a99f8d8-9f33-4e83-9d8e-562820438a28}")
+            Return New Guid("{b585dbc3-37eb-4387-b6d2-7bd220dc2470}")
         End Get
     End Property
 End Class

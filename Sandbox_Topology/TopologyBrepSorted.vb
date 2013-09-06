@@ -5,7 +5,7 @@ Imports Grasshopper.Kernel.Data
 Imports Rhino.Geometry
 
 
-Public Class TopologyPlateSorted
+Public Class TopologyBrepSorted
     Inherits GH_Component
     ''' <summary>
     ''' Initializes a new instance of the PlateTopologySorted class.
@@ -80,7 +80,7 @@ Public Class TopologyPlateSorted
     Protected Overrides ReadOnly Property Icon() As System.Drawing.Bitmap
         Get
             'You can add image files to your project resources and access them like this:
-            Return My.Resources.Echinoid_1_TopologySorted
+            Return My.Resources.TopologyBrepFilterEdges
             'Return Nothing
         End Get
     End Property
@@ -90,6 +90,7 @@ Public Class TopologyPlateSorted
             Return GH_Exposure.tertiary
         End Get
     End Property
+
     ''' <summary>
     ''' Gets the unique ID for this component. Do not change this ID after release.
     ''' </summary>
