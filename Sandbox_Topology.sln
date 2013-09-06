@@ -17,4 +17,10 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		BuildVersion_BuildVersioningStyle = None.None.DeltaBaseDate.Increment
+		BuildVersion_UseGlobalSettings = True
+		BuildVersion_StartDate = 2013/9/6
+		BuildVersion_UpdateAssemblyVersion = True
+	EndGlobalSection
 EndGlobal

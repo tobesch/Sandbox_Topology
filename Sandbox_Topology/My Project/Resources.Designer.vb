@@ -60,55 +60,6 @@ Namespace My.Resources
             End Set
         End Property
         
-        Public ReadOnly Property Sandbox_Labels() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("Sandbox_Labels", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        Public ReadOnly Property Sandbox_Planarize() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("Sandbox_Planarize", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        Public ReadOnly Property Sandbox_PlateTopology() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("Sandbox_PlateTopology", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        Public ReadOnly Property Sandbox_Polygonalize() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("Sandbox_Polygonalize", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        Public ReadOnly Property Sandbox_Topology() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("Sandbox_Topology", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        Public ReadOnly Property Sandbox_TopologySorted() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("Sandbox_TopologySorted", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        Public ReadOnly Property Sandbox_Unfold() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("Sandbox_Unfold", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
         Public ReadOnly Property TopologyBrepEdge() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("TopologyBrepEdge", resourceCulture)

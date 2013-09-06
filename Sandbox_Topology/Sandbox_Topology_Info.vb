@@ -5,13 +5,13 @@ Public Class Sandbox_Topology_Info
 
     Public Overrides ReadOnly Property AssemblyName() As String
         Get
-            Return "Sandbox"
+            Return "Sandbox Topology"
         End Get
     End Property
 
     Public Overrides ReadOnly Property License As Grasshopper.Kernel.GH_LibraryLicense
         Get
-            Return GH_LibraryLicense.educational
+            Return GH_LibraryLicense.opensource
         End Get
     End Property
     Public Overrides ReadOnly Property Description As String
@@ -26,7 +26,7 @@ Public Class Sandbox_Topology_Info
     End Property
     Public Overrides ReadOnly Property Name As String
         Get
-            Return "Sandbox"
+            Return "Sandbox Topology"
         End Get
     End Property
     Public Overrides ReadOnly Property AuthorContact As String
@@ -42,4 +42,5 @@ Public Class Sandbox_Topology_Info
 
     'Override here any more methods you see fit.
     'Start typing Public Overrides..., select a property and push Enter.
+
 End Class
