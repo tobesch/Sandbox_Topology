@@ -5,7 +5,6 @@ Public Class PointTopological
     Private _p As Point3d
     Private _i As Int32     'internal indexing of the points
     Private _l As List(Of PLineTopological) = Nothing
-    Private _endIndex As Int32
 
     Public Sub New(ByVal P As Point3d, ByVal I As Int32)
 
