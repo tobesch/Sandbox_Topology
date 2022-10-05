@@ -13,7 +13,7 @@
     <AssemblyName>Sandbox_Topology</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -112,17 +112,17 @@
     <Compile Include="TopologyMeshEdgeFilter.vb" />
     <Compile Include="TopologyMeshVertex.vb" />
     <Compile Include="TopologyMeshEdge.vb" />
-    <Compile Include="TopologyBrepVertexFilter.vb" />
-    <Compile Include="TopologyBrepEdgeFilter.vb" />
-    <Compile Include="TopologyBrepVertex.vb" />
+    <Compile Include="GhcTopologyBrepVertexFilter.vb" />
+    <Compile Include="GhcTopologyBrepEdgeFilter.vb" />
+    <Compile Include="GhcTopologyBrepVertex.vb" />
     <Compile Include="TopologyPolygonEdgeFilter.vb" />
     <Compile Include="PLineTopological.vb" />
     <Compile Include="PointTopological.vb" />
-    <Compile Include="TopologyLine.vb" />
+    <Compile Include="GhcTopologyLine.vb" />
     <Compile Include="TopologyPolygonPointFilter.vb" />
     <Compile Include="TopologyPolygonPoint.vb" />
     <Compile Include="Sandbox_Topology_Info.vb" />
-    <Compile Include="TopologyBrepEdge.vb" />
+    <Compile Include="GhcTopologyBrepEdge.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -348,7 +348,7 @@ Erase "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.DeltaBaseDate.Increment" BuildVersion_UseGlobalSettings="True" BuildVersion_StartDate="2013/9/6" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_StartDate="2013/9/6" BuildVersion_UseGlobalSettings="True" BuildVersion_BuildVersioningStyle="None.None.DeltaBaseDate.Increment" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="..\packages\RhinoCommon.6.35.21222.17001\build\net45\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.6.35.21222.17001\build\net45\RhinoCommon.targets')" />
