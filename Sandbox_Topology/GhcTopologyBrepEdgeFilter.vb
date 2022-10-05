@@ -6,14 +6,14 @@ Imports Grasshopper.Kernel.Types
 Imports Grasshopper.Kernel.Data
 
 
-Public Class TopologyBrepEdgeFilter
+Public Class GhcTopologyBrepEdgeFilter
     Inherits GH_Component
     ''' <summary>
     ''' Initializes a new instance of the NakedPolygonVertices class.
     ''' </summary>
     Public Sub New()
-        MyBase.New("Brep Topology Edge Filter", "Brep Topo Edge Filter", _
-           "Filter the edges of a brep based on their valency", _
+        MyBase.New("Brep Topology Edge Filter", "Brep Topo Edge Filter",
+           "Filter the edges of a brep based on their valency",
            "Sandbox", "Topology")
     End Sub
 
