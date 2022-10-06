@@ -31,7 +31,7 @@ Public Class GhcTopologyLine
     ''' Registers all the output parameters for this component.
     ''' </summary>
     Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
-        pManager.AddPointParameter("List of points", "P", "Ordered list of unique points", GH_ParamAccess.list)
+        pManager.AddPointParameter("List of points", "P", "Ordered list of unique points", GH_ParamAccess.tree)
         pManager.AddIntegerParameter("Line-Point structure", "LP", "For each line lists both end points indices", GH_ParamAccess.tree)
         pManager.AddIntegerParameter("Point-Point structure", "PP", "For each point list all point indices connected to it", GH_ParamAccess.tree)
         pManager.AddLineParameter("Point-Line structure", "PL", "For each point list all lines connected to it", GH_ParamAccess.tree)
@@ -94,7 +94,7 @@ Public Class GhcTopologyLine
             'For Each _lineTopo As PLineTopological In _lineList
             For j As Int32 = 0 To _lineList.Count - 1
                 Dim _lineTopo As PLineTopological = _lineList.Item(j)
-                Dim args = New Integer() {i, j}
+                Dim args As Integer() = New Integer() {i, j}
                 Dim _path As New GH_Path(args)
                 _LPValues.Add(_lineTopo.PointIndices.Item(0), _path)
                 _LPValues.Add(_lineTopo.PointIndices.Item(1), _path)
@@ -103,7 +103,7 @@ Public Class GhcTopologyLine
             'For Each _ptTopo As PointTopological In _ptList
             For j As Int32 = 0 To _ptList.Count - 1
                 Dim _ptTopo As PointTopological = _ptList.Item(j)
-                Dim args = New Integer() {i, j}
+                Dim args As Integer() = New Integer() {i, j}
                 Dim _path As New GH_Path(args)
                 For Each _lineTopo As PLineTopological In _ptTopo.PLines
                     If _ptTopo.Index = _lineTopo.PointIndices.Item(0) Then
@@ -117,10 +117,10 @@ Public Class GhcTopologyLine
             'For Each _ptTopo As PointTopological In _ptList
             For j As Int32 = 0 To _ptList.Count - 1
                 Dim _ptTopo As PointTopological = _ptList.Item(j)
-                Dim args = New Integer() {i, j}
+                Dim args As Integer() = New Integer() {i, j}
                 Dim _path As New GH_Path(args)
                 For Each _lineTopo As PLineTopological In _ptTopo.PLines
-                    _PLValues.Add(_L.Branch(i).Item(_lineTopo.Index), _path)
+                    _PLValues.Add(_L.Branch(i).Item(_lineTopo.Index).Value, _path)
                 Next
             Next
 
