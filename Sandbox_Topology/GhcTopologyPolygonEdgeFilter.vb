@@ -77,27 +77,7 @@ Public Class GhcTopologyPolygonEdgeFilter
                 End If
             Next
 
-            'Dim _idList As New List(Of Int32)
-
-            'For Each edgeList As List(Of GH_Integer) In _EL.Branches
-            '    If branch.Count = _V Then
-            '        _idList.Add(_path.ToString.Trim(New Char() {"{", "}"}))
-            '    End If
-            'Next
-
-            'For Each edgeList As List(Of GH_Integer) In _EL.Branches
-            '    If branch.Count = _V Then
-            '        _idList.Add(_path.ToString.Trim(New Char() {"{", "}"}))
-            '    End If
-            'Next
-
-            'For Each _id As Int32 In _idList
-
-            '    _edgeTree.Add(_E.Item(_id).Value)
-
-            'Next
         Next
-
 
         DA.SetDataTree(0, _idTree)
         DA.SetDataTree(1, _edgeTree)
