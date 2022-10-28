@@ -104,7 +104,7 @@
     <Compile Include="PLineTopological.vb" />
     <Compile Include="PointTopological.vb" />
     <Compile Include="GhcTopologyLine.vb" />
-    <Compile Include="TopologyPolygonPointFilter.vb" />
+    <Compile Include="GhcTopologyPolygonPointFilter.vb" />
     <Compile Include="GhcTopologyPolygonPoint.vb" />
     <Compile Include="Sandbox_Topology_Info.vb" />
     <Compile Include="GhcTopologyBrepEdge.vb" />
