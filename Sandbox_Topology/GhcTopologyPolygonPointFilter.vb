@@ -21,7 +21,7 @@ Public Class GhcTopologyPolygonPointFilter
     ''' Registers all the input parameters for this component.
     ''' </summary>
     Protected Overrides Sub RegisterInputParams(ByVal pManager As GH_Component.GH_InputParamManager)
-        pManager.AddPointParameter("Point list", "P", "Ordered list of points", GH_ParamAccess.list)
+        pManager.AddPointParameter("Point list", "P", "Ordered list of points", GH_ParamAccess.tree)
         pManager.AddIntegerParameter("Point-Loop structure", "PL", "Ordered structure listing the polylines adjacent to each point", GH_ParamAccess.tree)
         pManager.AddIntegerParameter("Valency filter", "V", "Filter points with the specified number of adjacent polylines", GH_ParamAccess.item, 1)
     End Sub
@@ -30,7 +30,7 @@ Public Class GhcTopologyPolygonPointFilter
     ''' Registers all the output parameters for this component.
     ''' </summary>
     Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
-        pManager.AddTextParameter("List of point IDs", "I", "List of point indices matching the valency criteria", GH_ParamAccess.list)
+        pManager.AddTextParameter("List of point IDs", "I", "List of point indices matching the valency criteria", GH_ParamAccess.tree)
         pManager.AddPointParameter("List of points", "P", "List of points matching the valency criteria", GH_ParamAccess.tree)
     End Sub
 
@@ -42,42 +42,46 @@ Public Class GhcTopologyPolygonPointFilter
 
         '1. Declare placeholder variables and assign initial invalid data.
         '   This way, if the input parameters fail to supply valid data, we know when to abort.
-        Dim _P As New List(Of GH_Point)
-        Dim _PF As GH_Structure(Of GH_Integer) = Nothing
-        Dim _C As Int32 = 0
+        Dim _P As New GH_Structure(Of GH_Point)
+        Dim _PF As New GH_Structure(Of GH_Integer)
+        Dim _V As Int32 = 0
 
         '2. Retrieve input data.
-        If (Not DA.GetDataList(0, _P)) Then Return
+        If (Not DA.GetDataTree(0, _P)) Then Return
         If (Not DA.GetDataTree(1, _PF)) Then Return
-        If (Not DA.GetData(2, _C)) Then Return
+        If (Not DA.GetData(2, _V)) Then Return
 
         '3. Abort on invalid inputs.
         '3.1. get the number of branches in the trees
-        If (Not _P.Count > 0) Then Return
+        If (Not _P.PathCount > 0) Then Return
         If (Not _PF.PathCount > 0) Then Return
-        If (Not _C > 0) Then Return
+        If (Not _V > 0) Then Return
 
         '4. Do something useful.
         'Dim _ptList As List(Of Point3d) = _P
         Dim _pfTree As GH_Structure(Of GH_Integer) = _PF
 
-        Dim _idList As New List(Of Int32)
-        For Each _path As GH_Path In _pfTree.Paths
-            If _pfTree.Branch(_path).Count = _C Then
-                _idList.Add(_path.ToString.Trim(New Char() {"{", "}"}))
-            End If
+        Dim _idTree As New Grasshopper.DataTree(Of Int32)
+        Dim _ptTree As New Grasshopper.DataTree(Of Point3d)
+
+        For i As Int32 = 0 To _P.Branches.Count - 1
+
+            Dim branch As List(Of GH_Point) = _P.Branch(i)
+            Dim mainpath As New GH_Path(i)
+
+            For j As Int32 = 0 To branch.Count - 1
+                Dim args As Integer() = New Integer() {i, j}
+                Dim path As New GH_Path(args)
+                If _PF.Branch(path).Count = _V Then
+                    _idTree.Add(j, mainpath)
+                    _ptTree.Add(branch.Item(j).Value, mainpath)
+                End If
+            Next
+
         Next
 
-        Dim _ptList As New List(Of Point3d)
-        For Each _id As Int32 In _idList
-
-            _ptList.Add(_P.Item(_id).Value)
-
-        Next
-
-        DA.SetDataList(0, _idList)
-        DA.SetDataList(1, _ptList)
-
+        DA.SetDataTree(0, _idTree)
+        DA.SetDataTree(1, _ptTree)
 
     End Sub
 
