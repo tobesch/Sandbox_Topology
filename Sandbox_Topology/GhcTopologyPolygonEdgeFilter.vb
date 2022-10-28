@@ -4,16 +4,17 @@ Imports Grasshopper.Kernel
 Imports Rhino.Geometry
 Imports Grasshopper.Kernel.Types
 Imports Grasshopper.Kernel.Data
+Imports System.IO
 
 
-Public Class TopologyPolygonEdgeFilter
+Public Class GhcTopologyPolygonEdgeFilter
     Inherits GH_Component
     ''' <summary>
     ''' Initializes a new instance of the NakedPolygonVertices class.
     ''' </summary>
     Public Sub New()
-        MyBase.New("Polygon Topology Edge Filter", "Poly Topo Edge Filter", _
-           "Filter the edges in a polygon network based on their valency", _
+        MyBase.New("Polygon Topology Edge Filter", "Poly Topo Edge Filter",
+           "Filter the edges in a polygon network based on their valency",
            "Sandbox", "Topology")
     End Sub
 
@@ -21,7 +22,7 @@ Public Class TopologyPolygonEdgeFilter
     ''' Registers all the input parameters for this component.
     ''' </summary>
     Protected Overrides Sub RegisterInputParams(ByVal pManager As GH_Component.GH_InputParamManager)
-        pManager.AddLineParameter("Edge list", "E", "Ordered list of edges", GH_ParamAccess.list)
+        pManager.AddLineParameter("Edge list", "E", "Ordered list of edges", GH_ParamAccess.tree)
         pManager.AddIntegerParameter("Edge-Loop structure", "EL", "Ordered structure listing the polylines adjacent to each edge", GH_ParamAccess.tree)
         pManager.AddIntegerParameter("Valency filter", "V", "Filter edges with the specified number of adjacent polylines", GH_ParamAccess.item, 1)
     End Sub
@@ -30,7 +31,7 @@ Public Class TopologyPolygonEdgeFilter
     ''' Registers all the output parameters for this component.
     ''' </summary>
     Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
-        pManager.AddTextParameter("List of edge IDs", "I", "List of edge indices matching the valency criteria", GH_ParamAccess.list)
+        pManager.AddTextParameter("List of edge IDs", "I", "List of edge indices matching the valency criteria", GH_ParamAccess.tree)
         pManager.AddLineParameter("List of edges", "E", "List of edges matching the valency criteria", GH_ParamAccess.tree)
     End Sub
 
@@ -42,39 +43,64 @@ Public Class TopologyPolygonEdgeFilter
 
         '1. Declare placeholder variables and assign initial invalid data.
         '   This way, if the input parameters fail to supply valid data, we know when to abort.
-        Dim _E As New List(Of GH_Line)
+        Dim _E As New GH_Structure(Of GH_Line)
         Dim _EL As GH_Structure(Of GH_Integer) = Nothing
-        Dim _C As Int32 = 0
+        Dim _V As Int32 = 0
 
         '2. Retrieve input data.
-        If (Not DA.GetDataList(0, _E)) Then Return
+        If (Not DA.GetDataTree(0, _E)) Then Return
         If (Not DA.GetDataTree(1, _EL)) Then Return
-        If (Not DA.GetData(2, _C)) Then Return
+        If (Not DA.GetData(2, _V)) Then Return
 
         '3. Abort on invalid inputs.
         '3.1. get the number of branches in the trees
-        If (Not _E.Count > 0) Then Return
+        If (Not _E.PathCount > 0) Then Return
         If (Not _EL.PathCount > 0) Then Return
-        If (Not _C > 0) Then Return
+        If (Not _V > 0) Then Return
 
         '4. Do something useful.
 
-        Dim _idList As New List(Of Int32)
-        For Each _path As GH_Path In _EL.Paths
-            If _EL.Branch(_path).Count = _C Then
-                _idList.Add(_path.ToString.Trim(New Char() {"{", "}"}))
-            End If
+        Dim _idTree As New Grasshopper.DataTree(Of Int32)
+        Dim _edgeTree As New Grasshopper.DataTree(Of Line)
+
+        For i As Int32 = 0 To _E.Branches.Count - 1
+
+            Dim branch As List(Of GH_Line) = _E.Branch(i)
+            Dim mainpath As New GH_Path(i)
+
+            For j As Int32 = 0 To branch.Count - 1
+                Dim args As Integer() = New Integer() {i, j}
+                Dim path As New GH_Path(args)
+                If _EL.Branch(path).Count = _V Then
+                    _idTree.Add(j, mainpath)
+                    _edgeTree.Add(branch.Item(j).Value, mainpath)
+                End If
+            Next
+
+            'Dim _idList As New List(Of Int32)
+
+            'For Each edgeList As List(Of GH_Integer) In _EL.Branches
+            '    If branch.Count = _V Then
+            '        _idList.Add(_path.ToString.Trim(New Char() {"{", "}"}))
+            '    End If
+            'Next
+
+            'For Each edgeList As List(Of GH_Integer) In _EL.Branches
+            '    If branch.Count = _V Then
+            '        _idList.Add(_path.ToString.Trim(New Char() {"{", "}"}))
+            '    End If
+            'Next
+
+            'For Each _id As Int32 In _idList
+
+            '    _edgeTree.Add(_E.Item(_id).Value)
+
+            'Next
         Next
 
-        Dim _eList As New List(Of Line)
-        For Each _id As Int32 In _idList
 
-            _eList.Add(_E.Item(_id).Value)
-
-        Next
-
-        DA.SetDataList(0, _idList)
-        DA.SetDataList(1, _eList)
+        DA.SetDataTree(0, _idTree)
+        DA.SetDataTree(1, _edgeTree)
 
 
     End Sub

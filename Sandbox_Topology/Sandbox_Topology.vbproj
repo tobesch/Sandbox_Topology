@@ -100,12 +100,12 @@
     <Compile Include="GhcTopologyBrepVertexFilter.vb" />
     <Compile Include="GhcTopologyBrepEdgeFilter.vb" />
     <Compile Include="GhcTopologyBrepVertex.vb" />
-    <Compile Include="TopologyPolygonEdgeFilter.vb" />
+    <Compile Include="GhcTopologyPolygonEdgeFilter.vb" />
     <Compile Include="PLineTopological.vb" />
     <Compile Include="PointTopological.vb" />
     <Compile Include="GhcTopologyLine.vb" />
     <Compile Include="TopologyPolygonPointFilter.vb" />
-    <Compile Include="TopologyPolygonPoint.vb" />
+    <Compile Include="GhcTopologyPolygonPoint.vb" />
     <Compile Include="Sandbox_Topology_Info.vb" />
     <Compile Include="GhcTopologyBrepEdge.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -124,7 +124,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="TopologyPolygonEdge.vb" />
+    <Compile Include="GhcTopologyPolygonEdge.vb" />
     <Compile Include="TopologyLineFilter.vb" />
     <Compile Include="TopologyShared.vb" />
   </ItemGroup>
