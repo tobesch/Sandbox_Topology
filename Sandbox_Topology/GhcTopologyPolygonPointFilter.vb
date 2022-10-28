@@ -6,14 +6,14 @@ Imports Grasshopper.Kernel.Types
 Imports Grasshopper.Kernel.Data
 
 
-Public Class TopologyPolygonPointFilter
+Public Class GhcTopologyPolygonPointFilter
     Inherits GH_Component
     ''' <summary>
     ''' Initializes a new instance of the NakedPolygonVertices class.
     ''' </summary>
     Public Sub New()
-        MyBase.New("Polygon Topology Point Filter", "Poly Topo Point Filter", _
-           "Filter the points in a polygon network based on their connectivity", _
+        MyBase.New("Polygon Topology Point Filter", "Poly Topo Point Filter",
+           "Filter the points in a polygon network based on their connectivity",
            "Sandbox", "Topology")
     End Sub
 
