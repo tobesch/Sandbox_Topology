@@ -339,7 +339,7 @@ Erase "$(TargetPath)"
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_StartDate="2013/9/6" BuildVersion_UseGlobalSettings="True" BuildVersion_BuildVersioningStyle="None.None.DeltaBaseDate.Increment" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.DeltaBaseDate.Increment" BuildVersion_UseGlobalSettings="True" BuildVersion_StartDate="2013/9/6" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="..\packages\RhinoCommon.6.35.21222.17001\build\net45\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.6.35.21222.17001\build\net45\RhinoCommon.targets')" />
