@@ -48,7 +48,7 @@ namespace Sandbox
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
-            var _C = new GH_Structure<GH_Curve>();
+            GH_Structure<GH_Curve> _C; // It’s an out parameter so you don’t have to construct it ahead of time -- David Rutten
             double _T = 0d;
 
             // 2. Retrieve input data.
