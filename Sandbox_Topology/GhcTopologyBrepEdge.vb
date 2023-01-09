@@ -6,7 +6,7 @@ Imports Grasshopper.Kernel.Types
 Imports Rhino.Geometry
 
 
-Public Class TopologyBrepVertex
+Public Class GhcTopologyBrepEdge
     Inherits GH_Component
 
     ''' <summary>
@@ -17,8 +17,8 @@ Public Class TopologyBrepVertex
     ''' new tabs/panels will automatically be created.
     ''' </summary>
     Public Sub New()
-        MyBase.New("Brep Topology Vertex", "Brep Topo Vertex", _
-           "Analyses the vertex topology of a Brep", _
+        MyBase.New("Brep Topology Edge", "Brep Topo Edge",
+           "Analyses the edge topology of a Brep",
            "Sandbox", "Topology")
     End Sub
 
@@ -33,8 +33,8 @@ Public Class TopologyBrepVertex
     ''' Registers all the output parameters for this component.
     ''' </summary>
     Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
-        pManager.AddIntegerParameter("Face-Vertex structure", "FV", "For each face list vertex indices belonging to face", GH_ParamAccess.tree)
-        pManager.AddIntegerParameter("Vertex-Face structure", "VF", "For each vertex list adjacent face indices", GH_ParamAccess.tree)
+        pManager.AddIntegerParameter("Face-Edge structure", "FE", "For each face list edge indices belonging to face", GH_ParamAccess.tree)
+        pManager.AddIntegerParameter("Edge-Face structure", "EF", "For each edge lists adjacent face indices", GH_ParamAccess.tree)
     End Sub
 
     ''' <summary>
@@ -62,43 +62,28 @@ Public Class TopologyBrepVertex
         If (Not _brep.IsValidTopology(log)) Then Return
 
         '6. Now do something productive
-        Dim _polyList As New List(Of Polyline)
+        Dim e_tree As New Grasshopper.DataTree(Of Int32)
 
-        For Each _loop As BrepLoop In _brep.Loops
-            Dim _poly As Polyline = Nothing
-            If Not _loop.To3dCurve.TryGetPolyline(_poly) Then Return
-            _polyList.Add(_poly)
+        For Each _face As BrepFace In _brep.Faces
+
+            Dim _edges As Int32() = _face.AdjacentEdges()
+            Dim e_path As New GH_Path(e_tree.BranchCount)
+            e_tree.AddRange(_edges, e_path)
+
         Next
 
-        '4.2. get topology
-        Dim _T As Double = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance
-        Dim _ptList As New List(Of PointTopological)
-        For Each _vertex As BrepVertex In _brep.Vertices
-            _ptList.Add(New PointTopological(_vertex.Location, _ptList.Count))
-        Next
-        'Dim _ptList As List(Of PointTopological) = getPointTopo(_polyList, _T)
-        Dim _fList As List(Of PLineTopological) = getPLineTopo(_polyList, _ptList, _T)
-        Call setPointPLineTopo(_fList, _ptList)
 
-        ' 4.3: return results
-        Dim _FV As New Grasshopper.DataTree(Of Int32)
-        For Each _lineTopo As PLineTopological In _fList
-            Dim _path As New GH_Path(_FV.BranchCount)
-            For Each _index As Int32 In _lineTopo.PointIndices
-                _FV.Add(_index, _path)
-            Next
+        Dim f_tree As New Grasshopper.DataTree(Of Int32)
+
+        For Each _edge As BrepEdge In _brep.Edges
+
+            Dim _faces As Int32() = _edge.AdjacentFaces()
+            Dim f_path As New GH_Path(f_tree.BranchCount)
+            f_tree.AddRange(_faces, f_path)
         Next
 
-        Dim _VF As New Grasshopper.DataTree(Of Int32)
-        For Each _ptTopo As PointTopological In _ptList
-            Dim _path As New GH_Path(_VF.BranchCount)
-            For Each _lineTopo As PLineTopological In _ptTopo.PLines
-                _VF.Add(_lineTopo.Index, _path)
-            Next
-        Next
-
-        DA.SetDataTree(0, _FV)
-        DA.SetDataTree(1, _VF)
+        DA.SetDataTree(0, e_tree)
+        DA.SetDataTree(1, f_tree)
 
     End Sub
 
@@ -109,7 +94,7 @@ Public Class TopologyBrepVertex
     Protected Overrides ReadOnly Property Icon() As System.Drawing.Bitmap
         Get
             'You can add image files to your project resources and access them like this:
-            Return My.Resources.TopologyBrepPoint
+            Return My.Resources.TopologyBrepEdge
             'Return Nothing
         End Get
     End Property
@@ -127,7 +112,7 @@ Public Class TopologyBrepVertex
     ''' </summary>
     Public Overrides ReadOnly Property ComponentGuid() As Guid
         Get
-            Return New Guid("{b585dbc3-37eb-4387-b6d2-7bd220dc2470}")
+            Return New Guid("{9a99f8d8-9f33-4e83-9d8e-562820438a28}")
         End Get
     End Property
 End Class

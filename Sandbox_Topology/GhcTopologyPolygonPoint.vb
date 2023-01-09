@@ -7,14 +7,14 @@ Imports Grasshopper.Kernel.Data
 Imports Grasshopper.Kernel.Types
 
 
-Public Class TopologyPolygonPoint
+Public Class GhcTopologyPolygonPoint
     Inherits GH_Component
     ''' <summary>
     ''' Initializes a new instance of the PolygonTopology class.
     ''' </summary>
     Public Sub New()
-        MyBase.New("Polygon Topology Point", "Poly Topo Point", _
-     "Analyses the point topology of a network consisting of closed polylines", _
+        MyBase.New("Polygon Topology Point", "Poly Topo Point",
+     "Analyses the point topology of a network consisting of closed polylines",
      "Sandbox", "Topology")
     End Sub
 
@@ -22,7 +22,7 @@ Public Class TopologyPolygonPoint
     ''' Registers all the input parameters for this component.
     ''' </summary>
     Protected Overrides Sub RegisterInputParams(ByVal pManager As GH_Component.GH_InputParamManager)
-        pManager.AddCurveParameter("List of polylines", "C", "Network of closed polylines", GH_ParamAccess.list)
+        pManager.AddCurveParameter("List of polylines", "C", "Network of closed polylines", GH_ParamAccess.tree)
         pManager.AddNumberParameter("Tolerance", "T", "Tolerance value", GH_ParamAccess.item, 0.001)
     End Sub
 
@@ -30,7 +30,7 @@ Public Class TopologyPolygonPoint
     ''' Registers all the output parameters for this component.
     ''' </summary>
     Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
-        pManager.AddPointParameter("List of points", "P", "Ordered list of unique points", GH_ParamAccess.list)
+        pManager.AddPointParameter("List of points", "P", "Ordered list of unique points", GH_ParamAccess.tree)
         pManager.AddIntegerParameter("Loop-Point structure", "LP", "For each polyline lists all point indices", GH_ParamAccess.tree)
         pManager.AddIntegerParameter("Point-Loop structure", "PL", "For each point lists all adjacent polyline indices", GH_ParamAccess.tree)
     End Sub
@@ -43,56 +43,69 @@ Public Class TopologyPolygonPoint
 
         '1. Declare placeholder variables and assign initial invalid data.
         '   This way, if the input parameters fail to supply valid data, we know when to abort.
-        Dim _C As New List(Of GH_Curve)
+        Dim _C As New GH_Structure(Of GH_Curve)
         Dim _T As Double = 0
 
         '2. Retrieve input data.
-        If (Not DA.GetDataList(0, _C)) Then Return
+        If (Not DA.GetDataTree(0, _C)) Then Return
         If (Not DA.GetData(1, _T)) Then Return
 
         '3. Abort on invalid inputs.
-        If (Not _C.Count > 0) Then Return
+        If (Not _C.PathCount > 0) Then Return
         If (Not _T > 0) Then Return
 
         '4. Do something useful.
-        Dim _polyList As New List(Of Polyline)
+        Dim _polyTree As New Grasshopper.DataTree(Of Polyline)
 
         '4.1. check inputs
-        For Each _crv As GH_Curve In _C
-            Dim _poly As Polyline = Nothing
-            If Not _crv.Value.TryGetPolyline(_poly) Then Return
-            _polyList.Add(_poly)
+        For i As Int32 = 0 To _C.Branches.Count - 1 Step 1
+            Dim path As New GH_Path(i)
+            For Each _crv As GH_Curve In _C.Branches.Item(i)
+                Dim _poly As Polyline = Nothing
+                If Not _crv.Value.TryGetPolyline(_poly) Then Return
+                _polyTree.Add(_poly, path)
+            Next
         Next
 
-        '4.2. get topology
-        Dim _ptList As List(Of PointTopological) = getPointTopo(_polyList, _T)
-        Dim _fList As List(Of PLineTopological) = getPLineTopo(_polyList, _ptList, _T)
-        Call setPointPLineTopo(_fList, _ptList)
-        'Dim _ptFaceDict As Dictionary(Of String, List(Of String)) = getPointFaceDict(_fList, _ptList)
-
-        ' 4.3: return results
-        Dim _PValues As New List(Of Point3d)
-        For Each _ptTopo As PointTopological In _ptList
-            _PValues.Add(_ptTopo.Point)
-        Next
-
+        Dim _PValues As New Grasshopper.DataTree(Of Point3d)
         Dim _FPValues As New Grasshopper.DataTree(Of Int32)
-        For Each _lineTopo As PLineTopological In _fList
-            Dim _path As New GH_Path(_FPValues.BranchCount)
-            For Each _index As Int32 In _lineTopo.PointIndices
-                _FPValues.Add(_index, _path)
-            Next
-        Next
-
         Dim _PFValues As New Grasshopper.DataTree(Of Int32)
-        For Each _ptTopo As PointTopological In _ptList
-            Dim _path As New GH_Path(_PFValues.BranchCount)
-            For Each _lineTopo As PLineTopological In _ptTopo.PLines
-                _PFValues.Add(_lineTopo.Index, _path)
+
+        For i As Int32 = 0 To _polyTree.Branches.Count - 1
+
+            Dim branch As List(Of Polyline) = _polyTree.Branch(i)
+            Dim mainpath As New GH_Path(i)
+
+            '4.2. get topology
+            Dim _ptList As List(Of PointTopological) = getPointTopo(branch, _T)
+            Dim _fList As List(Of PLineTopological) = getPLineTopo(branch, _ptList, _T)
+            Call setPointPLineTopo(_fList, _ptList)
+
+            ' 4.3: return results
+            For Each _ptTopo As PointTopological In _ptList
+                _PValues.Add(_ptTopo.Point, mainpath)
+            Next
+
+            For j As Int32 = 0 To _fList.Count - 1
+                Dim _lineTopo As PLineTopological = _fList.Item(j)
+                Dim args As Integer() = New Integer() {i, j}
+                Dim _path As New GH_Path(args)
+                For Each _index As Int32 In _lineTopo.PointIndices
+                    _FPValues.Add(_index, _path)
+                Next
+            Next
+
+            For j As Int32 = 0 To _ptList.Count - 1
+                Dim _ptTopo As PointTopological = _ptList.Item(j)
+                Dim args As Integer() = New Integer() {i, j}
+                Dim _path As New GH_Path(args)
+                For Each _lineTopo As PLineTopological In _ptTopo.PLines
+                    _PFValues.Add(_lineTopo.Index, _path)
+                Next
             Next
         Next
 
-        DA.SetDataList(0, _PValues)
+        DA.SetDataTree(0, _PValues)
         DA.SetDataTree(1, _FPValues)
         DA.SetDataTree(2, _PFValues)
 

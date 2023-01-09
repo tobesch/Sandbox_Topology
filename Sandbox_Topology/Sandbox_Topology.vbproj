@@ -13,7 +13,7 @@
     <AssemblyName>Sandbox_Topology</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -84,21 +84,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="Grasshopper">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files\Rhino 7\Plug-ins\Grasshopper\Grasshopper.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="GH_IO">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files\Rhino 7\Plug-ins\Grasshopper\GH_IO.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="RhinoCommon">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Program Files\Rhino 7\System\RhinoCommon.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -112,17 +97,17 @@
     <Compile Include="TopologyMeshEdgeFilter.vb" />
     <Compile Include="TopologyMeshVertex.vb" />
     <Compile Include="TopologyMeshEdge.vb" />
-    <Compile Include="TopologyBrepVertexFilter.vb" />
-    <Compile Include="TopologyBrepEdgeFilter.vb" />
-    <Compile Include="TopologyBrepVertex.vb" />
-    <Compile Include="TopologyPolygonEdgeFilter.vb" />
+    <Compile Include="GhcTopologyBrepVertexFilter.vb" />
+    <Compile Include="GhcTopologyBrepEdgeFilter.vb" />
+    <Compile Include="GhcTopologyBrepVertex.vb" />
+    <Compile Include="GhcTopologyPolygonEdgeFilter.vb" />
     <Compile Include="PLineTopological.vb" />
     <Compile Include="PointTopological.vb" />
-    <Compile Include="TopologyLine.vb" />
-    <Compile Include="TopologyPolygonPointFilter.vb" />
-    <Compile Include="TopologyPolygonPoint.vb" />
+    <Compile Include="GhcTopologyLine.vb" />
+    <Compile Include="GhcTopologyPolygonPointFilter.vb" />
+    <Compile Include="GhcTopologyPolygonPoint.vb" />
     <Compile Include="Sandbox_Topology_Info.vb" />
-    <Compile Include="TopologyBrepEdge.vb" />
+    <Compile Include="GhcTopologyBrepEdge.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -139,7 +124,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="TopologyPolygonEdge.vb" />
+    <Compile Include="GhcTopologyPolygonEdge.vb" />
     <Compile Include="TopologyLineFilter.vb" />
     <Compile Include="TopologyShared.vb" />
   </ItemGroup>
@@ -334,7 +319,9 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>Copy "$(TargetPath)" "$(TargetDir)$(ProjectName).gha"
-Erase "$(TargetPath)"</PostBuildEvent>
+Copy "$(TargetPath)" "$(AppData)\Grasshopper\Libraries\$(ProjectName).gha"
+Erase "$(TargetPath)"
+</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug32|AnyCPU' ">
     <StartArguments>
@@ -348,7 +335,7 @@ Erase "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.DeltaBaseDate.Increment" BuildVersion_UseGlobalSettings="True" BuildVersion_StartDate="2013/9/6" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_StartDate="2013/9/6" BuildVersion_UseGlobalSettings="True" BuildVersion_BuildVersioningStyle="None.None.DeltaBaseDate.Increment" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="..\packages\RhinoCommon.6.35.21222.17001\build\net45\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.6.35.21222.17001\build\net45\RhinoCommon.targets')" />

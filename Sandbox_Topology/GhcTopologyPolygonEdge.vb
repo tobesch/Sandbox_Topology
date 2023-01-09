@@ -6,14 +6,14 @@ Imports Grasshopper.Kernel.Types
 Imports Grasshopper.Kernel.Data
 
 
-Public Class TopologyPolygonEdge
+Public Class GhcTopologyPolygonEdge
     Inherits GH_Component
     ''' <summary>
     ''' Initializes a new instance of the TopologyPolygonEdge class.
     ''' </summary>
     Public Sub New()
-        MyBase.New("Polygon Topology Edge", "Poly Topo Edge", _
-     "Analyses the edge topology of a curve network consisting of closed polylines", _
+        MyBase.New("Polygon Topology Edge", "Poly Topo Edge",
+     "Analyses the edge topology of a curve network consisting of closed polylines",
      "Sandbox", "Topology")
     End Sub
 
@@ -21,7 +21,7 @@ Public Class TopologyPolygonEdge
     ''' Registers all the input parameters for this component.
     ''' </summary>
     Protected Overrides Sub RegisterInputParams(ByVal pManager As GH_Component.GH_InputParamManager)
-        pManager.AddCurveParameter("List of polylines", "C", "Network of closed polylines", GH_ParamAccess.list)
+        pManager.AddCurveParameter("List of polylines", "C", "Network of closed polylines", GH_ParamAccess.tree)
         pManager.AddNumberParameter("Tolerance", "T", "Tolerance value", GH_ParamAccess.item, 0.001)
     End Sub
 
@@ -29,7 +29,7 @@ Public Class TopologyPolygonEdge
     ''' Registers all the output parameters for this component.
     ''' </summary>
     Protected Overrides Sub RegisterOutputParams(ByVal pManager As GH_Component.GH_OutputParamManager)
-        pManager.AddLineParameter("List of edges", "E", "Ordered list of unique polyline edges", GH_ParamAccess.list)
+        pManager.AddLineParameter("List of edges", "E", "Ordered list of unique polyline edges", GH_ParamAccess.tree)
         pManager.AddIntegerParameter("Loop-Edge structure", "LE", "For each polyline lists edge indices belonging to polyline", GH_ParamAccess.tree)
         pManager.AddIntegerParameter("Edge-Loop structure", "EL", "For each edge lists adjacent polyline indices", GH_ParamAccess.tree)
     End Sub
@@ -42,55 +42,72 @@ Public Class TopologyPolygonEdge
 
         '1. Declare placeholder variables and assign initial invalid data.
         '   This way, if the input parameters fail to supply valid data, we know when to abort.
-        Dim _C As New List(Of GH_Curve)
+        Dim _C As New GH_Structure(Of GH_Curve)
         Dim _T As Double = 0
 
         '2. Retrieve input data.
-        If (Not DA.GetDataList(0, _C)) Then Return
+        If (Not DA.GetDataTree(0, _C)) Then Return
         If (Not DA.GetData(1, _T)) Then Return
 
         '3. Abort on invalid inputs.
-        If (Not _C.Count > 0) Then Return
+        If (Not _C.PathCount > 0) Then Return
         If (Not _T > 0) Then Return
 
         '4. Do something useful.
-        Dim _polyList As New List(Of Polyline)
+        Dim _polyTree As New Grasshopper.DataTree(Of Polyline)
 
         '4.1. check inputs
-        For Each _crv As GH_Curve In _C
-            Dim _poly As Polyline = Nothing
-            If Not _crv.Value.TryGetPolyline(_poly) Then Return
-            _polyList.Add(_poly)
+        For i As Int32 = 0 To _C.Branches.Count - 1 Step 1
+            Dim path As New GH_Path(i)
+            For Each _crv As GH_Curve In _C.Branches.Item(i)
+                Dim _poly As Polyline = Nothing
+                If Not _crv.Value.TryGetPolyline(_poly) Then Return
+                _polyTree.Add(_poly, path)
+            Next
         Next
 
-        '4.2. get topology
-        Dim _edgeDict As Dictionary(Of String, Line) = getEdgeDict(_polyList, _T)
-        Dim _fDict As Dictionary(Of String, List(Of String)) = getFaceDict(_polyList, _edgeDict, _T)
-        Dim _edgeFaceDict As Dictionary(Of String, List(Of String)) = getEdgeFaceDict(_fDict, _edgeDict)
-
-        '4.3: return results
-        Dim _EValues As New List(Of Line)
-        For Each _pair As KeyValuePair(Of String, Line) In _edgeDict
-            _EValues.Add(_pair.Value)
-        Next
-
+        Dim _EValues As New Grasshopper.DataTree(Of Line)
         Dim _FEValues As New Grasshopper.DataTree(Of Int32)
-        For Each _edgeIndexList As List(Of String) In _fDict.Values
-            Dim _path As New GH_Path(_FEValues.BranchCount)
-            For Each _item As String In _edgeIndexList
-                _FEValues.Add(_item.Substring(1), _path)
-            Next
-        Next
-
         Dim _EFValues As New Grasshopper.DataTree(Of Int32)
-        For Each _fList As List(Of String) In _edgeFaceDict.Values
-            Dim _path As New GH_Path(_EFValues.BranchCount)
-            For Each _item As String In _fList
-                _EFValues.Add(_item.Substring(1), _path)
+
+        For i As Int32 = 0 To _polyTree.Branches.Count - 1
+
+            Dim branch As List(Of Polyline) = _polyTree.Branch(i)
+            Dim mainpath As New GH_Path(i)
+
+            '4.2. get topology
+            Dim _edgeDict As Dictionary(Of String, Line) = getEdgeDict(branch, _T)
+            Dim _fDict As Dictionary(Of String, List(Of String)) = getFaceDict(branch, _edgeDict, _T)
+            Dim _edgeFaceDict As Dictionary(Of String, List(Of String)) = getEdgeFaceDict(_fDict, _edgeDict)
+
+            '4.3: return results
+            For Each _pair As KeyValuePair(Of String, Line) In _edgeDict
+                _EValues.Add(_pair.Value, mainpath)
             Next
+
+            For j As Int32 = 0 To _fDict.Count - 1
+                Dim _edgeIndexList As List(Of String) = _fDict.Item("F" & j)
+                Dim args As Integer() = New Integer() {i, j}
+                Dim _path As New GH_Path(args)
+                'For Each _edgeIndexList As List(Of String) In _fDict.Values
+                For Each _item As String In _edgeIndexList
+                    _FEValues.Add(_item.Substring(1), _path)
+                Next
+            Next
+
+            For j As Int32 = 0 To _edgeFaceDict.Count - 1
+                Dim _fList As List(Of String) = _edgeFaceDict.Item("E" & j)
+                Dim args As Integer() = New Integer() {i, j}
+                Dim _path As New GH_Path(args)
+                'For Each _fList As List(Of String) In _edgeFaceDict.Values
+                For Each _item As String In _fList
+                    _EFValues.Add(_item.Substring(1), _path)
+                Next
+            Next
+
         Next
 
-        DA.SetDataList(0, _EValues)
+        DA.SetDataTree(0, _EValues)
         DA.SetDataTree(1, _FEValues)
         DA.SetDataTree(2, _EFValues)
 
