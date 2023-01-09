@@ -9,12 +9,20 @@ using Rhino.Geometry;
 namespace Sandbox
 {
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class GhcTopologyLine : GH_Component
     {
         /// <summary>
     /// Initializes a new instance of the PolygonEdgeTopology class.
     /// </summary>
-        public GhcTopologyLine() : base("Line Topology", "Line Topo", "Analyses the topology of a network consisting of lines", "Sandbox", "Topology")
+        public GhcTopologyLine() : base(
+            "Line Topology", 
+            "Line Topo", 
+            "Analyses the topology of a network consisting of lines", 
+            "Sandbox", 
+            "Topology")
         {
         }
 
@@ -47,7 +55,7 @@ namespace Sandbox
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
-            var _L = new GH_Structure<GH_Line>();
+            GH_Structure<GH_Line> _L;
             double _T = 0d;
 
             // 2. Retrieve input data.
@@ -135,7 +143,7 @@ namespace Sandbox
                     var args = new int[] { i, j };
                     var _path = new GH_Path(args);
                     foreach (PLineTopological _lineTopo in _ptTopo.PLines)
-                        _PLValues.Add((Line)_L.get_Branch(i)[_lineTopo.Index].Value, _path);
+                        _PLValues.Add(_L.Branches[i][_lineTopo.Index].Value, _path);
                 }
 
             }
@@ -147,6 +155,9 @@ namespace Sandbox
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override GH_Exposure Exposure
         {
             get
