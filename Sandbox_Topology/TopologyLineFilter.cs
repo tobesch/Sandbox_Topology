@@ -117,6 +117,9 @@ namespace Sandbox
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override GH_Exposure Exposure
         {
             get

@@ -8,7 +8,9 @@ using Rhino.Geometry;
 namespace Sandbox
 {
 
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class TopologyMeshVertexFilter : GH_Component
     {
         /// <summary>
@@ -112,6 +114,9 @@ namespace Sandbox
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override GH_Exposure Exposure
         {
             get

@@ -7,33 +7,35 @@ using Rhino.Geometry;
 namespace Sandbox
 {
 
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class TopologyMeshEdge : GH_Component
     {
 
         /// <summary>
-    /// Each implementation of GH_Component must provide a public 
-    /// constructor without any arguments.
-    /// Category represents the Tab in which the component will appear, 
-    /// Subcategory the panel. If you use non-existing tab or panel names, 
-    /// new tabs/panels will automatically be created.
-    /// </summary>
+        /// Each implementation of GH_Component must provide a public 
+        /// constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, 
+        /// Subcategory the panel. If you use non-existing tab or panel names, 
+        /// new tabs/panels will automatically be created.
+        /// </summary>
         public TopologyMeshEdge() : base("Mesh Topology Edge", "Mesh Topo Edge", "Analyses the edge topology of a Mesh", "Sandbox", "Topology")
 
         {
         }
 
         /// <summary>
-    /// Registers all the input parameters for this component.
-    /// </summary>
+        /// Registers all the input parameters for this component.
+        /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddMeshParameter("Mesh", "M", "Mesh to analyse", GH_ParamAccess.item);
         }
 
         /// <summary>
-    /// Registers all the output parameters for this component.
-    /// </summary>
+        /// Registers all the output parameters for this component.
+        /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddLineParameter("List of edges", "E", "Ordered list of mesh edges", GH_ParamAccess.list);
@@ -62,9 +64,7 @@ namespace Sandbox
                 return;
 
             // 4. Check for non-manifold Mesh
-            bool _isOriented;
-            bool _hasBoundary;
-            if (!_mesh.IsManifold(true, out _isOriented, out _hasBoundary))
+            if (!_mesh.IsManifold(true, out bool _isOriented, out bool _hasBoundary))
                 return;
 
             // 5. Check if the topology is valid
@@ -116,6 +116,9 @@ namespace Sandbox
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override GH_Exposure Exposure
         {
             get
