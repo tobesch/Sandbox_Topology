@@ -8,7 +8,7 @@ namespace Sandbox
     static class TopologyShared
     {
 
-        private static bool containsPoint(List<PointTopological> _points, Point3d _check, double _T)
+        private static bool ContainsPoint(List<PointTopological> _points, Point3d _check, double _T)
         {
 
             foreach (PointTopological _item in _points)
@@ -24,7 +24,7 @@ namespace Sandbox
 
         }
 
-        public static List<PointTopological> getPointTopo(List<Polyline> P, double _T)
+        public static List<PointTopological> GetPointTopo(List<Polyline> P, double _T)
         {
 
             var _ptList = new List<PointTopological>();
@@ -39,7 +39,7 @@ namespace Sandbox
                 {
 
                     // check if point exists in _ptList already
-                    if (!containsPoint(_ptList, _points[i], _T))
+                    if (!ContainsPoint(_ptList, _points[i], _T))
                     {
                         _ptList.Add(new PointTopological(_points[i], _count));
                         _count = _count + 1;
@@ -53,7 +53,7 @@ namespace Sandbox
 
         }
 
-        public static List<PLineTopological> getPLineTopo(List<Polyline> P, List<PointTopological> _ptDict, double _T)
+        public static List<PLineTopological> GetPLineTopo(List<Polyline> P, List<PointTopological> _ptDict, double _T)
         {
 
             var _lDict = new List<PLineTopological>();
@@ -90,7 +90,7 @@ namespace Sandbox
 
         }
 
-        public static void setPointPLineTopo(List<PLineTopological> _lineList, List<PointTopological> _pointList)
+        public static void SetPointPLineTopo(List<PLineTopological> _lineList, List<PointTopological> _pointList)
         {
 
             foreach (PointTopological _pt in _pointList)
