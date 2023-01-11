@@ -3,7 +3,9 @@ using Rhino.Geometry;
 
 namespace Sandbox
 {
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class PointTopological
     {
 
@@ -11,6 +13,11 @@ namespace Sandbox
         private int _i;     // internal indexing of the points
         private List<PLineTopological> _l = null;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="P"></param>
+        /// <param name="I"></param>
         public PointTopological(Point3d P, int I)
         {
 
@@ -22,6 +29,9 @@ namespace Sandbox
 
         // ##### PROPERTIES #####
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Point3d Point
         {
             get
@@ -30,6 +40,9 @@ namespace Sandbox
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public int Index
         {
             get
@@ -38,6 +51,9 @@ namespace Sandbox
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public List<PLineTopological> PLines
         {
             set

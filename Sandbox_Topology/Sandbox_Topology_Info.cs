@@ -2,10 +2,14 @@
 
 namespace Sandbox
 {
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class Sandbox_Topology_Info : GH_AssemblyInfo
     {
-
+        /// <summary>
+        /// 
+        /// </summary>
         public override string AssemblyName
         {
             get
@@ -14,6 +18,9 @@ namespace Sandbox
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override GH_LibraryLicense License
         {
             get
@@ -21,6 +28,10 @@ namespace Sandbox
                 return GH_LibraryLicense.opensource;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public override string Description
         {
             get
@@ -28,6 +39,10 @@ namespace Sandbox
                 return "Tools for experiments in computational architecture";
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public override string Version
         {
             get
@@ -35,6 +50,10 @@ namespace Sandbox
                 return "1.0.0.0";
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public override string Name
         {
             get
@@ -42,6 +61,10 @@ namespace Sandbox
                 return "Sandbox Topology";
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public override string AuthorContact
         {
             get
@@ -49,6 +72,10 @@ namespace Sandbox
                 return "tobias.schwinn@gmail.com";
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public override string AuthorName
         {
             get

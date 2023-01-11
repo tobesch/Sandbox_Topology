@@ -8,19 +8,21 @@ using Rhino.Geometry;
 namespace Sandbox
 {
 
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class GhcTopologyPolygonPoint : GH_Component
     {
         /// <summary>
-    /// Initializes a new instance of the PolygonTopology class.
-    /// </summary>
+        /// Initializes a new instance of the PolygonTopology class.
+        /// </summary>
         public GhcTopologyPolygonPoint() : base("Polygon Topology Point", "Poly Topo Point", "Analyses the point topology of a network consisting of closed polylines", "Sandbox", "Topology")
         {
         }
 
         /// <summary>
-    /// Registers all the input parameters for this component.
-    /// </summary>
+        /// Registers all the input parameters for this component.
+        /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddCurveParameter("List of polylines", "C", "Network of closed polylines", GH_ParamAccess.tree);
@@ -28,8 +30,8 @@ namespace Sandbox
         }
 
         /// <summary>
-    /// Registers all the output parameters for this component.
-    /// </summary>
+        /// Registers all the output parameters for this component.
+        /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddPointParameter("List of points", "P", "Ordered list of unique points", GH_ParamAccess.tree);
@@ -38,9 +40,9 @@ namespace Sandbox
         }
 
         /// <summary>
-    /// This is the method that actually does the work.
-    /// </summary>
-    /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// This is the method that actually does the work.
+        /// </summary>
+        /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
 
@@ -88,9 +90,9 @@ namespace Sandbox
                 var mainpath = new GH_Path(i);
 
                 // 4.2. get topology
-                var _ptList = TopologyShared.getPointTopo(branch, _T);
-                var _fList = TopologyShared.getPLineTopo(branch, _ptList, _T);
-                TopologyShared.setPointPLineTopo(_fList, _ptList);
+                var _ptList = TopologyShared.GetPointTopo(branch, _T);
+                var _fList = TopologyShared.GetPLineTopo(branch, _ptList, _T);
+                TopologyShared.SetPointPLineTopo(_fList, _ptList);
 
                 // 4.3: return results
                 foreach (PointTopological _ptTopo in _ptList)
@@ -122,9 +124,9 @@ namespace Sandbox
         }
 
         /// <summary>
-    /// Provides an Icon for every component that will be visible in the User Interface.
-    /// Icons need to be 24x24 pixels.
-    /// </summary>
+        /// Provides an Icon for every component that will be visible in the User Interface.
+        /// Icons need to be 24x24 pixels.
+        /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
             get
@@ -136,8 +138,8 @@ namespace Sandbox
         }
 
         /// <summary>
-    /// Gets the unique ID for this component. Do not change this ID after release.
-    /// </summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
         public override Guid ComponentGuid
         {
             get
@@ -146,6 +148,9 @@ namespace Sandbox
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override GH_Exposure Exposure
         {
             get

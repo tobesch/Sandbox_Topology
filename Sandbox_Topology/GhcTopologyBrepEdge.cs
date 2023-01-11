@@ -6,32 +6,34 @@ using Rhino.Geometry;
 namespace Sandbox
 {
 
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class GhcTopologyBrepEdge : GH_Component
     {
 
         /// <summary>
-    /// Each implementation of GH_Component must provide a public 
-    /// constructor without any arguments.
-    /// Category represents the Tab in which the component will appear, 
-    /// Subcategory the panel. If you use non-existing tab or panel names, 
-    /// new tabs/panels will automatically be created.
-    /// </summary>
+        /// Each implementation of GH_Component must provide a public 
+        /// constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, 
+        /// Subcategory the panel. If you use non-existing tab or panel names, 
+        /// new tabs/panels will automatically be created.
+        /// </summary>
         public GhcTopologyBrepEdge() : base("Brep Topology Edge", "Brep Topo Edge", "Analyses the edge topology of a Brep", "Sandbox", "Topology")
         {
         }
 
         /// <summary>
-    /// Registers all the input parameters for this component.
-    /// </summary>
+        /// Registers all the input parameters for this component.
+        /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddBrepParameter("Brep", "B", "Brep to analyse", GH_ParamAccess.item);
         }
 
         /// <summary>
-    /// Registers all the output parameters for this component.
-    /// </summary>
+        /// Registers all the output parameters for this component.
+        /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddIntegerParameter("Face-Edge structure", "FE", "For each face list edge indices belonging to face", GH_ParamAccess.tree);
@@ -39,10 +41,10 @@ namespace Sandbox
         }
 
         /// <summary>
-    /// This is the method that actually does the work.
-    /// </summary>
-    /// <param name="DA">The DA object can be used to retrieve data from input parameters and 
-    /// to store data in output parameters.</param>
+        /// This is the method that actually does the work.
+        /// </summary>
+        /// <param name="DA">The DA object can be used to retrieve data from input parameters and 
+        /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
 
@@ -96,9 +98,9 @@ namespace Sandbox
         }
 
         /// <summary>
-    /// Provides an Icon for every component that will be visible in the User Interface.
-    /// Icons need to be 24x24 pixels.
-    /// </summary>
+        /// Provides an Icon for every component that will be visible in the User Interface.
+        /// Icons need to be 24x24 pixels.
+        /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
             get
@@ -109,6 +111,9 @@ namespace Sandbox
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override GH_Exposure Exposure
         {
             get
@@ -118,10 +123,10 @@ namespace Sandbox
         }
 
         /// <summary>
-    /// Each component must have a unique Guid to identify it. 
-    /// It is vital this Guid doesn't change otherwise old ghx files 
-    /// that use the old ID will partially fail during loading.
-    /// </summary>
+        /// Each component must have a unique Guid to identify it. 
+        /// It is vital this Guid doesn't change otherwise old ghx files 
+        /// that use the old ID will partially fail during loading.
+        /// </summary>
         public override Guid ComponentGuid
         {
             get

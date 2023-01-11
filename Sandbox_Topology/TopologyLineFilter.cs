@@ -8,20 +8,22 @@ using Rhino.Geometry;
 namespace Sandbox
 {
 
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class TopologyLineFilter : GH_Component
     {
         /// <summary>
-    /// Initializes a new instance of the TopoplogyLineFilter class.
-    /// </summary>
+        /// Initializes a new instance of the TopoplogyLineFilter class.
+        /// </summary>
         public TopologyLineFilter() : base("Line Topology Filter", "Line Filter", "Filters a network of lines based on connectivity", "Sandbox", "Topology")
 
         {
         }
 
         /// <summary>
-    /// Registers all the input parameters for this component.
-    /// </summary>
+        /// Registers all the input parameters for this component.
+        /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddPointParameter("List of points", "P", "Ordered list of unique points", GH_ParamAccess.list);
@@ -30,8 +32,8 @@ namespace Sandbox
         }
 
         /// <summary>
-    /// Registers all the output parameters for this component.
-    /// </summary>
+        /// Registers all the output parameters for this component.
+        /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddPointParameter("List of points", "P", "List of points matching the valency criteria", GH_ParamAccess.list);
@@ -39,9 +41,9 @@ namespace Sandbox
         }
 
         /// <summary>
-    /// This is the method that actually does the work.
-    /// </summary>
-    /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// This is the method that actually does the work.
+        /// </summary>
+        /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
 
@@ -94,9 +96,9 @@ namespace Sandbox
         }
 
         /// <summary>
-    /// Provides an Icon for every component that will be visible in the User Interface.
-    /// Icons need to be 24x24 pixels.
-    /// </summary>
+        /// Provides an Icon for every component that will be visible in the User Interface.
+        /// Icons need to be 24x24 pixels.
+        /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
             get
@@ -107,8 +109,8 @@ namespace Sandbox
         }
 
         /// <summary>
-    /// Gets the unique ID for this component. Do not change this ID after release.
-    /// </summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
         public override Guid ComponentGuid
         {
             get
