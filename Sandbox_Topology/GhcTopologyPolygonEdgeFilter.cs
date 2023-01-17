@@ -77,7 +77,7 @@ namespace Sandbox
             for (int i = 0, loopTo = _E.Branches.Count - 1; i <= loopTo; i++)
             {
 
-                List<GH_Line> branch = (List<GH_Line>)_E.get_Branch(i);
+                List<GH_Line> branch = (List<GH_Line>)_E.Branches[i];
                 var mainpath = new GH_Path(i);
 
                 for (int j = 0, loopTo1 = branch.Count - 1; j <= loopTo1; j++)
