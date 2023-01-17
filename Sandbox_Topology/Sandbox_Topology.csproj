@@ -129,7 +129,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="GhcTopologyPolygonEdge.cs" />
-    <Compile Include="TopologyLineFilter.cs" />
+    <Compile Include="GhcTopologyLineFilter.cs" />
     <Compile Include="TopologyShared.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -339,7 +339,7 @@ Erase "$(TargetPath)"
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.DeltaBaseDate.Increment" BuildVersion_UseGlobalSettings="True" BuildVersion_StartDate="2013/9/6" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_StartDate="2013/9/6" BuildVersion_UseGlobalSettings="True" BuildVersion_BuildVersioningStyle="None.None.DeltaBaseDate.Increment" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="..\packages\RhinoCommon.6.35.21222.17001\build\net45\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.6.35.21222.17001\build\net45\RhinoCommon.targets')" />
