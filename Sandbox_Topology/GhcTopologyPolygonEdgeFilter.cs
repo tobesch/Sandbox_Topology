@@ -48,8 +48,8 @@ namespace Sandbox
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
-            var _E = new GH_Structure<GH_Line>();
-            GH_Structure<GH_Integer> _EL = null;
+            GH_Structure<GH_Line> _E;
+            GH_Structure<GH_Integer> _EL;
             int _V = 0;
 
             // 2. Retrieve input data.
@@ -74,13 +74,13 @@ namespace Sandbox
             var _idTree = new Grasshopper.DataTree<int>();
             var _edgeTree = new Grasshopper.DataTree<Line>();
 
-            for (int i = 0, loopTo = _E.Branches.Count - 1; i <= loopTo; i++)
+            for (int i = 0; i < _E.Branches.Count; i++)
             {
 
                 List<GH_Line> branch = (List<GH_Line>)_E.Branches[i];
-                var mainpath = new GH_Path(i);
+                var mainpath = _E.Paths[i];
 
-                for (int j = 0, loopTo1 = branch.Count - 1; j <= loopTo1; j++)
+                for (int j = 0; j < branch.Count; j++)
                 {
                     var args = new int[] { i, j };
                     var path = new GH_Path(args);
