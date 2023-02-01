@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace Sandbox
@@ -19,7 +21,12 @@ namespace Sandbox
         /// Subcategory the panel. If you use non-existing tab or panel names, 
         /// new tabs/panels will automatically be created.
         /// </summary>
-        public GhcTopologyBrepEdge() : base("Brep Topology Edge", "Brep Topo Edge", "Analyses the edge topology of a Brep", "Sandbox", "Topology")
+        public GhcTopologyBrepEdge() : base(
+            "Brep Topology Edge",
+            "Brep Topo Edge",
+            "Analyses the edge topology of a Brep",
+            "Sandbox",
+            "Topology")
         {
         }
 
@@ -28,7 +35,7 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddBrepParameter("Brep", "B", "Brep to analyse", GH_ParamAccess.item);
+            pManager.AddBrepParameter("Breps", "B", "Breps to analyse", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -36,6 +43,7 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
+            pManager.AddCurveParameter("List of edge curves", "E", "Ordered list of unique brep edge curves", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Face-Edge structure", "FE", "For each face list edge indices belonging to face", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Edge-Face structure", "EF", "For each edge lists adjacent face indices", GH_ParamAccess.tree);
         }
@@ -50,50 +58,56 @@ namespace Sandbox
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
-            Brep _brep = null;
+            List<Brep> _breps = new();
 
             // 2. Retrieve input data.
-            if (!DA.GetData(0, ref _brep))
+            if (!DA.GetDataList(0, _breps))
                 return;
 
             // 3. Abort on invalid inputs.
-            if (!_brep.IsValid)
+            if (!(_breps.Count > 0))
                 return;
 
-            // 4. Check for non-manifold Breps
-            if (!_brep.IsManifold)
-                return;
-
-            // 5. Check if the topology is valid
-            string log = string.Empty;
-            if (!_brep.IsValidTopology(out log))
-                return;
-
-            // 6. Now do something productive
-            var e_tree = new Grasshopper.DataTree<int>();
-
-            foreach (BrepFace _face in _brep.Faces)
+            foreach (Brep _brep in _breps)
             {
-
-                var _edges = _face.AdjacentEdges();
-                var e_path = new GH_Path(e_tree.BranchCount);
-                e_tree.AddRange(_edges, e_path);
-
+                // 3.1. Check for non-manifold Breps
+                if (!_brep.IsManifold)
+                    return;
+                // 3.2. Check if the topology is valid
+                if (!_brep.IsValidTopology(out _))
+                    return;
             }
 
+            // 4. Now do something productive
+            var e_tree = new Grasshopper.DataTree<Curve>();
+            var fe_tree = new Grasshopper.DataTree<int>();
+            var ef_tree = new Grasshopper.DataTree<int>();
 
-            var f_tree = new Grasshopper.DataTree<int>();
-
-            foreach (BrepEdge _edge in _brep.Edges)
+            for (int i = 0; i < _breps.Count; i++)
             {
+                var _edges = _breps[i].Edges;
+                var e_path = new GH_Path(i);
+                e_tree.AddRange(_edges, e_path);
 
-                var _faces = _edge.AdjacentFaces();
-                var f_path = new GH_Path(f_tree.BranchCount);
-                f_tree.AddRange(_faces, f_path);
+                for (int j = 0; j < _breps[i].Faces.Count; j++)
+                {
+                    var face_edges = _breps[i].Faces[j].AdjacentEdges();
+                    var fe_path = new GH_Path(i, j);
+                    fe_tree.AddRange(face_edges, fe_path);
+                }
+
+                for (int j = 0; j < _breps[i].Edges.Count; j++)
+                {
+                    var _faces = _breps[i].Edges[j].AdjacentFaces();
+                    var ef_path = new GH_Path(i, j);
+                    ef_tree.AddRange(_faces, ef_path);
+                }
+
             }
 
             DA.SetDataTree(0, e_tree);
-            DA.SetDataTree(1, f_tree);
+            DA.SetDataTree(1, fe_tree);
+            DA.SetDataTree(2, ef_tree);
 
         }
 
