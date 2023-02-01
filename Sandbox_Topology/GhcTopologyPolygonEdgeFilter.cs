@@ -70,32 +70,25 @@ namespace Sandbox
                 return;
 
             // 4. Do something useful.
-
             var _idTree = new Grasshopper.DataTree<int>();
             var _edgeTree = new Grasshopper.DataTree<Line>();
 
-            for (int i = 0; i < _E.Branches.Count; i++)
+            for (int i = 0; i < _EL.Branches.Count; i++)
             {
-
-                List<GH_Line> branch = (List<GH_Line>)_E.Branches[i];
-                var mainpath = _E.Paths[i];
-
-                for (int j = 0; j < branch.Count; j++)
+                var branch = _EL.Branches[i];
+                
+                if (branch.Count == _V)
                 {
-                    var args = new int[] { i, j };
-                    var path = new GH_Path(args);
-                    if (_EL.get_Branch(path).Count == _V)
-                    {
-                        _idTree.Add(j, mainpath);
-                        _edgeTree.Add(branch[j].Value, mainpath);
-                    }
+                    var curr_path = _EL.Paths[i]; // the path of the current branch
+                    var main_path = new GH_Path(curr_path.Indices[0]);
+                    int edge_index = curr_path.Indices[1];
+                    _idTree.Add(edge_index, main_path);
+                    _edgeTree.Add(_E.Branches[curr_path.Indices[0]][edge_index].Value, main_path);
                 }
-
             }
 
             DA.SetDataTree(0, _idTree);
             DA.SetDataTree(1, _edgeTree);
-
 
         }
 
