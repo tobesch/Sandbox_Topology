@@ -1,7 +1,10 @@
 ---
 name: Sandbox-Topology
-version: 1.0.0.0
+version: 0.1.0
 authors:
 - Tobias Schwinn
-description: Tools for experiments in computational architecture
-url: tobias.schwinn@gmail.com
+description: Tools for analyzing topology in polygonal networks
+url: https://tobias-schwinn.net
+icon: SandboxTopology.png
+keywords:
+- topology
