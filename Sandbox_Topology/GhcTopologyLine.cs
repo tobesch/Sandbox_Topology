@@ -44,6 +44,7 @@ namespace Sandbox
             pManager.AddIntegerParameter("Line-Point structure", "LP", "For each line lists both end points indices", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Point-Point structure", "PP", "For each point list all point indices connected to it", GH_ParamAccess.tree);
             pManager.AddLineParameter("Point-Line structure", "PL", "For each point list all lines connected to it", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("Point-Line structure index", "PLi", "For each point list all lines indices connected to it", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -91,6 +92,8 @@ namespace Sandbox
             var _LPValues = new Grasshopper.DataTree<int>();
             var _PPValues = new Grasshopper.DataTree<int>();
             var _PLValues = new Grasshopper.DataTree<Line>();
+            var _PLiValues = new Grasshopper.DataTree<int>();
+
 
             for (int i = 0, loopTo = _polyTree.Branches.Count - 1; i <= loopTo; i++)
             {
@@ -143,7 +146,10 @@ namespace Sandbox
                     var args = new int[] { i, j };
                     var _path = new GH_Path(args);
                     foreach (PLineTopological _lineTopo in _ptTopo.PLines)
+                    {
                         _PLValues.Add(_L.Branches[i][_lineTopo.Index].Value, _path);
+                        _PLiValues.Add(_lineTopo.Index, _path);
+                    }
                 }
 
             }
@@ -152,6 +158,7 @@ namespace Sandbox
             DA.SetDataTree(1, _LPValues);
             DA.SetDataTree(2, _PPValues);
             DA.SetDataTree(3, _PLValues);
+            DA.SetDataTree(4, _PLiValues);
 
         }
 
