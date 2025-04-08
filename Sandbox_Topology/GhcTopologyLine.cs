@@ -160,7 +160,6 @@ namespace Sandbox
             DA.SetDataTree(3, _PLValues);
             DA.SetDataTree(4, _PLiValues);
 
-
         }
 
         /// <summary>
