@@ -48,8 +48,8 @@ namespace Sandbox
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
-            var _P = new GH_Structure<GH_Point>();
-            var _PF = new GH_Structure<GH_Integer>();
+            GH_Structure<GH_Point> _P; 
+            GH_Structure<GH_Integer> _PF; 
             int _V = 0;
 
             // 2. Retrieve input data.
@@ -70,29 +70,21 @@ namespace Sandbox
                 return;
 
             // 4. Do something useful.
-            // Dim _ptList As List(Of Point3d) = _P
-            var _pfTree = _PF;
-
             var _idTree = new Grasshopper.DataTree<int>();
             var _ptTree = new Grasshopper.DataTree<Point3d>();
 
-            for (int i = 0, loopTo = _P.Branches.Count - 1; i <= loopTo; i++)
+            for (int i = 0; i < _PF.Branches.Count; i++)
             {
+                var branch = _PF.Branches[i];
 
-                List<GH_Point> branch = (List<GH_Point>)_P.get_Branch(i);
-                var mainpath = new GH_Path(i);
-
-                for (int j = 0, loopTo1 = branch.Count - 1; j <= loopTo1; j++)
+                if (branch.Count == _V)
                 {
-                    var args = new int[] { i, j };
-                    var path = new GH_Path(args);
-                    if (_PF.get_Branch(path).Count == _V)
-                    {
-                        _idTree.Add(j, mainpath);
-                        _ptTree.Add(branch[j].Value, mainpath);
-                    }
+                    var curr_path = _PF.Paths[i]; // the path of the current branch
+                    var main_path = new GH_Path(curr_path.Indices[0]);
+                    int vertex_index = curr_path.Indices[1];
+                    _idTree.Add(vertex_index, main_path);
+                    _ptTree.Add(_P.Branches[curr_path.Indices[0]][vertex_index].Value, main_path);
                 }
-
             }
 
             DA.SetDataTree(0, _idTree);

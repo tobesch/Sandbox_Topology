@@ -69,12 +69,12 @@ namespace Sandbox
             var _polyTree = new Grasshopper.DataTree<Polyline>();
 
             // 4.1. check inputs
-            for (int i = 0, loopTo = _C.Branches.Count - 1; i <= loopTo; i += 1)
+            for (int i = 0; i < _C.Branches.Count; i++)
             {
                 var path = new GH_Path(i);
                 foreach (GH_Curve _crv in _C.Branches[i])
                 {
-                    Polyline _poly = null;
+                    Polyline _poly;
                     if (!_crv.Value.TryGetPolyline(out _poly))
                         return;
                     _polyTree.Add(_poly, path);
@@ -259,12 +259,12 @@ namespace Sandbox
             {
                 var _startPt = _l.PointAt(0d);
                 var _endPt = _l.PointAt(1d);
-                if (_startPt.DistanceTo(_check.PointAt(0d)) < _T & _endPt.DistanceTo(_check.PointAt(1d)) < _T)
+                if (_startPt.DistanceTo(_check.PointAt(0d)) < _T && _endPt.DistanceTo(_check.PointAt(1d)) < _T)
                 {
                     // consider it the same edge
                     return true;
                 }
-                else if (_startPt.DistanceTo(_check.PointAt(1d)) < _T & _endPt.DistanceTo(_check.PointAt(0d)) < _T)
+                else if (_startPt.DistanceTo(_check.PointAt(1d)) < _T && _endPt.DistanceTo(_check.PointAt(0d)) < _T)
                 {
                     // consider it the same edge
                     return true;
