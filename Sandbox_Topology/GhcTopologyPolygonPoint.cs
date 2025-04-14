@@ -98,7 +98,7 @@ namespace Sandbox
                 foreach (PointTopological _ptTopo in _ptList)
                     _PValues.Add(_ptTopo.Point, mainpath);
 
-                for (int j = 0, loopTo2 = _fList.Count - 1; j <= loopTo2; j++)
+                for (int j = 0; j < _fList.Count; j++)
                 {
                     var _lineTopo = _fList[j];
                     var args = new int[] { i, j };
@@ -107,7 +107,7 @@ namespace Sandbox
                         _FPValues.Add(_index, _path);
                 }
 
-                for (int j = 0, loopTo3 = _ptList.Count - 1; j <= loopTo3; j++)
+                for (int j = 0; j < _ptList.Count - 1; j++)
                 {
                     var _ptTopo = _ptList[j];
                     var args = new int[] { i, j };

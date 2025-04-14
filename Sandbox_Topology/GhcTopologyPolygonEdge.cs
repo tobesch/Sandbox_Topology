@@ -69,12 +69,12 @@ namespace Sandbox
             var _polyTree = new Grasshopper.DataTree<Polyline>();
 
             // 4.1. check inputs
-            for (int i = 0, loopTo = _C.Branches.Count - 1; i <= loopTo; i += 1)
+            for (int i = 0; i < _C.Branches.Count; i++)
             {
                 var path = new GH_Path(i);
                 foreach (GH_Curve _crv in _C.Branches[i])
                 {
-                    Polyline _poly = null;
+                    Polyline _poly;
                     if (!_crv.Value.TryGetPolyline(out _poly))
                         return;
                     _polyTree.Add(_poly, path);
