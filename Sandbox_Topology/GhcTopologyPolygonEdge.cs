@@ -259,12 +259,12 @@ namespace Sandbox
             {
                 var _startPt = _l.PointAt(0d);
                 var _endPt = _l.PointAt(1d);
-                if (_startPt.DistanceTo(_check.PointAt(0d)) < _T & _endPt.DistanceTo(_check.PointAt(1d)) < _T)
+                if (_startPt.DistanceTo(_check.PointAt(0d)) < _T && _endPt.DistanceTo(_check.PointAt(1d)) < _T)
                 {
                     // consider it the same edge
                     return true;
                 }
-                else if (_startPt.DistanceTo(_check.PointAt(1d)) < _T & _endPt.DistanceTo(_check.PointAt(0d)) < _T)
+                else if (_startPt.DistanceTo(_check.PointAt(1d)) < _T && _endPt.DistanceTo(_check.PointAt(0d)) < _T)
                 {
                     // consider it the same edge
                     return true;

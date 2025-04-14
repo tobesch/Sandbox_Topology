@@ -107,7 +107,7 @@ namespace Sandbox
                         _FPValues.Add(_index, _path);
                 }
 
-                for (int j = 0; j < _ptList.Count - 1; j++)
+                for (int j = 0; j < _ptList.Count; j++)
                 {
                     var _ptTopo = _ptList[j];
                     var args = new int[] { i, j };
