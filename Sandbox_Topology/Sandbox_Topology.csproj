@@ -66,6 +66,49 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>bin\Sandbox_Topology.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug32|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Debug32\</OutputPath>
+    <DocumentationFile>bin\Sandbox_Topology.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DocumentationFile>bin\Sandbox_Topology.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DocumentationFile>bin\Sandbox_Topology.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Eto, Version=2.5.0.0, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
@@ -96,6 +139,7 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GhcTopologyLineIndex.cs" />
     <Compile Include="My Project\MyNamespace.Static.1.Designer.cs" />
     <Compile Include="TopologyMeshVertexFilter.cs" />
     <Compile Include="TopologyMeshEdgeFilter.cs" />
@@ -153,79 +197,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\RobArch_Symbols-09.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_Unfold.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_Outline.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_Joints.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_Miters.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_1_Topology.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_2_EdgeDispatch.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_3_Interpreter.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_3_NCSettings.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_2_Joints.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_2_Miters.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_2_Outline.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_3_NC.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_3_Unfold.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_1_TopologySorted.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Sandbox_Planarize.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Sandbox_PlateTopology.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Sandbox_Topology.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Sandbox_TopologySorted.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Sandbox_Unfold.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Sandbox_Labels.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Sandbox_Polygonalize.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_2_EdgeDispatch1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_3_Interpreter1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_3_NC1.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\TopologyBrep.png" />

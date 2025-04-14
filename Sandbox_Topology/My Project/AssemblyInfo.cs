@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Topology Toolset for Sandbox Addon")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Sandbox")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCopyright("Copyright © 2013")]
 [assembly: AssemblyTrademark("")]
 
 [assembly: ComVisible(false)]
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // <Assembly: AssemblyVersion("1.0.000.1737")> 
 
-[assembly: AssemblyVersion("0.1.000.2")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("0.2.0")] // semantic versioning: MAJOR.MINOR.PATCH
+[assembly: AssemblyFileVersion("0.2.0")]

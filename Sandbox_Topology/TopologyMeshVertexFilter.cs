@@ -14,7 +14,7 @@ namespace Sandbox
     public class TopologyMeshVertexFilter : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the NakedPolygonVertices class.
+        /// Initializes a new instance of the TopologyMeshVertexFilter class.
         /// </summary>
         public TopologyMeshVertexFilter() : base("Mesh Topology Vertex Filter", "Mesh Topo Vertex Filter", "Filter the vertices of a mesh based on their connectivity", "Sandbox", "Topology")
 

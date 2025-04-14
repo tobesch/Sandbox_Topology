@@ -12,10 +12,11 @@ namespace Sandbox
     /// <summary>
     /// 
     /// </summary>
+    [Obsolete("Deprecated. Use 'GhcTopologyLineIndex' for index-based output.")]
     public class GhcTopologyLine : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PolygonEdgeTopology class.
+        /// Initializes a new instance of the GhcTopologyLine class.
         /// </summary>
         public GhcTopologyLine() : base(
             "Line Topology", 
@@ -52,6 +53,8 @@ namespace Sandbox
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is deprecated. Use 'Line Topology Index' instead.");
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
@@ -143,7 +146,9 @@ namespace Sandbox
                     var args = new int[] { i, j };
                     var _path = new GH_Path(args);
                     foreach (PLineTopological _lineTopo in _ptTopo.PLines)
+                    {
                         _PLValues.Add(_L.Branches[i][_lineTopo.Index].Value, _path);
+                    }
                 }
 
             }
@@ -152,7 +157,6 @@ namespace Sandbox
             DA.SetDataTree(1, _LPValues);
             DA.SetDataTree(2, _PPValues);
             DA.SetDataTree(3, _PLValues);
-
         }
 
         /// <summary>
@@ -162,7 +166,7 @@ namespace Sandbox
         {
             get
             {
-                return GH_Exposure.primary;
+                return GH_Exposure.hidden;
             }
         }
 

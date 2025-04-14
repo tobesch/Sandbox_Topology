@@ -36,7 +36,7 @@ namespace Sandbox
         {
             get
             {
-                return "Tools for experiments in computational architecture";
+                return "Tools for analyzing topology in polygonal networks.";
             }
         }
 
@@ -47,7 +47,7 @@ namespace Sandbox
         {
             get
             {
-                return "1.0.0.0";
+                return "0.2.0";
             }
         }
 
@@ -69,7 +69,7 @@ namespace Sandbox
         {
             get
             {
-                return "tobias.schwinn@gmail.com";
+                return "tobias.schwinn@icd.uni-stuttgart.de";
             }
         }
 
