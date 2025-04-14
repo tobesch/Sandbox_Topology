@@ -35,7 +35,7 @@ namespace Sandbox
 
                 var _points = _poly.ToArray();
 
-                for (int i = 0, loopTo = Information.UBound(_points); i <= loopTo; i++)
+                for (int i = 0, loopTo = _points.Length - 1; i <= loopTo; i++)
                 {
 
                     // check if point exists in _ptList already

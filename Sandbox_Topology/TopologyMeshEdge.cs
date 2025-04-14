@@ -73,23 +73,23 @@ namespace Sandbox
                 return;
 
             // 6. Now do something productive
-            var _FFVAlues = new Grasshopper.DataTree<int>();
-            var _EFVAlues = new Grasshopper.DataTree<int>();
+            var _FFValues = new Grasshopper.DataTree<int>();
+            var _EFValues = new Grasshopper.DataTree<int>();
 
             var _faceList = _mesh.Faces;
             for (int _fIndex = 0, loopTo = _faceList.Count - 1; _fIndex <= loopTo; _fIndex++)
             {
                 var _faces = _faceList.AdjacentFaces(_fIndex);
-                var ff_path = new GH_Path(_FFVAlues.BranchCount);
-                _FFVAlues.AddRange(_faces, ff_path);
+                var ff_path = new GH_Path(_FFValues.BranchCount);
+                _FFValues.AddRange(_faces, ff_path);
             }
 
             var _edgeList = _mesh.TopologyEdges;
             for (int _eIndex = 0, loopTo1 = _edgeList.Count - 1; _eIndex <= loopTo1; _eIndex++)
             {
                 var _faces = _edgeList.GetConnectedFaces(_eIndex);
-                var ef_path = new GH_Path(_EFVAlues.BranchCount);
-                _EFVAlues.AddRange(_faces, ef_path);
+                var ef_path = new GH_Path(_EFValues.BranchCount);
+                _EFValues.AddRange(_faces, ef_path);
             }
 
             var _EList = new List<Line>();
@@ -97,8 +97,8 @@ namespace Sandbox
                 _EList.Add(_edgeList.EdgeLine(_eIndex));
 
             DA.SetDataList(0, _EList);
-            DA.SetDataTree(1, _FFVAlues);
-            DA.SetDataTree(2, _EFVAlues);
+            DA.SetDataTree(1, _FFValues);
+            DA.SetDataTree(2, _EFValues);
 
         }
 

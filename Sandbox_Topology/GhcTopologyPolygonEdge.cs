@@ -176,7 +176,7 @@ namespace Sandbox
 
                 var _value = new List<string>();
 
-                for (int i = 0, loopTo = Information.UBound(_edges); i <= loopTo; i++)
+                for (int i = 0, loopTo = _edges.Length - 1; i <= loopTo; i++)
                 {
 
                     foreach (string _key in _edgeDict.Keys)
@@ -237,12 +237,12 @@ namespace Sandbox
 
             var _startPt = _line1.PointAt(0d);
             var _endPt = _line1.PointAt(1d);
-            if (_startPt.DistanceTo(_line2.PointAt(0d)) < _T & _endPt.DistanceTo(_line2.PointAt(1d)) < _T)
+            if (_startPt.DistanceTo(_line2.PointAt(0d)) < _T && _endPt.DistanceTo(_line2.PointAt(1d)) < _T)
             {
                 // consider it the same edge
                 return true;
             }
-            else if (_startPt.DistanceTo(_line2.PointAt(1d)) < _T & _endPt.DistanceTo(_line2.PointAt(0d)) < _T)
+            else if (_startPt.DistanceTo(_line2.PointAt(1d)) < _T && _endPt.DistanceTo(_line2.PointAt(0d)) < _T)
             {
                 // consider it the same edge
                 return true;

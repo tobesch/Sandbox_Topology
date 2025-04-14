@@ -14,7 +14,7 @@ namespace Sandbox
     public class GhcTopologyPolygonPointFilter : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the NakedPolygonVertices class.
+        /// Initializes a new instance of the GhcTopologyPolygonPointFilter class.
         /// </summary>
         public GhcTopologyPolygonPointFilter() : base("Polygon Topology Point Filter", "Poly Topo Point Filter", "Filter the points in a polygon network based on their connectivity", "Sandbox", "Topology")
         {

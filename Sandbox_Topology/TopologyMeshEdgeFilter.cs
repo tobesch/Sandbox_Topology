@@ -14,7 +14,7 @@ namespace Sandbox
     public class TopologyMeshEdgeFilter : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the NakedPolygonVertices class.
+        /// Initializes a new instance of the TopologyMeshEdgeFilter class.
         /// </summary>
         public TopologyMeshEdgeFilter() : base("Mesh Topology Edge Filter", "Mesh Topo Edge Filter", "Filter the edges of a mesh based on their valency", "Sandbox", "Topology")
 

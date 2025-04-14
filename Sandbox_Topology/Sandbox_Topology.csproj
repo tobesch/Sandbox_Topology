@@ -139,6 +139,7 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GhcTopologyLineIndex.cs" />
     <Compile Include="My Project\MyNamespace.Static.1.Designer.cs" />
     <Compile Include="TopologyMeshVertexFilter.cs" />
     <Compile Include="TopologyMeshEdgeFilter.cs" />
@@ -196,79 +197,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\RobArch_Symbols-09.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_Unfold.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_Outline.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_Joints.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_Miters.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_1_Topology.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_2_EdgeDispatch.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_3_Interpreter.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_3_NCSettings.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_2_Joints.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_2_Miters.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_2_Outline.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_3_NC.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_3_Unfold.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_1_TopologySorted.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Sandbox_Planarize.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Sandbox_PlateTopology.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Sandbox_Topology.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Sandbox_TopologySorted.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Sandbox_Unfold.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Sandbox_Labels.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Sandbox_Polygonalize.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_2_EdgeDispatch1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_3_Interpreter1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Echinoid_3_NC1.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\TopologyBrep.png" />
