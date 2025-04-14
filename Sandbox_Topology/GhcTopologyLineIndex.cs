@@ -10,18 +10,19 @@ namespace Sandbox
 {
 
     /// <summary>
-    /// 
+    /// A component that analyzes the topology of a line network and outputs index-based structures
+    /// compatible with other topology components.
     /// </summary>
-    [Obsolete("Deprecated. Use 'GhcTopologyLineIndex' for index-based output.")]
-    public class GhcTopologyLine : GH_Component
+
+    public class GhcTopologyLineIndex : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the GhcTopologyLine class.
+        /// Initializes a new instance of the GhcTopologyLineIndex class.
         /// </summary>
-        public GhcTopologyLine() : base(
-            "Line Topology", 
-            "Line Topo", 
-            "Analyses the topology of a network consisting of lines", 
+        public GhcTopologyLineIndex() : base(
+            "Line Topology Index", 
+            "LineTopoIdx", 
+            "Analyses the topology of a network consisting of lines and outputs indices", 
             "Sandbox", 
             "Topology")
         {
@@ -44,7 +45,7 @@ namespace Sandbox
             pManager.AddPointParameter("List of points", "P", "Ordered list of unique points", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Line-Point structure", "LP", "For each line lists both end points indices", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Point-Point structure", "PP", "For each point list all point indices connected to it", GH_ParamAccess.tree);
-            pManager.AddLineParameter("Point-Line structure", "PL", "For each point list all lines connected to it", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("Point-Line structure", "PL", "For each point list all lines indices connected to it", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -53,8 +54,6 @@ namespace Sandbox
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is deprecated. Use 'Line Topology Index' instead.");
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
@@ -93,7 +92,7 @@ namespace Sandbox
             var _PValues = new Grasshopper.DataTree<Point3d>();
             var _LPValues = new Grasshopper.DataTree<int>();
             var _PPValues = new Grasshopper.DataTree<int>();
-            var _PLValues = new Grasshopper.DataTree<Line>();
+            var _PLValues = new Grasshopper.DataTree<int>();
 
             for (int i = 0, loopTo = _polyTree.Branches.Count - 1; i <= loopTo; i++)
             {
@@ -147,7 +146,7 @@ namespace Sandbox
                     var _path = new GH_Path(args);
                     foreach (PLineTopological _lineTopo in _ptTopo.PLines)
                     {
-                        _PLValues.Add(_L.Branches[i][_lineTopo.Index].Value, _path);
+                        _PLValues.Add(_lineTopo.Index, _path);
                     }
                 }
 
@@ -166,7 +165,7 @@ namespace Sandbox
         {
             get
             {
-                return GH_Exposure.hidden;
+                return GH_Exposure.primary;
             }
         }
 
@@ -186,12 +185,6 @@ namespace Sandbox
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid
-        {
-            get
-            {
-                return new Guid("{a09956f1-a616-4896-a242-eab3fc506087}");
-            }
-        }
+        public override Guid ComponentGuid => new Guid("1a0cbffe-ea7b-4afc-9f19-bf088f857304");
     }
 }
