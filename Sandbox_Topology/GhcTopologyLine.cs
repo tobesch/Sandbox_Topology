@@ -12,6 +12,7 @@ namespace Sandbox
     /// <summary>
     /// 
     /// </summary>
+    [Obsolete("Deprecated. Use 'GhcTopologyLineIndex' for index-based output.")]
     public class GhcTopologyLine : GH_Component
     {
         /// <summary>
@@ -44,7 +45,6 @@ namespace Sandbox
             pManager.AddIntegerParameter("Line-Point structure", "LP", "For each line lists both end points indices", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Point-Point structure", "PP", "For each point list all point indices connected to it", GH_ParamAccess.tree);
             pManager.AddLineParameter("Point-Line structure", "PL", "For each point list all lines connected to it", GH_ParamAccess.tree);
-            pManager.AddIntegerParameter("Point-Line structure index", "PLi", "For each point list all lines indices connected to it", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -53,6 +53,8 @@ namespace Sandbox
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is deprecated. Use 'Line Topology Index' instead.");
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
@@ -92,8 +94,6 @@ namespace Sandbox
             var _LPValues = new Grasshopper.DataTree<int>();
             var _PPValues = new Grasshopper.DataTree<int>();
             var _PLValues = new Grasshopper.DataTree<Line>();
-            var _PLiValues = new Grasshopper.DataTree<int>();
-
 
             for (int i = 0, loopTo = _polyTree.Branches.Count - 1; i <= loopTo; i++)
             {
@@ -148,7 +148,6 @@ namespace Sandbox
                     foreach (PLineTopological _lineTopo in _ptTopo.PLines)
                     {
                         _PLValues.Add(_L.Branches[i][_lineTopo.Index].Value, _path);
-                        _PLiValues.Add(_lineTopo.Index, _path);
                     }
                 }
 
@@ -158,8 +157,6 @@ namespace Sandbox
             DA.SetDataTree(1, _LPValues);
             DA.SetDataTree(2, _PPValues);
             DA.SetDataTree(3, _PLValues);
-            DA.SetDataTree(4, _PLiValues);
-
         }
 
         /// <summary>
@@ -169,7 +166,7 @@ namespace Sandbox
         {
             get
             {
-                return GH_Exposure.primary;
+                return GH_Exposure.hidden;
             }
         }
 
