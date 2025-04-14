@@ -176,7 +176,7 @@ namespace Sandbox
 
                 var _value = new List<string>();
 
-                for (int i = 0, loopTo = Information.UBound(_edges); i <= loopTo; i++)
+                for (int i = 0, loopTo = _edges.Length - 1; i <= loopTo; i++)
                 {
 
                     foreach (string _key in _edgeDict.Keys)
