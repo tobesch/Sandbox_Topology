@@ -17,7 +17,7 @@ namespace Sandbox
     public class GhcTopologyLineIndex : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PolygonEdgeTopology class.
+        /// Initializes a new instance of the GhcTopologyLineIndex class.
         /// </summary>
         public GhcTopologyLineIndex() : base(
             "Line Topology Index", 

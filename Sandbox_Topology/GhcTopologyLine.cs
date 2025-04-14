@@ -16,7 +16,7 @@ namespace Sandbox
     public class GhcTopologyLine : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PolygonEdgeTopology class.
+        /// Initializes a new instance of the GhcTopologyLine class.
         /// </summary>
         public GhcTopologyLine() : base(
             "Line Topology", 
