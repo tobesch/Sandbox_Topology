@@ -173,7 +173,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="GhcTopologyPolygonEdge.cs" />
-    <Compile Include="TopologyLineFilter.cs" />
+    <Compile Include="GhcTopologyLineFilter.cs" />
     <Compile Include="TopologyShared.cs" />
   </ItemGroup>
   <ItemGroup>

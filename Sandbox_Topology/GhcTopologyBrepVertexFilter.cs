@@ -25,7 +25,7 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddPointParameter("Vertex list", "V", "Ordered list of points", GH_ParamAccess.list);
+            pManager.AddPointParameter("Vertex list", "V", "Ordered list of points", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Vertex-Face structure", "VF", "For each vertex the list of adjacent face indices", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Valency filter", "Val", "Filter vertices with the specified number of adjacent faces", GH_ParamAccess.item, 1);
         }
@@ -48,47 +48,47 @@ namespace Sandbox
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
-            var _P = new List<GH_Point>();
-            GH_Structure<GH_Integer> _PF = null;
-            int _V = 0;
+            GH_Structure<GH_Point> _V;
+            GH_Structure<GH_Integer> _VF;
+            int _Val = 0;
 
             // 2. Retrieve input data.
-            if (!DA.GetDataList(0, _P))
+            if (!DA.GetDataTree(0, out _V))
                 return;
-            if (!DA.GetDataTree(1, out _PF))
+            if (!DA.GetDataTree(1, out _VF))
                 return;
-            if (!DA.GetData(2, ref _V))
+            if (!DA.GetData(2, ref _Val))
                 return;
 
             // 3. Abort on invalid inputs.
             // 3.1. get the number of branches in the trees
-            if (!(_P.Count > 0))
+            if (!(_V.PathCount > 0))
                 return;
-            if (!(_PF.PathCount > 0))
+            if (!(_VF.PathCount > 0))
                 return;
-            if (!(_V > 0))
+            if (!(_Val > 0))
                 return;
 
             // 4. Do something useful.
-            // Dim _ptList As List(Of Point3d) = _P
-            var _pfTree = _PF;
+            var _idTree = new Grasshopper.DataTree<int>();
+            var _ptTree = new Grasshopper.DataTree<Point3d>();
 
-            var _idList = new List<int>();
-            for (int i = 0, loopTo = _PF.Branches.Count - 1; i <= loopTo; i++)
+            for (int i = 0; i < _VF.Branches.Count; i++)
             {
-                var _branch = _PF.Branches[i];
-                if (_branch.Count == _V)
+                var branch = _VF.Branches[i];
+
+                if (branch.Count == _Val)
                 {
-                    _idList.Add(i);
+                    var curr_path = _VF.Paths[i]; // the path of the current branch
+                    var main_path = new GH_Path(curr_path.Indices[0]);
+                    int vertex_index = curr_path.Indices[1];
+                    _idTree.Add(vertex_index, main_path);
+                    _ptTree.Add(_V.Branches[curr_path.Indices[0]][vertex_index].Value, main_path);
                 }
             }
 
-            var _ptList = new List<Point3d>();
-            foreach (int _id in _idList)
-                _ptList.Add(_P[_id].Value);
-
-            DA.SetDataList(0, _idList);
-            DA.SetDataList(1, _ptList);
+            DA.SetDataTree(0, _idTree);
+            DA.SetDataTree(1, _ptTree);
 
         }
 

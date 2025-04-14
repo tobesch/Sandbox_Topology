@@ -72,7 +72,7 @@ namespace Sandbox
                 var path = new GH_Path(i);
                 foreach (GH_Curve _crv in _C.Branches[i])
                 {
-                    Polyline _poly = null;
+                    Polyline _poly;
                     if (!_crv.Value.TryGetPolyline(out _poly))
                         return;
                     _polyTree.Add(_poly, path);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace Sandbox
@@ -29,7 +30,7 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddBrepParameter("Brep", "B", "Brep to analyse", GH_ParamAccess.item);
+            pManager.AddBrepParameter("Brep", "B", "Brep to analyse", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -37,6 +38,7 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
+            pManager.AddPointParameter("List of Vertices", "V", "Ordered list of unique brep vertices", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Face-Vertex structure", "FV", "For each face list vertex indices belonging to face", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Vertex-Face structure", "VF", "For each vertex list adjacent face indices", GH_ParamAccess.tree);
         }
@@ -51,65 +53,96 @@ namespace Sandbox
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
-            Brep _brep = null;
+            GH_Structure<GH_Brep> _breps; // It’s an out parameter so you don’t have to construct it ahead of time -- David Rutten
 
             // 2. Retrieve input data.
-            if (!DA.GetData(0, ref _brep))
+            if (!DA.GetDataTree(0, out _breps))
                 return;
 
             // 3. Abort on invalid inputs.
-            if (!_brep.IsValid)
+            if (!(_breps.PathCount > 0))
                 return;
 
-            // 4. Check for non-manifold Breps
-            if (!_brep.IsManifold)
-                return;
-
-            // 5. Check if the topology is valid
-            string log = string.Empty;
-            if (!_brep.IsValidTopology(out log))
-                return;
-
-            // 6. Now do something productive
-            var _polyList = new List<Polyline>();
-
-            foreach (BrepLoop _loop in _brep.Loops)
+            for (int i = 0; i < _breps.Branches.Count; i++)
             {
-                Polyline _poly;
-                if (!_loop.To3dCurve().TryGetPolyline(out _poly))
-                    return;
-                _polyList.Add(_poly);
+                foreach (GH_Brep _brep in _breps.Branches[i])
+                {
+                    // 3.1. Check for non-manifold Breps
+                    if (!_brep.Value.IsManifold)
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "One of the input breps is non-manifold!");
+                        return;
+                    }
+                    // 3.2. Check if the topology is valid
+                    if (!_brep.Value.IsValidTopology(out _))
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "One of the input breps has invalid topology!");
+                        return;
+                    }
+                }
             }
 
-            // 4.2. get topology
-            double _T = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
-            var _ptList = new List<PointTopological>();
-            foreach (BrepVertex _vertex in _brep.Vertices)
-                _ptList.Add(new PointTopological(_vertex.Location, _ptList.Count));
-            // Dim _ptList As List(Of PointTopological) = getPointTopo(_polyList, _T)
-            var _fList = TopologyShared.GetPLineTopo(_polyList, _ptList, _T);
-            TopologyShared.SetPointPLineTopo(_fList, _ptList);
+            // 4. Now do something productive
+            var _polyTree = new Grasshopper.DataTree<Polyline>();
 
-            // 4.3: return results
-            var _FV = new Grasshopper.DataTree<int>();
-            foreach (PLineTopological _lineTopo in _fList)
+            // 4.1. check inputs
+            for (int i = 0; i < _breps.Branches.Count; i++)
             {
-                var _path = new GH_Path(_FV.BranchCount);
-                foreach (int _index in _lineTopo.PointIndices)
-                    _FV.Add(_index, _path);
+                var path = new GH_Path(i);
+                foreach (GH_Brep _brep in _breps.Branches[i])
+                {
+                    foreach (BrepLoop _loop in _brep.Value.Loops)
+                    {
+                        Polyline _poly;
+                        if (!_loop.To3dCurve().TryGetPolyline(out _poly))
+                            return;
+                        _polyTree.Add(_poly, path);
+                    }
+                }
             }
 
-            var _VF = new Grasshopper.DataTree<int>();
-            foreach (PointTopological _ptTopo in _ptList)
+            var _VValues = new Grasshopper.DataTree<Point3d>();
+            var _FVValues = new Grasshopper.DataTree<int>();
+            var _VFValues = new Grasshopper.DataTree<int>();
+
+            for (int i = 0; i < _polyTree.Branches.Count; i++)
             {
-                var _path = new GH_Path(_VF.BranchCount);
-                foreach (PLineTopological _lineTopo in _ptTopo.PLines)
-                    _VF.Add(_lineTopo.Index, _path);
+
+                var branch = _polyTree.Branch(i);
+                var mainpath = new GH_Path(i);
+
+                // 4.2. get topology
+                double _T = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
+                var _ptList = TopologyShared.GetPointTopo(branch, _T);
+                var _fList = TopologyShared.GetPLineTopo(branch, _ptList, _T);
+                TopologyShared.SetPointPLineTopo(_fList, _ptList);
+
+                // 4.3: return results
+                foreach (PointTopological _ptTopo in _ptList)
+                    _VValues.Add(_ptTopo.Point, mainpath);
+
+                for (int j = 0; j < _fList.Count; j++)
+                {
+                    var _lineTopo = _fList[j]; 
+                    var args = new int[] { i, j };
+                    var _path = new GH_Path(args); ;
+                    foreach (int _index in _lineTopo.PointIndices)
+                        _FVValues.Add(_index, _path);
+                }
+
+                for (int j = 0; j < _ptList.Count - 1; j++)
+                {
+                    var _ptTopo = _ptList[j];
+                    var args = new int[] { i, j };
+                    var _path = new GH_Path(args);
+                    foreach (PLineTopological _lineTopo in _ptTopo.PLines)
+                        _VFValues.Add(_lineTopo.Index, _path);
+                }
             }
 
-            DA.SetDataTree(0, _FV);
-            DA.SetDataTree(1, _VF);
-
+            DA.SetDataTree(0, _VValues);
+            DA.SetDataTree(1, _FVValues);
+            DA.SetDataTree(2, _VFValues);
         }
 
         /// <summary>

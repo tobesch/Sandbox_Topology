@@ -48,8 +48,8 @@ namespace Sandbox
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
-            var _E = new GH_Structure<GH_Line>();
-            GH_Structure<GH_Integer> _EL = null;
+            GH_Structure<GH_Line> _E;
+            GH_Structure<GH_Integer> _EL;
             int _V = 0;
 
             // 2. Retrieve input data.
@@ -70,32 +70,25 @@ namespace Sandbox
                 return;
 
             // 4. Do something useful.
-
             var _idTree = new Grasshopper.DataTree<int>();
             var _edgeTree = new Grasshopper.DataTree<Line>();
 
-            for (int i = 0, loopTo = _E.Branches.Count - 1; i <= loopTo; i++)
+            for (int i = 0; i < _EL.Branches.Count; i++)
             {
-
-                List<GH_Line> branch = (List<GH_Line>)_E.get_Branch(i);
-                var mainpath = new GH_Path(i);
-
-                for (int j = 0, loopTo1 = branch.Count - 1; j <= loopTo1; j++)
+                var branch = _EL.Branches[i];
+                
+                if (branch.Count == _V)
                 {
-                    var args = new int[] { i, j };
-                    var path = new GH_Path(args);
-                    if (_EL.get_Branch(path).Count == _V)
-                    {
-                        _idTree.Add(j, mainpath);
-                        _edgeTree.Add(branch[j].Value, mainpath);
-                    }
+                    var curr_path = _EL.Paths[i]; // the path of the current branch
+                    var main_path = new GH_Path(curr_path.Indices[0]);
+                    int edge_index = curr_path.Indices[1];
+                    _idTree.Add(edge_index, main_path);
+                    _edgeTree.Add(_E.Branches[curr_path.Indices[0]][edge_index].Value, main_path);
                 }
-
             }
 
             DA.SetDataTree(0, _idTree);
             DA.SetDataTree(1, _edgeTree);
-
 
         }
 
