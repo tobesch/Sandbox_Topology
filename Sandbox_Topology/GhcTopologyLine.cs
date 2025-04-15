@@ -95,7 +95,7 @@ namespace Sandbox
             var _PPValues = new Grasshopper.DataTree<int>();
             var _PLValues = new Grasshopper.DataTree<Line>();
 
-            for (int i = 0, loopTo = _polyTree.Branches.Count - 1; i <= loopTo; i++)
+            for (int i = 0; i < _polyTree.Branches.Count; i++)
             {
 
                 var branch = _polyTree.Branch(i);
@@ -111,7 +111,7 @@ namespace Sandbox
                     _PValues.Add(_ptTopo.Point, mainpath);
 
                 // For Each _lineTopo As PLineTopological In _lineList
-                for (int j = 0, loopTo1 = _lineList.Count - 1; j <= loopTo1; j++)
+                for (int j = 0; j < _lineList.Count; j++)
                 {
                     var _lineTopo = _lineList[j];
                     var args = new int[] { i, j };
@@ -121,7 +121,7 @@ namespace Sandbox
                 }
 
                 // For Each _ptTopo As PointTopological In _ptList
-                for (int j = 0, loopTo2 = _ptList.Count - 1; j <= loopTo2; j++)
+                for (int j = 0; j < _ptList.Count; j++)
                 {
                     var _ptTopo = _ptList[j];
                     var args = new int[] { i, j };
@@ -140,7 +140,7 @@ namespace Sandbox
                 }
 
                 // For Each _ptTopo As PointTopological In _ptList
-                for (int j = 0, loopTo3 = _ptList.Count - 1; j <= loopTo3; j++)
+                for (int j = 0; j < _ptList.Count; j++)
                 {
                     var _ptTopo = _ptList[j];
                     var args = new int[] { i, j };

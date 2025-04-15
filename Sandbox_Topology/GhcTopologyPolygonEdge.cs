@@ -85,7 +85,7 @@ namespace Sandbox
             var _FEValues = new Grasshopper.DataTree<int>();
             var _EFValues = new Grasshopper.DataTree<int>();
 
-            for (int i = 0, loopTo1 = _polyTree.Branches.Count - 1; i <= loopTo1; i++)
+            for (int i = 0; i < _polyTree.Branches.Count; i++)
             {
 
                 var branch = _polyTree.Branch(i);
@@ -100,7 +100,7 @@ namespace Sandbox
                 foreach (KeyValuePair<string, Line> _pair in _edgeDict)
                     _EValues.Add(_pair.Value, mainpath);
 
-                for (int j = 0, loopTo2 = _fDict.Count - 1; j <= loopTo2; j++)
+                for (int j = 0; j < _fDict.Count; j++)
                 {
                     var _edgeIndexList = _fDict["F" + j];
                     var args = new int[] { i, j };
@@ -110,7 +110,7 @@ namespace Sandbox
                         _FEValues.Add(Conversions.ToInteger(_item.Substring(1)), _path);
                 }
 
-                for (int j = 0, loopTo3 = _edgeFaceDict.Count - 1; j <= loopTo3; j++)
+                for (int j = 0; j < _edgeFaceDict.Count; j++)
                 {
                     var _fList = _edgeFaceDict["E" + j];
                     var args = new int[] { i, j };
@@ -171,12 +171,11 @@ namespace Sandbox
 
                 string _Fkey = "F" + _count;
 
-                Line[] _edges;
-                _edges = _poly.GetSegments();
+                Line[] _edges = _poly.GetSegments();
 
                 var _value = new List<string>();
 
-                for (int i = 0, loopTo = _edges.Length - 1; i <= loopTo; i++)
+                for (int i = 0; i < _edges.Length; i++)
                 {
 
                     foreach (string _key in _edgeDict.Keys)
@@ -192,7 +191,7 @@ namespace Sandbox
 
                 _fDict.Add(_Fkey, _value);
 
-                _count = _count + 1;
+                _count += 1;
 
             }
 
@@ -208,24 +207,19 @@ namespace Sandbox
             int _count = 0;
             foreach (Polyline _poly in _polyList)
             {
+                Line[] _edges = _poly.GetSegments();
 
-                Line[] _edges;
-                _edges = _poly.GetSegments();
-
-                for (int i = 0, loopTo = Information.UBound(_edges); i <= loopTo; i++)
+                for (int i = 0; i < _edges.Length; i++)
                 {
-
                     // check if edge exists in _edgeDict already
                     if (!containsEdge(_edgeDict, _edges[i], _T))
                     {
                         string _key = "E" + _count;
                         var _value = _edges[i];
                         _edgeDict.Add(_key, _value);
-                        _count = _count + 1;
+                        _count += 1;
                     }
-
                 }
-
             }
 
             return _edgeDict;

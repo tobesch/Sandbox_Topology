@@ -67,7 +67,7 @@ namespace Sandbox
             var _polyTree = new Grasshopper.DataTree<Polyline>();
 
             // 4.1. check inputs
-            for (int i = 0, loopTo = _C.Branches.Count - 1; i <= loopTo; i += 1)
+            for (int i = 0; i < _C.Branches.Count; i ++)
             {
                 var path = new GH_Path(i);
                 foreach (GH_Curve _crv in _C.Branches[i])
@@ -83,7 +83,7 @@ namespace Sandbox
             var _FPValues = new Grasshopper.DataTree<int>();
             var _PFValues = new Grasshopper.DataTree<int>();
 
-            for (int i = 0, loopTo1 = _polyTree.Branches.Count - 1; i <= loopTo1; i++)
+            for (int i = 0; i < _polyTree.Branches.Count; i++)
             {
 
                 var branch = _polyTree.Branch(i);
