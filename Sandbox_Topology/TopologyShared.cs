@@ -35,18 +35,15 @@ namespace Sandbox
 
                 var _points = _poly.ToArray();
 
-                for (int i = 0, loopTo = _points.Length - 1; i <= loopTo; i++)
+                for (int i = 0; i < _points.Length; i++)
                 {
-
                     // check if point exists in _ptList already
                     if (!ContainsPoint(_ptList, _points[i], _T))
                     {
                         _ptList.Add(new PointTopological(_points[i], _count));
-                        _count = _count + 1;
+                        _count += 1;
                     }
-
                 }
-
             }
 
             return _ptList;
@@ -66,9 +63,8 @@ namespace Sandbox
 
                 var _indices = new List<int>();
 
-                for (int i = 0, loopTo = Information.UBound(_points); i <= loopTo; i++)
+                for (int i = 0; i < _points.Length; i++)
                 {
-
                     foreach (PointTopological _item in _ptDict)
                     {
                         if (_item.Point.DistanceTo(_points[i]) < _T)
@@ -77,12 +73,11 @@ namespace Sandbox
                             break;
                         }
                     }
-
                 }
 
                 _lDict.Add(new PLineTopological(_indices, _count));
 
-                _count = _count + 1;
+                _count += 1;
 
             }
 
