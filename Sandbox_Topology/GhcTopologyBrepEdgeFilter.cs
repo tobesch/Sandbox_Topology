@@ -56,14 +56,14 @@ namespace Sandbox
             // This way, if the input parameters fail to supply valid data, we know when to abort.
             GH_Structure<GH_Curve> _E;
             GH_Structure<GH_Integer> _EF;
-            int _C = 0;
+            int _Val = 0;
 
             // 2. Retrieve input data.
             if (!DA.GetDataTree(0, out _E))
                 return;
             if (!DA.GetDataTree(1, out _EF))
                 return;
-            if (!DA.GetData(2, ref _C))
+            if (!DA.GetData(2, ref _Val))
                 return;
 
             // 3. Abort on invalid inputs.
@@ -72,7 +72,7 @@ namespace Sandbox
                 return;
             if (!(_EF.PathCount > 0))
                 return;
-            if (!(_C > 0))
+            if (!(_Val > 0))
                 return;
 
             // 4. Do something useful.
@@ -83,7 +83,7 @@ namespace Sandbox
             {
                 var _branch = _EF.Branches[i];
 
-                if (_branch.Count == _C)
+                if (_branch.Count == _Val)
                 {
                     var curr_path = _EF.Paths[i]; // the path of the current branch
                     var main_path = new GH_Path(curr_path.Indices[0]);
