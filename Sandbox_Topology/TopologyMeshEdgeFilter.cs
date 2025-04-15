@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
@@ -26,7 +27,7 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddLineParameter("Edge list", "E", "Ordered list of edges", GH_ParamAccess.list);
+            pManager.AddLineParameter("Edge list", "E", "Ordered list of edges", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Edge-Face structure", "EF", "For each edge the list of adjacent face indices", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Valency filter", "V", "Filter edges with the specified number of adjacent faces", GH_ParamAccess.item, 1);
         }
@@ -49,12 +50,12 @@ namespace Sandbox
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
-            var _E = new List<GH_Line>();
-            GH_Structure<GH_Integer> _EF = null;
+            GH_Structure<GH_Line> _E;
+            GH_Structure<GH_Integer> _EF;
             int _C = 0;
 
             // 2. Retrieve input data.
-            if (!DA.GetDataList(0, _E))
+            if (!DA.GetDataTree(0,out _E))
                 return;
             if (!DA.GetDataTree(1, out _EF))
                 return;
@@ -63,7 +64,7 @@ namespace Sandbox
 
             // 3. Abort on invalid inputs.
             // 3.1. get the number of branches in the trees
-            if (!(_E.Count > 0))
+            if (!(_E.PathCount > 0))
                 return;
             if (!(_EF.PathCount > 0))
                 return;
@@ -72,22 +73,25 @@ namespace Sandbox
 
             // 4. Do something useful.
 
-            var _idList = new List<int>();
-            for (int i = 0, loopTo = _EF.Branches.Count - 1; i <= loopTo; i++)
+            var id_tree = new DataTree<int>();
+            var e_tree = new DataTree<Line>();
+
+            for (int i = 0; i < _EF.Branches.Count; i++)
             {
                 var _branch = _EF.Branches[i];
+
                 if (_branch.Count == _C)
                 {
-                    _idList.Add(i);
+                    var curr_path = _EF.Paths[i]; // the path of the current branch
+                    var main_path = new GH_Path(curr_path.Indices[0]);
+                    int edge_index = curr_path.Indices[1];
+                    id_tree.Add(edge_index, main_path);
+                    e_tree.Add(_E.Branches[curr_path.Indices[0]][edge_index].Value, main_path);
                 }
             }
 
-            var _eList = new List<Line>();
-            foreach (int _id in _idList)
-                _eList.Add(_E[_id].Value);
-
-            DA.SetDataList(0, _idList);
-            DA.SetDataList(1, _eList);
+            DA.SetDataTree(0, id_tree);
+            DA.SetDataTree(1, e_tree);
 
         }
 
