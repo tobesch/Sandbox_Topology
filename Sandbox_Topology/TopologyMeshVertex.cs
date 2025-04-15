@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
+using Rhino.Render.ChangeQueue;
 
 namespace Sandbox
 {
@@ -30,7 +33,7 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddMeshParameter("Mesh", "M", "Mesh to analyse", GH_ParamAccess.item);
+            pManager.AddMeshParameter("Mesh", "M", "Mesh to analyse", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -38,7 +41,7 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddPointParameter("List of mesh vertices", "V", "Ordered list of mesh vertices", GH_ParamAccess.list);
+            pManager.AddPointParameter("List of mesh vertices", "V", "Ordered list of mesh vertices", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Vertex-Vertex structure", "VV", "For each vertex the list of adjacent vertex indices", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Vertex-Face structure", "VF", "For each vertex the list of adjacent face indices", GH_ParamAccess.tree);
         }
@@ -53,55 +56,70 @@ namespace Sandbox
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
-            Mesh _mesh = null;
+            GH_Structure<GH_Mesh> _meshes; // It’s an out parameter so you don’t have to construct it ahead of time -- David Rutten
 
             // 2. Retrieve input data.
-            if (!DA.GetData(0, ref _mesh))
+            if (!DA.GetDataTree(0, out _meshes))
                 return;
 
             // 3. Abort on invalid inputs.
-            if (!_mesh.IsValid)
+            if (!(_meshes.PathCount > 0))
                 return;
 
-            // 4. Check for non-manifold Mesh
-            bool _isOriented;
-            bool _hasBoundary;
-            if (!_mesh.IsManifold(true, out _isOriented, out _hasBoundary))
-                return;
-
-            // 5. Check if the topology is valid
-            string log = string.Empty;
-            if (!_mesh.IsValidWithLog(out log))
-                return;
-
-            // 6. Now do something productive
-            var _VVValues = new Grasshopper.DataTree<int>();
-            var _VFValues = new Grasshopper.DataTree<int>();
-
-            var _vertexList = _mesh.Vertices;
-            for (int _vIndex = 0, loopTo = _vertexList.Count - 1; _vIndex <= loopTo; _vIndex++)
+            for (int i = 0; i < _meshes.Branches.Count; i++)
             {
-                var _indices = _vertexList.GetConnectedVertices(_vIndex);
-                var vv_path = new GH_Path(_VVValues.BranchCount);
-                foreach (int _vertex in _indices)
+                foreach (GH_Mesh _mesh in _meshes.Branches[i])
                 {
-                    if (_vertex != _vIndex)
-                        _VVValues.Add(_vertex, vv_path);
+                    if (!_mesh.Value.IsValid)
+                        return;
+
+                    // 4. Check for non-manifold Mesh
+                    if (!_mesh.Value.IsManifold(true, out bool _isOriented, out bool _hasBoundary))
+                        return;
+
+                    // 5. Check if the topology is valid
+                    string log = string.Empty;
+                    if (!_mesh.Value.IsValidWithLog(out log))
+                        return;
                 }
             }
 
-            for (int _vIndex = 0, loopTo1 = _vertexList.Count - 1; _vIndex <= loopTo1; _vIndex++)
+            // 6. Now do something productive
+            var _V_tree = new DataTree<Point3d>();
+            var _VVValues = new DataTree<int>();
+            var _VFValues = new DataTree<int>();
+
+            for (int i = 0; i < _meshes.Branches.Count; i++)
             {
-                var _faces = _vertexList.GetVertexFaces(_vIndex);
-                var vf_path = new GH_Path(_VFValues.BranchCount);
-                _VFValues.AddRange(_faces, vf_path);
+                var v_path = new GH_Path(i);
+
+                foreach (GH_Mesh _mesh in _meshes.Branches[i])
+                {
+                    var _vertexList = _mesh.Value.Vertices;
+                    for (int j = 0; j < _vertexList.Count; j++)
+                    {
+                        var _indices = _vertexList.GetConnectedVertices(j);
+                        var vv_path = new GH_Path(i, j);
+                        foreach (int _vertex in _indices)
+                        {
+                            if (_vertex != j)
+                                _VVValues.Add(_vertex, vv_path);
+                        }
+                    }
+
+                    for (int j = 0; j < _vertexList.Count; j++)
+                    {
+                        var _faces = _vertexList.GetVertexFaces(j);
+                        var vf_path = new GH_Path(i, j);
+                        _VFValues.AddRange(_faces, vf_path);
+                    }
+
+                    var _vertices = _vertexList.ToPoint3dArray();
+                    _V_tree.AddRange(_vertices, v_path);
+                }
             }
 
-            var _VList = new List<Point3d>();
-            var _vertices = _vertexList.ToPoint3dArray();
-            _VList.AddRange(_vertices);
-
-            DA.SetDataList(0, _VList);
+            DA.SetDataTree(0, _V_tree);
             DA.SetDataTree(1, _VVValues);
             DA.SetDataTree(2, _VFValues);
 
