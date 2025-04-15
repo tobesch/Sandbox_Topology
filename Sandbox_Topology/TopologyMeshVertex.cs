@@ -5,7 +5,6 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
-using Rhino.Render.ChangeQueue;
 
 namespace Sandbox
 {
