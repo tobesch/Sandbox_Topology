@@ -79,7 +79,7 @@ namespace Sandbox
             var id_tree = new Grasshopper.DataTree<int>();
             var e_tree = new Grasshopper.DataTree<Curve>();
 
-            for (int i = 0, loopTo = _EF.Branches.Count - 1; i <= loopTo; i++)
+            for (int i = 0; i < _EF.Branches.Count; i++)
             {
                 var _branch = _EF.Branches[i];
 
