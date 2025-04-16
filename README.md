@@ -5,7 +5,7 @@ Sandbox_Topology
 
 Sandbox Topology provides tools for the topological analysis and filtering of line, polyline, mesh and brep networks.
 
-Such networks are defined at the lowest level by points and lines / curves, but might also include loops and faces as in the case of polylines, meshes or breps / polysurfaces.
+Such networks are defined by points and lines / curves at the lowest level, but might also include loops and faces as in the case of polylines, meshes or breps / polysurfaces.
 
 If you have every asked yourself questions such as, "How can I get all vertices in a mesh that have exactly 5 face neighbors?" or "How can I select the two faces that share a given edge in a brep?", then this plugin is for you.
 
@@ -29,11 +29,11 @@ In the latest version, the tools support datatrees as input. In other words, mul
 
 The latest version of Sandbox Topology uses .NET Framework 4.5, so it should still be compatible with Rhino 6.
 
-# Installation:
+# Installation
 
-As of Rhino 7, the best way to install the plugin is via Rhino's PackageManager. Just type "PackageManager", then search for "Sandbox", make sure you select the latest version, and click "Install". In this case, example files can be found %appdata%\McNeel\Rhinoceros\packages\7.0. 
+* As of Rhino 7, the best way to install the plugin is via Rhino's PackageManager. Just type "PackageManager", then search for "Sandbox", make sure you select the latest version, and click "Install". In this case, example files can be found %appdata%\McNeel\Rhinoceros\packages\7.0. 
 
-Alternatively, in Rhino 6 launch Grasshopper, choose File > Special Folders > Components folder. Copy the .gha file there. Right-click the file > Properties > make sure there is no "blocked" text. Restart Rhino and Grasshopper. Example files can be found below.
+* Alternatively, in Rhino 6 launch Grasshopper, choose File > Special Folders > Components folder. Copy the .gha file there. Right-click the file > Properties > make sure there is no "blocked" text. Restart Rhino and Grasshopper. Example files can be found below.
 
 # Example files
 
@@ -48,6 +48,6 @@ In the spirit of the Grasshopper community that thrives on knowledge sharing, I 
 
 While I have tested this toolbox, it might still contain bugs. Please use it "as is", it does not come with any warranties for what it can do or liability for damages it can cause. If you see room for improvement feel free to contact me or even consider contributing to its development.
 
-- Tobias
+-- Tobias
 
 PS: The title image is from wikipedia (https://en.wikipedia.org/wiki/File:NetworkTopology-Star.png) and currently serves as a placeholder...
