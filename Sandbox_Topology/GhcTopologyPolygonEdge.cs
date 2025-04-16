@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using Rhino.Geometry;
 
 namespace Sandbox
@@ -69,12 +67,12 @@ namespace Sandbox
             var _polyTree = new Grasshopper.DataTree<Polyline>();
 
             // 4.1. check inputs
-            for (int i = 0, loopTo = _C.Branches.Count - 1; i <= loopTo; i += 1)
+            for (int i = 0; i < _C.Branches.Count; i++)
             {
                 var path = new GH_Path(i);
                 foreach (GH_Curve _crv in _C.Branches[i])
                 {
-                    Polyline _poly = null;
+                    Polyline _poly;
                     if (!_crv.Value.TryGetPolyline(out _poly))
                         return;
                     _polyTree.Add(_poly, path);
@@ -85,7 +83,7 @@ namespace Sandbox
             var _FEValues = new Grasshopper.DataTree<int>();
             var _EFValues = new Grasshopper.DataTree<int>();
 
-            for (int i = 0, loopTo1 = _polyTree.Branches.Count - 1; i <= loopTo1; i++)
+            for (int i = 0; i < _polyTree.Branches.Count; i++)
             {
 
                 var branch = _polyTree.Branch(i);
@@ -100,24 +98,24 @@ namespace Sandbox
                 foreach (KeyValuePair<string, Line> _pair in _edgeDict)
                     _EValues.Add(_pair.Value, mainpath);
 
-                for (int j = 0, loopTo2 = _fDict.Count - 1; j <= loopTo2; j++)
+                for (int j = 0; j < _fDict.Count; j++)
                 {
                     var _edgeIndexList = _fDict["F" + j];
                     var args = new int[] { i, j };
                     var _path = new GH_Path(args);
                     // For Each _edgeIndexList As List(Of String) In _fDict.Values
                     foreach (string _item in _edgeIndexList)
-                        _FEValues.Add(Conversions.ToInteger(_item.Substring(1)), _path);
+                        _FEValues.Add(Int32.Parse(_item.Substring(1)), _path);
                 }
 
-                for (int j = 0, loopTo3 = _edgeFaceDict.Count - 1; j <= loopTo3; j++)
+                for (int j = 0; j < _edgeFaceDict.Count; j++)
                 {
                     var _fList = _edgeFaceDict["E" + j];
                     var args = new int[] { i, j };
                     var _path = new GH_Path(args);
                     // For Each _fList As List(Of String) In _edgeFaceDict.Values
                     foreach (string _item in _fList)
-                        _EFValues.Add(Conversions.ToInteger(_item.Substring(1)), _path);
+                        _EFValues.Add(Int32.Parse(_item.Substring(1)), _path);
                 }
 
             }
@@ -171,12 +169,11 @@ namespace Sandbox
 
                 string _Fkey = "F" + _count;
 
-                Line[] _edges;
-                _edges = _poly.GetSegments();
+                Line[] _edges = _poly.GetSegments();
 
                 var _value = new List<string>();
 
-                for (int i = 0, loopTo = _edges.Length - 1; i <= loopTo; i++)
+                for (int i = 0; i < _edges.Length; i++)
                 {
 
                     foreach (string _key in _edgeDict.Keys)
@@ -192,7 +189,7 @@ namespace Sandbox
 
                 _fDict.Add(_Fkey, _value);
 
-                _count = _count + 1;
+                _count += 1;
 
             }
 
@@ -208,24 +205,19 @@ namespace Sandbox
             int _count = 0;
             foreach (Polyline _poly in _polyList)
             {
+                Line[] _edges = _poly.GetSegments();
 
-                Line[] _edges;
-                _edges = _poly.GetSegments();
-
-                for (int i = 0, loopTo = Information.UBound(_edges); i <= loopTo; i++)
+                for (int i = 0; i < _edges.Length; i++)
                 {
-
                     // check if edge exists in _edgeDict already
                     if (!containsEdge(_edgeDict, _edges[i], _T))
                     {
                         string _key = "E" + _count;
                         var _value = _edges[i];
                         _edgeDict.Add(_key, _value);
-                        _count = _count + 1;
+                        _count += 1;
                     }
-
                 }
-
             }
 
             return _edgeDict;
@@ -259,12 +251,12 @@ namespace Sandbox
             {
                 var _startPt = _l.PointAt(0d);
                 var _endPt = _l.PointAt(1d);
-                if (_startPt.DistanceTo(_check.PointAt(0d)) < _T & _endPt.DistanceTo(_check.PointAt(1d)) < _T)
+                if (_startPt.DistanceTo(_check.PointAt(0d)) < _T && _endPt.DistanceTo(_check.PointAt(1d)) < _T)
                 {
                     // consider it the same edge
                     return true;
                 }
-                else if (_startPt.DistanceTo(_check.PointAt(1d)) < _T & _endPt.DistanceTo(_check.PointAt(0d)) < _T)
+                else if (_startPt.DistanceTo(_check.PointAt(1d)) < _T && _endPt.DistanceTo(_check.PointAt(0d)) < _T)
                 {
                     // consider it the same edge
                     return true;

@@ -67,12 +67,12 @@ namespace Sandbox
             var _polyTree = new Grasshopper.DataTree<Polyline>();
 
             // 4.1. check inputs
-            for (int i = 0, loopTo = _C.Branches.Count - 1; i <= loopTo; i += 1)
+            for (int i = 0; i < _C.Branches.Count; i ++)
             {
                 var path = new GH_Path(i);
                 foreach (GH_Curve _crv in _C.Branches[i])
                 {
-                    Polyline _poly = null;
+                    Polyline _poly;
                     if (!_crv.Value.TryGetPolyline(out _poly))
                         return;
                     _polyTree.Add(_poly, path);
@@ -83,7 +83,7 @@ namespace Sandbox
             var _FPValues = new Grasshopper.DataTree<int>();
             var _PFValues = new Grasshopper.DataTree<int>();
 
-            for (int i = 0, loopTo1 = _polyTree.Branches.Count - 1; i <= loopTo1; i++)
+            for (int i = 0; i < _polyTree.Branches.Count; i++)
             {
 
                 var branch = _polyTree.Branch(i);
@@ -98,7 +98,7 @@ namespace Sandbox
                 foreach (PointTopological _ptTopo in _ptList)
                     _PValues.Add(_ptTopo.Point, mainpath);
 
-                for (int j = 0, loopTo2 = _fList.Count - 1; j <= loopTo2; j++)
+                for (int j = 0; j < _fList.Count; j++)
                 {
                     var _lineTopo = _fList[j];
                     var args = new int[] { i, j };
@@ -107,7 +107,7 @@ namespace Sandbox
                         _FPValues.Add(_index, _path);
                 }
 
-                for (int j = 0, loopTo3 = _ptList.Count - 1; j <= loopTo3; j++)
+                for (int j = 0; j < _ptList.Count; j++)
                 {
                     var _ptTopo = _ptList[j];
                     var args = new int[] { i, j };

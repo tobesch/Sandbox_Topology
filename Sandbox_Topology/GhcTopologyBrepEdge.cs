@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace Sandbox
@@ -19,7 +21,12 @@ namespace Sandbox
         /// Subcategory the panel. If you use non-existing tab or panel names, 
         /// new tabs/panels will automatically be created.
         /// </summary>
-        public GhcTopologyBrepEdge() : base("Brep Topology Edge", "Brep Topo Edge", "Analyses the edge topology of a Brep", "Sandbox", "Topology")
+        public GhcTopologyBrepEdge() : base(
+            "Brep Topology Edge",
+            "Brep Topo Edge",
+            "Analyses the edge topology of a Brep",
+            "Sandbox",
+            "Topology")
         {
         }
 
@@ -28,7 +35,7 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddBrepParameter("Brep", "B", "Brep to analyse", GH_ParamAccess.item);
+            pManager.AddBrepParameter("Breps", "B", "Breps to analyse", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -36,6 +43,7 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
+            pManager.AddCurveParameter("List of edge curves", "E", "Ordered list of unique brep edge curves", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Face-Edge structure", "FE", "For each face list edge indices belonging to face", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Edge-Face structure", "EF", "For each edge lists adjacent face indices", GH_ParamAccess.tree);
         }
@@ -47,54 +55,69 @@ namespace Sandbox
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
-            Brep _brep = null;
+            GH_Structure<GH_Brep> _breps; // It’s an out parameter so you don’t have to construct it ahead of time -- David Rutten
 
             // 2. Retrieve input data.
-            if (!DA.GetData(0, ref _brep))
+            if (!DA.GetDataTree(0, out _breps))
                 return;
 
             // 3. Abort on invalid inputs.
-            if (!_brep.IsValid)
+            if (!(_breps.PathCount > 0))
                 return;
 
-            // 4. Check for non-manifold Breps
-            if (!_brep.IsManifold)
-                return;
-
-            // 5. Check if the topology is valid
-            string log = string.Empty;
-            if (!_brep.IsValidTopology(out log))
-                return;
-
-            // 6. Now do something productive
-            var e_tree = new Grasshopper.DataTree<int>();
-
-            foreach (BrepFace _face in _brep.Faces)
+            for (int i = 0; i < _breps.Branches.Count; i++)
             {
-
-                var _edges = _face.AdjacentEdges();
-                var e_path = new GH_Path(e_tree.BranchCount);
-                e_tree.AddRange(_edges, e_path);
-
+                foreach (GH_Brep _brep in _breps.Branches[i])
+                {
+                    // 3.1. Check for non-manifold Breps
+                    if (!_brep.Value.IsManifold)
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "One of the input breps is non-manifold!");
+                        return;
+                    }
+                    // 3.2. Check if the topology is valid
+                    if (!_brep.Value.IsValidTopology(out _))
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "One of the input breps has invalid topology!");
+                        return;
+                    }
+                }
             }
 
+            // 4. Now do something productive
+            var e_tree = new Grasshopper.DataTree<Curve>();
+            var fe_tree = new Grasshopper.DataTree<int>();
+            var ef_tree = new Grasshopper.DataTree<int>();
 
-            var f_tree = new Grasshopper.DataTree<int>();
-
-            foreach (BrepEdge _edge in _brep.Edges)
+            for (int i = 0; i < _breps.Branches.Count; i++)
             {
+                foreach (GH_Brep _brep in _breps.Branches[i])
+                {
+                    var _edges = _brep.Value.Edges;
+                    var e_path = new GH_Path(i);
+                    e_tree.AddRange(_edges, e_path);
 
-                var _faces = _edge.AdjacentFaces();
-                var f_path = new GH_Path(f_tree.BranchCount);
-                f_tree.AddRange(_faces, f_path);
+                    for (int j = 0; j < _brep.Value.Faces.Count; j++)
+                    {
+                        var face_edges = _brep.Value.Faces[j].AdjacentEdges();
+                        var fe_path = new GH_Path(i, j);
+                        fe_tree.AddRange(face_edges, fe_path);
+                    }
+
+                    for (int j = 0; j < _brep.Value.Edges.Count; j++)
+                    {
+                        var _faces = _brep.Value.Edges[j].AdjacentFaces();
+                        var ef_path = new GH_Path(i, j);
+                        ef_tree.AddRange(_faces, ef_path);
+                    }                    
+                }
             }
 
             DA.SetDataTree(0, e_tree);
-            DA.SetDataTree(1, f_tree);
-
+            DA.SetDataTree(1, fe_tree);
+            DA.SetDataTree(2, ef_tree);
         }
 
         /// <summary>
