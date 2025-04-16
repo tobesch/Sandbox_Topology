@@ -32,7 +32,7 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddMeshParameter("Mesh", "M", "Mesh to analyse", GH_ParamAccess.tree);
+            pManager.AddMeshParameter("Meshes", "M", "Meshes to analyse", GH_ParamAccess.tree);
         }
 
         /// <summary>
