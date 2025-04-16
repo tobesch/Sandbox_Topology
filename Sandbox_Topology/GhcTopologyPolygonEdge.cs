@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using Rhino.Geometry;
 
 namespace Sandbox
@@ -107,7 +105,7 @@ namespace Sandbox
                     var _path = new GH_Path(args);
                     // For Each _edgeIndexList As List(Of String) In _fDict.Values
                     foreach (string _item in _edgeIndexList)
-                        _FEValues.Add(Conversions.ToInteger(_item.Substring(1)), _path);
+                        _FEValues.Add(Int32.Parse(_item.Substring(1)), _path);
                 }
 
                 for (int j = 0; j < _edgeFaceDict.Count; j++)
@@ -117,7 +115,7 @@ namespace Sandbox
                     var _path = new GH_Path(args);
                     // For Each _fList As List(Of String) In _edgeFaceDict.Values
                     foreach (string _item in _fList)
-                        _EFValues.Add(Conversions.ToInteger(_item.Substring(1)), _path);
+                        _EFValues.Add(Int32.Parse(_item.Substring(1)), _path);
                 }
 
             }
