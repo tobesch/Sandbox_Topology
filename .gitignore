@@ -404,6 +404,7 @@ FodyWeavers.xsd
 Thumbs.db
 *.exe
 *.bak
+*.3dmbak
 [Dd]ebug*/
 *.lib
 obj/
