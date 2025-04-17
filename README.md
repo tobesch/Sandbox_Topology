@@ -3,6 +3,8 @@ Sandbox_Topology
 
 # Short description
 
+<img align="left" width="100" height="100" src="Documentation/sandboxtopology.png">
+
 Sandbox Topology provides tools for the topological analysis and filtering of line, polyline, mesh and brep networks.
 
 Such networks are defined by points and lines / curves at the lowest level, but might also include loops and faces as in the case of polylines, meshes or breps / polysurfaces.
