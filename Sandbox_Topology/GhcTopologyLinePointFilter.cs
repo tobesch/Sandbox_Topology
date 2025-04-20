@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
@@ -103,7 +103,7 @@ namespace Sandbox
             get
             {
                 // You can add image files to your project resources and access them like this:
-                return My.Resources.Resources.TopologyLinePointFilter;
+                return Properties.Resources.Resources.TopologyLinePointFilter;
             }
         }
 
