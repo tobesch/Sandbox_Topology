@@ -153,7 +153,7 @@
     <Compile Include="GhcTopologyPolygonEdgeFilter.cs" />
     <Compile Include="PLineTopological.cs" />
     <Compile Include="PointTopological.cs" />
-    <Compile Include="GhcTopologyLine.cs" />
+    <Compile Include="obsolete\GhcTopologyLine.cs" />
     <Compile Include="GhcTopologyPolygonPointFilter.cs" />
     <Compile Include="GhcTopologyPolygonPoint.cs" />
     <Compile Include="Sandbox_Topology_Info.cs" />
@@ -175,7 +175,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="GhcTopologyPolygonEdge.cs" />
-    <Compile Include="GhcTopologyLineFilter.cs" />
+    <Compile Include="obsolete\GhcTopologyLineFilter.cs" />
     <Compile Include="TopologyShared.cs" />
   </ItemGroup>
   <ItemGroup>
