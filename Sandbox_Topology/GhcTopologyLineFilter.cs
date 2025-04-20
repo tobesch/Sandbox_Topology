@@ -11,6 +11,7 @@ namespace Sandbox
     /// <summary>
     /// 
     /// </summary>
+    [Obsolete("Deprecated. Use 'GhcTopologyLinePointFilter' or '...EdgeFilter' instead.")]
     public class GhcTopologyLineFilter : GH_Component
     {
         /// <summary>
@@ -46,6 +47,7 @@ namespace Sandbox
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is deprecated. Use 'Line Topology Point Filter' or '...Edge Filter' instead.");
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
