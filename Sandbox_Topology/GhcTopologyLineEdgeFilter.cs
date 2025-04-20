@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
@@ -26,7 +27,7 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddLineParameter("List of lines", "L", "Ordered list of unique points", GH_ParamAccess.tree);
+            pManager.AddLineParameter("List of lines", "L", "Ordered list of unique lines", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Point-Line structure", "PL", "Ordered structure listing the lines connected to each point", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Valency filter", "V", "Filter points with the specified number of lines connected to it", GH_ParamAccess.item, 1);
         }
@@ -36,8 +37,8 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddLineParameter("List of points", "P", "List of points matching the valency criteria", GH_ParamAccess.tree);
-            pManager.AddIntegerParameter("List of point IDs", "I", "List of point indices matching the valency criteria", GH_ParamAccess.tree);
+            pManager.AddLineParameter("List of lines", "L", "List of lines connected to points matching the valency criteria", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("List of line IDs", "I", "List of line indices connected to points matching the valency criteria", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -82,9 +83,12 @@ namespace Sandbox
                 {
                     var curr_path = _PL.Paths[i]; // the path of the current branch
                     var main_path = new GH_Path(curr_path.Indices[0]);
-                    int line_index = curr_path.Indices[1];
-                    _lineTree.Add(_L.Branches[curr_path.Indices[0]][line_index].Value, main_path);
-                    _idTree.Add(line_index, main_path);
+
+                    foreach (GH_Integer _item in _branch)
+                    {
+                        _lineTree.Add(_L.Branches[curr_path.Indices[0]][_item.Value].Value, curr_path);
+                        _idTree.Add(_item.Value, curr_path);
+                    }
                 }
             }
 
