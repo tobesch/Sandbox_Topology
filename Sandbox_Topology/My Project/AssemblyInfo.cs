@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // <Assembly: AssemblyVersion("1.0.000.1737")> 
 
-[assembly: AssemblyVersion("0.3.0")] // semantic versioning: MAJOR.MINOR.PATCH
-[assembly: AssemblyFileVersion("0.3.0")]
+[assembly: AssemblyVersion("0.3.1")] // semantic versioning: MAJOR.MINOR.PATCH
+[assembly: AssemblyFileVersion("0.3.1")]
