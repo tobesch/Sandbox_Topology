@@ -140,8 +140,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GhcTopologyLineEdgeFilter.cs" />
+    <Compile Include="GhcTopologyLineIndex_2.cs" />
     <Compile Include="GhcTopologyLinePointFilter.cs" />
-    <Compile Include="GhcTopologyLineIndex.cs" />
+    <Compile Include="obsolete\GhcTopologyLineIndex.cs" />
     <Compile Include="My Project\MyNamespace.Static.1.Designer.cs" />
     <Compile Include="TopologyMeshVertexFilter.cs" />
     <Compile Include="TopologyMeshEdgeFilter.cs" />
