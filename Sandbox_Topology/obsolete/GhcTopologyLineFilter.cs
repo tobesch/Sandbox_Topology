@@ -128,7 +128,7 @@ namespace Sandbox
         {
             get
             {
-                return GH_Exposure.primary;
+                return GH_Exposure.hidden;
             }
         }
     }
