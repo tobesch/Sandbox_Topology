@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Grasshopper.Kernel;
 
 using Grasshopper.Kernel.Data;
@@ -133,7 +133,7 @@ namespace Sandbox
             {
                 // You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return My.Resources.Resources.TopologyPolyPoint;
+                return Properties.Resources.Resources.TopologyPolyPoint;
             }
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Grasshopper.Kernel;
 
@@ -13,7 +13,7 @@ namespace Sandbox
     /// A component that analyzes the topology of a line network and outputs index-based structures
     /// compatible with other topology components.
     /// </summary>
-
+    [Obsolete("Deprecated. Use 'GhcTopologyLineIndex' for index-based output.")]
     public class GhcTopologyLineIndex : GH_Component
     {
         /// <summary>
@@ -54,6 +54,7 @@ namespace Sandbox
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is deprecated. Use 'Line Topology Index' instead.");
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
@@ -165,7 +166,7 @@ namespace Sandbox
         {
             get
             {
-                return GH_Exposure.primary;
+                return GH_Exposure.hidden;
             }
         }
 
@@ -178,7 +179,7 @@ namespace Sandbox
             get
             {
                 // You can add image files to your project resources and access them like this:
-                return My.Resources.Resources.TopologyLine;
+                return Properties.Resources.Resources.TopologyLine;
             }
         }
 

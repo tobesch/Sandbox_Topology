@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Grasshopper;
+using System.IO;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
@@ -12,12 +12,12 @@ namespace Sandbox
     /// <summary>
     /// 
     /// </summary>
-    public class TopologyMeshVertexFilter : GH_Component
+    public class GhcTopologyLineEdgeFilter : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the TopologyMeshVertexFilter class.
+        /// Initializes a new instance of the TopoplogyLineFilter class.
         /// </summary>
-        public TopologyMeshVertexFilter() : base("Mesh Topology Vertex Filter", "Mesh Topo Vertex Filter", "Filter the vertices of a mesh based on their connectivity", "Sandbox", "Topology")
+        public GhcTopologyLineEdgeFilter() : base("Line Topology Edge Filter", "Line Edge Filter", "Filters edges in a network of lines based on connectivity", "Sandbox", "Topology")
 
         {
         }
@@ -27,9 +27,9 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddPointParameter("Vertex list", "V", "Ordered list of points", GH_ParamAccess.tree);
-            pManager.AddIntegerParameter("Vertex-Face structure", "VF", "For each vertex the list of adjacent face indices", GH_ParamAccess.tree);
-            pManager.AddIntegerParameter("Valency filter", "Val", "Filter vertices with the specified number of adjacent faces", GH_ParamAccess.item, 1);
+            pManager.AddLineParameter("List of lines", "L", "Ordered list of unique lines", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("Point-Line structure", "PL", "Ordered structure listing the lines connected to each point", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("Valency filter", "V", "Filter points with the specified number of lines connected to it", GH_ParamAccess.item, 1);
         }
 
         /// <summary>
@@ -37,8 +37,8 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("List of vertex IDs", "I", "List of vertex indices matching the valency criteria", GH_ParamAccess.list);
-            pManager.AddPointParameter("List of vertices", "P", "List of vertices matching the valency criteria", GH_ParamAccess.tree);
+            pManager.AddLineParameter("List of lines", "L", "List of lines connected to points matching the valency criteria", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("List of line IDs", "I", "List of line indices connected to points matching the valency criteria", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -50,47 +50,52 @@ namespace Sandbox
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
-            GH_Structure<GH_Point> _V;
-            GH_Structure<GH_Integer> _VF;
-            int _Val = 0;
+            GH_Structure<GH_Line> _L;
+            GH_Structure<GH_Integer> _PL;
+            int _V = 0;
 
             // 2. Retrieve input data.
-            if (!DA.GetDataTree(0, out _V))
+            if (!DA.GetDataTree(0, out _L))
                 return;
-            if (!DA.GetDataTree(1, out _VF))
+            if (!DA.GetDataTree(1, out _PL))
                 return;
-            if (!DA.GetData(2, ref _Val))
+            if (!DA.GetData(2, ref _V))
                 return;
 
             // 3. Abort on invalid inputs.
-            // 3.1. get the number of branches in the trees
-            if (!(_V.PathCount > 0))
+            if (_L.Branches.Count < 1)
                 return;
-            if (!(_VF.PathCount > 0))
+            if (_PL.Branches.Count < 1)
                 return;
-            if (!(_Val > 0))
+            if (!(_V > 0))
                 return;
 
             // 4. Do something useful.
-            var id_tree = new DataTree<int>();
-            var vt_tree = new DataTree<Point3d>();
+            // 4.1 Filter based on Valency parameter
+            var _lineTree = new Grasshopper.DataTree<Line>();
+            var _idTree = new Grasshopper.DataTree<int>();
 
-            for (int i = 0; i < _VF.Branches.Count; i++)
+            for (int i = 0; i < _PL.Branches.Count; i++)
             {
-                var _branch = _VF.Branches[i];
+                var _branch = _PL.Branches[i];
 
-                if (_branch.Count == _Val)
+                if (_branch.Count == _V)
                 {
-                    var curr_path = _VF.Paths[i]; // the path of the current branch
+                    var curr_path = _PL.Paths[i]; // the path of the current branch
                     var main_path = new GH_Path(curr_path.Indices[0]);
-                    int vertex_index = curr_path.Indices[1];
-                    id_tree.Add(vertex_index, main_path);
-                    vt_tree.Add(_V.Branches[curr_path.Indices[0]][vertex_index].Value, main_path);
+
+                    foreach (GH_Integer _item in _branch)
+                    {
+                        _lineTree.Add(_L.Branches[curr_path.Indices[0]][_item.Value].Value, curr_path);
+                        _idTree.Add(_item.Value, curr_path);
+                    }
                 }
             }
 
-            DA.SetDataTree(0, id_tree);
-            DA.SetDataTree(1, vt_tree);
+            // 4.2: return results
+            DA.SetDataTree(0, _lineTree);
+            DA.SetDataTree(1, _idTree);
+
         }
 
         /// <summary>
@@ -102,7 +107,7 @@ namespace Sandbox
             get
             {
                 // You can add image files to your project resources and access them like this:
-                return Properties.Resources.Resources.TopologyMeshPointFilter;
+                return Properties.Resources.Resources.TopologyLineFilter;
             }
         }
 
@@ -113,7 +118,7 @@ namespace Sandbox
         {
             get
             {
-                return new Guid("{0d5dea63-930b-4842-92d6-6a81d9ea3fc9}");
+                return new Guid("e93a15b7-7acd-418f-8d5d-704466bee99e");
             }
         }
 
@@ -124,7 +129,7 @@ namespace Sandbox
         {
             get
             {
-                return GH_Exposure.quarternary;
+                return GH_Exposure.primary;
             }
         }
     }

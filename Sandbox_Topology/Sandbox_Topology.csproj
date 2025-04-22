@@ -139,7 +139,10 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GhcTopologyLineIndex.cs" />
+    <Compile Include="GhcTopologyLineEdgeFilter.cs" />
+    <Compile Include="GhcTopologyLineIndex_2.cs" />
+    <Compile Include="GhcTopologyLinePointFilter.cs" />
+    <Compile Include="obsolete\GhcTopologyLineIndex.cs" />
     <Compile Include="My Project\MyNamespace.Static.1.Designer.cs" />
     <Compile Include="TopologyMeshVertexFilter.cs" />
     <Compile Include="TopologyMeshEdgeFilter.cs" />
@@ -151,7 +154,7 @@
     <Compile Include="GhcTopologyPolygonEdgeFilter.cs" />
     <Compile Include="PLineTopological.cs" />
     <Compile Include="PointTopological.cs" />
-    <Compile Include="GhcTopologyLine.cs" />
+    <Compile Include="obsolete\GhcTopologyLine.cs" />
     <Compile Include="GhcTopologyPolygonPointFilter.cs" />
     <Compile Include="GhcTopologyPolygonPoint.cs" />
     <Compile Include="Sandbox_Topology_Info.cs" />
@@ -173,14 +176,14 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="GhcTopologyPolygonEdge.cs" />
-    <Compile Include="GhcTopologyLineFilter.cs" />
+    <Compile Include="obsolete\GhcTopologyLineFilter.cs" />
     <Compile Include="TopologyShared.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
-      <Generator>PublicVbMyResourcesResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Sandbox.My.Resources</CustomToolNamespace>
+      <CustomToolNamespace>Sandbox.Properties.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -283,6 +286,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TopologyLinePointFilter.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
