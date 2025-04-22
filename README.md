@@ -19,7 +19,7 @@ Sandbox Topology combines separate tools, which I have informally developed over
 
 # Related work
 
-Others, of course, have also addressed some of the issues and scenarios that are included here, such as Daniel Piker's Topologizer for line networks or David Rutten's Brep Topology component. However, topological network analysis being a common topic, I do think that it deserves an organized toolbox in the form of its very own Grasshopper addon.
+Others, of course, have also addressed some of the issues and scenarios that are included here, such as Daniel Piker's Topologizer for line networks or David Rutten's Brep Topology component. More recently, Amin Bahrami has included some topology-related tools into his Heteroptera addon that seem to do other cool things with networks beyond of what I proposing here. The USP of Sandbox Topology therefore is that it provides a structured toolbox for topological network analysis organized by four of the main geometry types in Rhino: Lines, Polylines, Meshes and Breps.
 
 # Functionality
 
