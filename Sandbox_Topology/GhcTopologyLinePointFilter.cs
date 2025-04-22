@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
@@ -11,12 +11,12 @@ namespace Sandbox
     /// <summary>
     /// 
     /// </summary>
-    public class GhcTopologyLineFilter : GH_Component
+    public class GhcTopologyLinePointFilter : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the TopoplogyLineFilter class.
         /// </summary>
-        public GhcTopologyLineFilter() : base("Line Topology Filter", "Line Filter", "Filters a network of lines based on connectivity", "Sandbox", "Topology")
+        public GhcTopologyLinePointFilter() : base("Line Topology Point Filter", "Line Point Filter", "Filters points in a network of lines based on connectivity", "Sandbox", "Topology")
 
         {
         }
@@ -27,7 +27,7 @@ namespace Sandbox
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddPointParameter("List of points", "P", "Ordered list of unique points", GH_ParamAccess.tree);
-            pManager.AddLineParameter("Point-Line structure", "PL", "Ordered structure listing the lines connected to each point", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("Point-Point structure", "PP", "Ordered structure listing the points connected to each point", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Valency filter", "V", "Filter points with the specified number of lines connected to it", GH_ParamAccess.item, 1);
         }
 
@@ -37,7 +37,7 @@ namespace Sandbox
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddPointParameter("List of points", "P", "List of points matching the valency criteria", GH_ParamAccess.tree);
-            pManager.AddLineParameter("Line structure", "L", "For each filtered point lists the lines connected to it", GH_ParamAccess.tree);
+            pManager.AddTextParameter("List of point IDs", "I", "List of point indices matching the valency criteria", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -50,13 +50,13 @@ namespace Sandbox
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
             GH_Structure<GH_Point> _P;
-            GH_Structure<GH_Line> _PL;
+            GH_Structure<GH_Integer> _PP;
             int _V = 0;
 
             // 2. Retrieve input data.
             if (!DA.GetDataTree(0, out _P))
                 return;
-            if (!DA.GetDataTree(1, out _PL))
+            if (!DA.GetDataTree(1, out _PP))
                 return;
             if (!DA.GetData(2, ref _V))
                 return;
@@ -64,7 +64,7 @@ namespace Sandbox
             // 3. Abort on invalid inputs.
             if (_P.Branches.Count < 1)
                 return;
-            if (_PL.Branches.Count < 1)
+            if (_PP.Branches.Count < 1)
                 return;
             if (!(_V > 0))
                 return;
@@ -72,26 +72,25 @@ namespace Sandbox
             // 4. Do something useful.
             // 4.1 Filter based on Valency parameter
             var _ptTree = new Grasshopper.DataTree<Point3d>();
-            var _lineTree = new Grasshopper.DataTree<Line>();
+            var _idTree = new Grasshopper.DataTree<int>();
 
-            for (int i = 0; i < _PL.Branches.Count; i++)
+            for (int i = 0; i < _PP.Branches.Count; i++)
             {
-                var _branch = _PL.Branches[i];
+                var _branch = _PP.Branches[i];
+
                 if (_branch.Count == _V)
                 {
-                    var _path = _PL.Paths[i];
-                    _ptTree.Add(_P.Branches[_path[0]][_path[1]].Value, _path);
-
-                    //var _path = new GH_Path(i);
-                    foreach (GH_Line _item in _branch)
-                        _lineTree.Add(_item.Value, _path);
-
+                    var curr_path = _PP.Paths[i]; // the path of the current branch
+                    var main_path = new GH_Path(curr_path.Indices[0]);
+                    int vertex_index = curr_path.Indices[1];
+                    _ptTree.Add(_P.Branches[curr_path.Indices[0]][vertex_index].Value, main_path);
+                    _idTree.Add(vertex_index, main_path);
                 }
             }
 
             // 4.2: return results
             DA.SetDataTree(0, _ptTree);
-            DA.SetDataTree(1, _lineTree);
+            DA.SetDataTree(1, _idTree);
 
         }
 
@@ -104,7 +103,7 @@ namespace Sandbox
             get
             {
                 // You can add image files to your project resources and access them like this:
-                return My.Resources.Resources.TopologyLineFilter;
+                return Properties.Resources.Resources.TopologyLinePointFilter;
             }
         }
 
@@ -115,7 +114,7 @@ namespace Sandbox
         {
             get
             {
-                return new Guid("{251697aa-b454-4f30-8bf7-0f00ea707fc2}");
+                return new Guid("618d5d0e-e7e8-452b-8c93-8aaae7fb3207");
             }
         }
 

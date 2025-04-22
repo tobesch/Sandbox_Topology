@@ -11,12 +11,14 @@ namespace Sandbox
     /// <summary>
     /// 
     /// </summary>
-    public class GhcTopologyPolygonPointFilter : GH_Component
+    [Obsolete("Deprecated. Use 'GhcTopologyLinePointFilter' or '...EdgeFilter' instead.")]
+    public class GhcTopologyLineFilter : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the GhcTopologyPolygonPointFilter class.
+        /// Initializes a new instance of the TopoplogyLineFilter class.
         /// </summary>
-        public GhcTopologyPolygonPointFilter() : base("Polygon Topology Point Filter", "Poly Topo Point Filter", "Filter the points in a polygon network based on their connectivity", "Sandbox", "Topology")
+        public GhcTopologyLineFilter() : base("Line Topology Filter", "Line Filter", "Filters a network of lines based on connectivity", "Sandbox", "Topology")
+
         {
         }
 
@@ -25,9 +27,9 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddPointParameter("Point list", "P", "Ordered list of points", GH_ParamAccess.tree);
-            pManager.AddIntegerParameter("Point-Loop structure", "PL", "Ordered structure listing the polylines adjacent to each point", GH_ParamAccess.tree);
-            pManager.AddIntegerParameter("Valency filter", "V", "Filter points with the specified number of adjacent polylines", GH_ParamAccess.item, 1);
+            pManager.AddPointParameter("List of points", "P", "Ordered list of unique points", GH_ParamAccess.tree);
+            pManager.AddLineParameter("Point-Line structure", "PL", "Ordered structure listing the lines connected to each point", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("Valency filter", "V", "Filter points with the specified number of lines connected to it", GH_ParamAccess.item, 1);
         }
 
         /// <summary>
@@ -35,8 +37,8 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("List of point IDs", "I", "List of point indices matching the valency criteria", GH_ParamAccess.tree);
             pManager.AddPointParameter("List of points", "P", "List of points matching the valency criteria", GH_ParamAccess.tree);
+            pManager.AddLineParameter("Line structure", "L", "For each filtered point lists the lines connected to it", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -45,50 +47,53 @@ namespace Sandbox
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is deprecated. Use 'Line Topology Point Filter' or '...Edge Filter' instead.");
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
-            GH_Structure<GH_Point> _P; 
-            GH_Structure<GH_Integer> _PF; 
+            GH_Structure<GH_Point> _P;
+            GH_Structure<GH_Line> _PL;
             int _V = 0;
 
             // 2. Retrieve input data.
             if (!DA.GetDataTree(0, out _P))
                 return;
-            if (!DA.GetDataTree(1, out _PF))
+            if (!DA.GetDataTree(1, out _PL))
                 return;
             if (!DA.GetData(2, ref _V))
                 return;
 
             // 3. Abort on invalid inputs.
-            // 3.1. get the number of branches in the trees
-            if (!(_P.PathCount > 0))
+            if (_P.Branches.Count < 1)
                 return;
-            if (!(_PF.PathCount > 0))
+            if (_PL.Branches.Count < 1)
                 return;
             if (!(_V > 0))
                 return;
 
             // 4. Do something useful.
-            var _idTree = new Grasshopper.DataTree<int>();
+            // 4.1 Filter based on Valency parameter
             var _ptTree = new Grasshopper.DataTree<Point3d>();
+            var _lineTree = new Grasshopper.DataTree<Line>();
 
-            for (int i = 0; i < _PF.Branches.Count; i++)
+            for (int i = 0; i < _PL.Branches.Count; i++)
             {
-                var branch = _PF.Branches[i];
-
-                if (branch.Count == _V)
+                var _branch = _PL.Branches[i];
+                if (_branch.Count == _V)
                 {
-                    var curr_path = _PF.Paths[i]; // the path of the current branch
-                    var main_path = new GH_Path(curr_path.Indices[0]);
-                    int vertex_index = curr_path.Indices[1];
-                    _idTree.Add(vertex_index, main_path);
-                    _ptTree.Add(_P.Branches[curr_path.Indices[0]][vertex_index].Value, main_path);
+                    var _path = _PL.Paths[i];
+                    _ptTree.Add(_P.Branches[_path[0]][_path[1]].Value, _path);
+
+                    //var _path = new GH_Path(i);
+                    foreach (GH_Line _item in _branch)
+                        _lineTree.Add(_item.Value, _path);
+
                 }
             }
 
-            DA.SetDataTree(0, _idTree);
-            DA.SetDataTree(1, _ptTree);
+            // 4.2: return results
+            DA.SetDataTree(0, _ptTree);
+            DA.SetDataTree(1, _lineTree);
 
         }
 
@@ -101,7 +106,7 @@ namespace Sandbox
             get
             {
                 // You can add image files to your project resources and access them like this:
-                return Properties.Resources.Resources.TopologyPolyPointFilter;
+                return Properties.Resources.Resources.TopologyLineFilter;
             }
         }
 
@@ -112,7 +117,7 @@ namespace Sandbox
         {
             get
             {
-                return new Guid("{340977b2-12a6-4dbd-9dac-b2a6c058c5e8}");
+                return new Guid("{251697aa-b454-4f30-8bf7-0f00ea707fc2}");
             }
         }
 
@@ -123,7 +128,7 @@ namespace Sandbox
         {
             get
             {
-                return GH_Exposure.secondary;
+                return GH_Exposure.hidden;
             }
         }
     }

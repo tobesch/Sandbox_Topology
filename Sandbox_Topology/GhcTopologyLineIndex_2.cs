@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Grasshopper.Kernel;
 
@@ -10,18 +10,19 @@ namespace Sandbox
 {
 
     /// <summary>
-    /// 
+    /// A component that analyzes the topology of a line network and outputs index-based structures
+    /// compatible with other topology components.
     /// </summary>
-    [Obsolete("Deprecated. Use 'GhcTopologyLineIndex' for index-based output.")]
-    public class GhcTopologyLine : GH_Component
+
+    public class GhcTopologyLineIndex_2 : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the GhcTopologyLine class.
+        /// Initializes a new instance of the GhcTopologyLineIndex class.
         /// </summary>
-        public GhcTopologyLine() : base(
-            "Line Topology", 
-            "Line Topo", 
-            "Analyses the topology of a network consisting of lines", 
+        public GhcTopologyLineIndex_2() : base(
+            "Line Topology Index", 
+            "LineTopoIdx", 
+            "Analyses the topology of a network consisting of lines and outputs indices", 
             "Sandbox", 
             "Topology")
         {
@@ -42,9 +43,10 @@ namespace Sandbox
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddPointParameter("List of points", "P", "Ordered list of unique points", GH_ParamAccess.tree);
+            pManager.AddLineParameter("List of lines", "L", "Ordered list of lines", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Line-Point structure", "LP", "For each line lists both end points indices", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Point-Point structure", "PP", "For each point list all point indices connected to it", GH_ParamAccess.tree);
-            pManager.AddLineParameter("Point-Line structure", "PL", "For each point list all lines connected to it", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("Point-Line structure", "PL", "For each point list all lines indices connected to it", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -53,8 +55,6 @@ namespace Sandbox
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is deprecated. Use 'Line Topology Index' instead.");
 
             // 1. Declare placeholder variables and assign initial invalid data.
             // This way, if the input parameters fail to supply valid data, we know when to abort.
@@ -91,15 +91,18 @@ namespace Sandbox
             }
 
             var _PValues = new Grasshopper.DataTree<Point3d>();
+            var _LValues = new Grasshopper.DataTree<Line>();
             var _LPValues = new Grasshopper.DataTree<int>();
             var _PPValues = new Grasshopper.DataTree<int>();
-            var _PLValues = new Grasshopper.DataTree<Line>();
+            var _PLValues = new Grasshopper.DataTree<int>();
 
             for (int i = 0; i < _polyTree.Branches.Count; i++)
             {
 
                 var branch = _polyTree.Branch(i);
-                var mainpath = new GH_Path(i);
+                var curr_path = _polyTree.Paths[i]; // the path of the current branch
+                var main_path = new GH_Path(curr_path.Indices[0]);
+                //var main_path = new GH_Path(i);
 
                 // 4.2 get topology
                 var _ptList = TopologyShared.GetPointTopo(branch, _T);
@@ -107,8 +110,10 @@ namespace Sandbox
                 TopologyShared.SetPointPLineTopo(_lineList, _ptList);
 
                 // 4.3 return results
+                List<Point3d> _points = new List<Point3d>();
                 foreach (PointTopological _ptTopo in _ptList)
-                    _PValues.Add(_ptTopo.Point, mainpath);
+                    _points.Add(_ptTopo.Point);
+                _PValues.AddRange(_points, main_path);
 
                 // For Each _lineTopo As PLineTopological In _lineList
                 for (int j = 0; j < _lineList.Count; j++)
@@ -116,8 +121,11 @@ namespace Sandbox
                     var _lineTopo = _lineList[j];
                     var args = new int[] { i, j };
                     var _path = new GH_Path(args);
-                    _LPValues.Add(_lineTopo.PointIndices[0], _path);
-                    _LPValues.Add(_lineTopo.PointIndices[1], _path);
+                    int fromIndex = _lineTopo.PointIndices[0];
+                    int toIndex = _lineTopo.PointIndices[1];
+                    _LPValues.Add(fromIndex, _path);
+                    _LPValues.Add(toIndex, _path);
+                    _LValues.Add(new Line(_points[fromIndex], _points[toIndex]), main_path);
                 }
 
                 // For Each _ptTopo As PointTopological In _ptList
@@ -147,16 +155,17 @@ namespace Sandbox
                     var _path = new GH_Path(args);
                     foreach (PLineTopological _lineTopo in _ptTopo.PLines)
                     {
-                        _PLValues.Add(_L.Branches[i][_lineTopo.Index].Value, _path);
+                        _PLValues.Add(_lineTopo.Index, _path);
                     }
                 }
 
             }
 
             DA.SetDataTree(0, _PValues);
-            DA.SetDataTree(1, _LPValues);
-            DA.SetDataTree(2, _PPValues);
-            DA.SetDataTree(3, _PLValues);
+            DA.SetDataTree(1, _LValues);
+            DA.SetDataTree(2, _LPValues);
+            DA.SetDataTree(3, _PPValues);
+            DA.SetDataTree(4, _PLValues);
         }
 
         /// <summary>
@@ -166,7 +175,7 @@ namespace Sandbox
         {
             get
             {
-                return GH_Exposure.hidden;
+                return GH_Exposure.primary;
             }
         }
 
@@ -179,19 +188,13 @@ namespace Sandbox
             get
             {
                 // You can add image files to your project resources and access them like this:
-                return My.Resources.Resources.TopologyLine;
+                return Properties.Resources.Resources.TopologyLine;
             }
         }
 
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid
-        {
-            get
-            {
-                return new Guid("{a09956f1-a616-4896-a242-eab3fc506087}");
-            }
-        }
+        public override Guid ComponentGuid => new Guid("4e5d4692-c5bf-4e1a-967c-5c2c064a74cc");
     }
 }
