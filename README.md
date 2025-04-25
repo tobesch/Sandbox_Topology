@@ -15,11 +15,9 @@ If you have every asked yourself questions such as, "How can I get all vertices 
 
 On various occasions during a computational design process, low-level control over the sub-elements that make up the design geometry might become necessary as well as decision making based on the adjacency of faces, valency of nodes, or connectivity between points. Usage examples include design for fabrication, line and mesh networks for dynamic relaxation, path analysis, planarization of polygon networks, optimization, etc.
 
-Sandbox Topology combines separate tools, which I have informally developed over the course of some 2-3 years alongside projects in academia and practice. While the development of custom digital tools that are specific to design projects has become a very common process, there often isn't the time to collect, prepare, and release a "clean" version of such a custom developed tool. However, having encountered similar tasks of topological network analysis often enough, and after having validated the tools across various projects, I'm happy to share it as Sandbox Topology with the Grasshopper ecosystem.
+Sandbox Topology combines separate tools, which I have informally developed over the course of some 2-3 years alongside projects in academia and practice. Having encountered similar tasks of topological network analysis often enough, and after having validated the tools across various projects, I'm happy to share it as Sandbox Topology with the Grasshopper ecosystem.
 
-# Related work
-
-Others, of course, have also addressed some of the issues and scenarios that are included here, such as Daniel Piker's Topologizer for line networks or David Rutten's Brep Topology component. However, topological network analysis being a common topic, I do think that it deserves an organized toolbox in the form of its very own Grasshopper addon.
+Others, of course, have also addressed some of the issues and scenarios that are included here, such as Daniel Piker's Topologizer for line networks or David Rutten's Brep Topology component. More recently, Amin Bahrami has included some topology-related tools into his Heteroptera addon that seem to do other cool things with networks beyond what I am proposing here. Sandbox Topology, on the other hand, provides a structured toolbox for topological network analysis and filtering that does just that. It is organized by four of the main geometry types available in Rhino: Lines, Polylines, Meshes and Breps.
 
 # Functionality
 
