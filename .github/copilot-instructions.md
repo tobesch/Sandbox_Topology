@@ -2,25 +2,25 @@
 
 ## Project scope
 
-Sandbox Topology is a single C# Grasshopper plugin assembly for Rhino. It targets **.NET Framework 4.5** and uses the checked-in RhinoCommon and Grasshopper 6.35 packages under `packages/`. The project emits a `.gha` Grasshopper plugin; the source assembly itself is not the distributable artifact.
+Sandbox Topology is a single C# Grasshopper plugin assembly for Rhino 7+. It targets **.NET Framework 4.8** and restores RhinoCommon and Grasshopper 6.35 through `PackageReference`. The project emits a `.gha` Grasshopper plugin; the source assembly itself is not the distributable artifact.
 
 The repository also contains Grasshopper examples in `Examples/` and package-ready copies in `PackageManager/`. Keep the package manifest version and the assembly version in `Sandbox_Topology/Sandbox_Topology_Info.cs` aligned when making a release.
 
 ## Build, test, and lint
 
-- Build the solution with Visual Studio 2022 or MSBuild:
+- Restore and build with the .NET SDK:
 
   ```powershell
-  msbuild .\Sandbox_Topology.sln /t:Build /p:Configuration=Release /p:Platform="Any CPU"
+  dotnet build .\Sandbox_Topology.sln --configuration Release --property:Platform="Any CPU"
   ```
 
 - The project default configuration is `Debug32`. To build that configuration explicitly:
 
   ```powershell
-  msbuild .\Sandbox_Topology.sln /t:Build /p:Configuration=Debug32 /p:Platform="Any CPU"
+  dotnet build .\Sandbox_Topology.sln --configuration Debug32 --property:Platform="Any CPU"
   ```
 
-- Builds run the project's post-build event: it copies the target assembly to a `.gha`, copies that plugin to `%AppData%\Grasshopper\Libraries\Sandbox_Topology.gha`, and removes the original `.dll`. Close Rhino/Grasshopper first if that destination file is locked.
+- Builds run an MSBuild target that copies the target assembly to a `.gha`, deploys the plugin and its `System.*.dll` runtime dependencies to `%AppData%\Grasshopper\Libraries`, then removes the original `.dll`. Close Rhino/Grasshopper first if that destination file is locked.
 
 - There is no automated test project, test runner, linter, or single-test command. Validate behavior in Rhino/Grasshopper with the matching `.gh` definition in `Examples/` (or `PackageManager/examples/`) and inspect the component's data-tree output.
 
@@ -41,4 +41,4 @@ The repository also contains Grasshopper examples in `Examples/` and package-rea
 - Line/polyline topology treats two points as identical only when `DistanceTo` is strictly less than the supplied positive tolerance. Preserve both the strict comparison and first-seen ordering because the emitted adjacency indices refer to that ordered unique-point list.
 - Validate inputs before calculating topology. Existing mesh and Brep components reject invalid or non-manifold geometry; Brep validation reports a Grasshopper runtime warning. New components that expose topology should retain compatible validation and tree-path behavior.
 - Keep component constructor metadata, input/output parameter names, short names, descriptions, category/subcategory, icon resource, and `GH_Exposure` coherent with the paired analysis/filter components. Add a matching embedded 24×24 icon resource for a new component.
-- New source files and resources must be added explicitly to `Sandbox_Topology/Sandbox_Topology.csproj`; this is an old-style project and does not glob source files automatically.
+- The SDK project automatically includes new C# source files and resources. Add explicit project items only for non-default build behavior, such as a package dependency or generated-resource metadata.
