@@ -20,7 +20,7 @@ The repository also contains Grasshopper examples in `Examples/` and package-rea
   dotnet build .\Sandbox_Topology.sln --configuration Debug32 --property:Platform="Any CPU"
   ```
 
-- Builds run an MSBuild target that copies the target assembly to a `.gha`, deploys the plugin and its `System.*.dll` runtime dependencies to `%AppData%\Grasshopper\Libraries`, then removes the original `.dll`. Close Rhino/Grasshopper first if that destination file is locked.
+- Builds run an MSBuild target that copies the target assembly to a `.gha`, deploys it to `%AppData%\Grasshopper\Libraries`, then removes the original `.dll`. Close Rhino/Grasshopper first if that destination file is locked.
 
 - There is no automated test project, test runner, linter, or single-test command. Validate behavior in Rhino/Grasshopper with the matching `.gh` definition in `Examples/` (or `PackageManager/examples/`) and inspect the component's data-tree output.
 

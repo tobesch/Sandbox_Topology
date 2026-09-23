@@ -11,7 +11,6 @@
     <Configurations>Debug;Debug32;Release</Configurations>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
     <NoWarn>42016;41999;42017;42018;42019;42032;42036;42020;42021;42022</NoWarn>
   </PropertyGroup>
 
@@ -73,7 +72,6 @@
   <ItemGroup>
     <PackageReference Include="Grasshopper" Version="6.35.21222.17001" />
     <PackageReference Include="RhinoCommon" Version="6.35.21222.17001" />
-    <PackageReference Include="System.Resources.Extensions" Version="4.7.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -81,25 +79,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Sandbox.Properties.Resources</CustomToolNamespace>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Remove="My Project\Resources.resx" />
+    <None Remove="Resources\*.png" />
+    <EmbeddedResource Include="Resources\*.png" />
   </ItemGroup>
 
   <Target Name="CreateGrasshopperPlugin" AfterTargets="Build">
     <PropertyGroup>
       <GrasshopperLibraryPath>$(AppData)\Grasshopper\Libraries</GrasshopperLibraryPath>
     </PropertyGroup>
-    <ItemGroup>
-      <GrasshopperRuntimeDependency Include="$(TargetDir)System.*.dll" />
-    </ItemGroup>
     <MakeDir Directories="$(GrasshopperLibraryPath)" />
     <Copy SourceFiles="$(TargetPath)" DestinationFiles="$(TargetDir)$(AssemblyName).gha" />
     <Copy SourceFiles="$(TargetPath)" DestinationFiles="$(GrasshopperLibraryPath)\$(AssemblyName).gha" />
-    <Copy SourceFiles="@(GrasshopperRuntimeDependency)" DestinationFolder="$(GrasshopperLibraryPath)" />
     <Delete Files="$(TargetPath)" />
   </Target>
 </Project>
