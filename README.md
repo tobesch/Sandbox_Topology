@@ -27,13 +27,13 @@ In the latest version, the tools support datatrees as input. In other words, mul
 
 # Compatibility
 
-The latest version of Sandbox Topology uses .NET Framework 4.5, so it should still be compatible with Rhino 6.
+The latest version of Sandbox Topology uses .NET Framework 4.8 and requires Rhino 7 or later.
 
 # Installation
 
 * As of Rhino 7, the best way to install the plugin is via Rhino's PackageManager. Just type "PackageManager", then search for "Sandbox", make sure you select the latest version, and click "Install". In this case, example files can be found %appdata%\McNeel\Rhinoceros\packages\7.0. 
 
-* Alternatively, in Rhino 6 launch Grasshopper, choose File > Special Folders > Components folder. Copy the .gha file there. Right-click the file > Properties > make sure there is no "blocked" text. Restart Rhino and Grasshopper. Example files can be found below.
+* Alternatively, launch Grasshopper and choose File > Special Folders > Components folder. Copy the `.gha` file there. Right-click the copied file, choose Properties, and ensure there is no "blocked" text. Restart Rhino and Grasshopper. Example files can be found below.
 
 # Example files
 
