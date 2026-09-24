@@ -37,7 +37,7 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("List of vertex IDs", "I", "List of vertex indices matching the valency criteria", GH_ParamAccess.list);
+            pManager.AddTextParameter("List of vertex IDs", "I", "List of vertex indices matching the valency criteria", GH_ParamAccess.tree);
             pManager.AddPointParameter("List of vertices", "P", "List of vertices matching the valency criteria", GH_ParamAccess.tree);
         }
 
@@ -74,6 +74,12 @@ namespace Sandbox
             // 4. Do something useful.
             var id_tree = new DataTree<int>();
             var vt_tree = new DataTree<Point3d>();
+
+            foreach (GH_Path path in _V.Paths)
+            {
+                id_tree.EnsurePath(path);
+                vt_tree.EnsurePath(path);
+            }
 
             for (int i = 0; i < _VF.Branches.Count; i++)
             {
