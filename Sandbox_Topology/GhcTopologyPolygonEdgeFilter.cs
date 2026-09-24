@@ -73,6 +73,12 @@ namespace Sandbox
             var _idTree = new Grasshopper.DataTree<int>();
             var _edgeTree = new Grasshopper.DataTree<Line>();
 
+            foreach (GH_Path path in _E.Paths)
+            {
+                _idTree.EnsurePath(path);
+                _edgeTree.EnsurePath(path);
+            }
+
             for (int i = 0; i < _EL.Branches.Count; i++)
             {
                 var branch = _EL.Branches[i];
