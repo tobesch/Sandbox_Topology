@@ -37,7 +37,7 @@ namespace Sandbox
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddPointParameter("List of points", "P", "List of points matching the valency criteria", GH_ParamAccess.tree);
-            pManager.AddTextParameter("List of point IDs", "I", "List of point indices matching the valency criteria", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("List of point IDs", "I", "List of point indices matching the valency criteria", GH_ParamAccess.tree);
         }
 
         /// <summary>

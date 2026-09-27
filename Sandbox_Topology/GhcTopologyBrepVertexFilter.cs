@@ -35,7 +35,7 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("List of vertex IDs", "I", "List of vertex indices matching the valency criteria", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("List of vertex IDs", "I", "List of vertex indices matching the valency criteria", GH_ParamAccess.tree);
             pManager.AddPointParameter("List of vertices", "P", "List of vertices matching the valency criteria", GH_ParamAccess.tree);
         }
 

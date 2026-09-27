@@ -35,7 +35,7 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("List of edge IDs", "I", "List of edge indices matching the valency criteria", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("List of edge IDs", "I", "List of edge indices matching the valency criteria", GH_ParamAccess.tree);
             pManager.AddLineParameter("List of edges", "E", "List of edges matching the valency criteria", GH_ParamAccess.tree);
         }
 
