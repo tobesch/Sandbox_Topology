@@ -37,7 +37,7 @@ namespace Sandbox
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddPointParameter("List of points", "P", "List of points matching the valency criteria", GH_ParamAccess.tree);
-            pManager.AddTextParameter("List of point IDs", "I", "List of point indices matching the valency criteria", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("List of point IDs", "I", "List of point indices matching the valency criteria", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -73,6 +73,12 @@ namespace Sandbox
             // 4.1 Filter based on Valency parameter
             var _ptTree = new Grasshopper.DataTree<Point3d>();
             var _idTree = new Grasshopper.DataTree<int>();
+
+            foreach (GH_Path path in _P.Paths)
+            {
+                _ptTree.EnsurePath(path);
+                _idTree.EnsurePath(path);
+            }
 
             for (int i = 0; i < _PP.Branches.Count; i++)
             {

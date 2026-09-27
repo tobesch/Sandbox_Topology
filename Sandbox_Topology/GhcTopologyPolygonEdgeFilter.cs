@@ -35,7 +35,7 @@ namespace Sandbox
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("List of edge IDs", "I", "List of edge indices matching the valency criteria", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("List of edge IDs", "I", "List of edge indices matching the valency criteria", GH_ParamAccess.tree);
             pManager.AddLineParameter("List of edges", "E", "List of edges matching the valency criteria", GH_ParamAccess.tree);
         }
 
@@ -72,6 +72,12 @@ namespace Sandbox
             // 4. Do something useful.
             var _idTree = new Grasshopper.DataTree<int>();
             var _edgeTree = new Grasshopper.DataTree<Line>();
+
+            foreach (GH_Path path in _E.Paths)
+            {
+                _idTree.EnsurePath(path);
+                _edgeTree.EnsurePath(path);
+            }
 
             for (int i = 0; i < _EL.Branches.Count; i++)
             {
