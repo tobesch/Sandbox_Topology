@@ -2,7 +2,7 @@
 
 ## Project scope
 
-Sandbox Topology is a single C# Grasshopper plugin assembly for Rhino 7+. It targets **.NET Framework 4.8** and restores RhinoCommon and Grasshopper 6.35 through `PackageReference`. The project emits a `.gha` Grasshopper plugin; the source assembly itself is not the distributable artifact.
+Sandbox Topology is a single C# Grasshopper plugin assembly for Rhino 7+. It targets **.NET Framework 4.8** and restores RhinoCommon and Grasshopper 7.x through `PackageReference`. The project emits a `.gha` Grasshopper plugin; the source assembly itself is not the distributable artifact.
 
 The repository also contains Grasshopper examples in `Examples/` and package-ready copies in `PackageManager/`. Keep the package manifest version and the assembly version in `Sandbox_Topology/Sandbox_Topology_Info.cs` aligned when making a release.
 
