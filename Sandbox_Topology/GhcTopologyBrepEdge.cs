@@ -69,6 +69,12 @@ namespace Sandbox
 
             for (int i = 0; i < _breps.Branches.Count; i++)
             {
+                if (_breps.Branches[i].Count > 1)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"Input branch {_breps.Paths[i]} contains more than one Brep. Each network branch must contain exactly one Brep.");
+                    return;
+                }
+
                 foreach (GH_Brep _brep in _breps.Branches[i])
                 {
                     // 3.1. Check for non-manifold Breps

@@ -67,6 +67,12 @@ namespace Sandbox
 
             for (int i = 0; i < _meshes.Branches.Count; i++)
             {
+                if (_meshes.Branches[i].Count > 1)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"Input branch {_meshes.Paths[i]} contains more than one mesh. Each network branch must contain exactly one mesh.");
+                    return;
+                }
+
                 foreach (GH_Mesh _mesh in _meshes.Branches[i])
                 {
                     if (!_mesh.Value.IsValid)
