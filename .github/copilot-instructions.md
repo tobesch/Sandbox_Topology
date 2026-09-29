@@ -31,8 +31,11 @@ The repository also contains Grasshopper examples in `Examples/` and package-rea
   - Line and closed-polyline components calculate topology with the custom model in `TopologyShared.cs`, `PointTopological.cs`, and `PLineTopological.cs`.
   - Mesh and Brep components use RhinoCommon topology APIs directly after validating their input geometry.
   - `*Filter` components consume the ordered geometry and adjacency data trees emitted by their matching analysis component; they filter an element when its associated adjacency branch has the requested count.
-- `Sandbox_Topology_Info.cs` supplies Grasshopper assembly metadata. Component icons are embedded through `Resources.resx` and accessed through `Properties.Resources.Resources`.
+- `Sandbox_Topology_Info.cs` supplies Grasshopper assembly metadata. Component icons are embedded from `Sandbox_Topology/Resources/*.png` and accessed through `Properties.Resources.Resources`.
 - `PackageManager/manifest.yml`, `PackageManager/Sandbox_Topology.gha`, and `PackageManager/examples/` form the Rhino package payload. The top-level `Examples/` directory is the development copy of the example definitions.
+- `Documentation/` contains bitmaps used on Food4Rhino in the image carousel and also the plugin icon used in `README.md`.
+- `Icons/` contains the Illustrator source file and source PNGs for component icons. Keep its PNGs manually synchronized with `Sandbox_Topology/Resources/`.
+- The `README.md` file is the primary source for the Food4Rhino description and is also used in the GitHub repository.
 
 ## Component and data-tree conventions
 

@@ -79,7 +79,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Remove="My Project\Resources.resx" />
     <None Remove="Resources\*.png" />
     <EmbeddedResource Include="Resources\*.png" />
   </ItemGroup>
