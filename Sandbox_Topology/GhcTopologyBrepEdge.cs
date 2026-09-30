@@ -93,6 +93,9 @@ namespace Sandbox
 
             for (int i = 0; i < _breps.Branches.Count; i++)
             {
+                int edgeOffset = 0;
+                int faceOffset = 0;
+
                 foreach (GH_Brep _brep in _breps.Branches[i])
                 {
                     var _edges = _brep.Value.Edges;
@@ -102,16 +105,21 @@ namespace Sandbox
                     for (int j = 0; j < _brep.Value.Faces.Count; j++)
                     {
                         var face_edges = _brep.Value.Faces[j].AdjacentEdges();
-                        var fe_path = new GH_Path(i, j);
-                        fe_tree.AddRange(face_edges, fe_path);
+                        var fe_path = new GH_Path(i, faceOffset + j);
+                        foreach (int edge in face_edges)
+                            fe_tree.Add(edgeOffset + edge, fe_path);
                     }
 
                     for (int j = 0; j < _brep.Value.Edges.Count; j++)
                     {
                         var _faces = _brep.Value.Edges[j].AdjacentFaces();
-                        var ef_path = new GH_Path(i, j);
-                        ef_tree.AddRange(_faces, ef_path);
-                    }                    
+                        var ef_path = new GH_Path(i, edgeOffset + j);
+                        foreach (int face in _faces)
+                            ef_tree.Add(faceOffset + face, ef_path);
+                    }
+
+                    edgeOffset += _brep.Value.Edges.Count;
+                    faceOffset += _brep.Value.Faces.Count;
                 }
             }
 
