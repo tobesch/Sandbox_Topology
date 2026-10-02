@@ -63,15 +63,27 @@ namespace Sandbox
 
             // 2. Retrieve input data.
             if (!DA.GetDataTree(0, out _L))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "List of lines input could not be retrieved.");
                 return;
+            }
             if (!DA.GetData(1, ref _T))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Tolerance input could not be retrieved.");
                 return;
+            }
 
             // 3. Abort on invalid inputs.
             if (_L.PathCount < 1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "List of lines must contain at least one branch.");
                 return;
+            }
             if (!(_T > 0d))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Tolerance must be greater than zero.");
                 return;
+            }
 
             // 4. Do something useful.
             var _polyTree = new Grasshopper.DataTree<Polyline>();

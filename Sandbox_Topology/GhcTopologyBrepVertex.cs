@@ -57,28 +57,24 @@ namespace Sandbox
 
             // 2. Retrieve input data.
             if (!DA.GetDataTree(0, out _breps))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Brep input could not be retrieved.");
                 return;
+            }
 
             // 3. Abort on invalid inputs.
             if (!(_breps.PathCount > 0))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Brep input must contain at least one branch.");
                 return;
+            }
 
             for (int i = 0; i < _breps.Branches.Count; i++)
             {
-                foreach (GH_Brep _brep in _breps.Branches[i])
+                for (int j = 0; j < _breps.Branches[i].Count; j++)
                 {
-                    // 3.1. Check for non-manifold Breps
-                    if (!_brep.Value.IsManifold)
-                    {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "One of the input breps is non-manifold!");
+                    if (!TopologyValidation.ValidateBrep(_breps.Branches[i][j].Value, this, $"at branch {_breps.Paths[i]}, item {j}"))
                         return;
-                    }
-                    // 3.2. Check if the topology is valid
-                    if (!_brep.Value.IsValidTopology(out _))
-                    {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "One of the input breps has invalid topology!");
-                        return;
-                    }
                 }
             }
 
@@ -91,11 +87,14 @@ namespace Sandbox
                 var path = new GH_Path(i);
                 foreach (GH_Brep _brep in _breps.Branches[i])
                 {
-                    foreach (BrepLoop _loop in _brep.Value.Loops)
+                    for (int j = 0; j < _brep.Value.Loops.Count; j++)
                     {
                         Polyline _poly;
-                        if (!_loop.To3dCurve().TryGetPolyline(out _poly))
+                        if (!_brep.Value.Loops[j].To3dCurve().TryGetPolyline(out _poly))
+                        {
+                            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"Brep loop at branch {_breps.Paths[i]}, item {j} cannot be converted to a polyline.");
                             return;
+                        }
                         _polyTree.Add(_poly, path);
                     }
                 }

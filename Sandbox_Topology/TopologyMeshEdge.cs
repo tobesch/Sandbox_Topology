@@ -58,26 +58,23 @@ namespace Sandbox
             
             // 2. Retrieve input data.
             if (!DA.GetDataTree(0, out _meshes))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Mesh input could not be retrieved.");
                 return;
+            }
 
             // 3. Abort on invalid inputs.
             if (!(_meshes.PathCount > 0))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Mesh input must contain at least one branch.");
                 return;
+            }
 
             for (int i = 0; i < _meshes.Branches.Count; i++)
             {
-                foreach (GH_Mesh _mesh in _meshes.Branches[i])
+                for (int j = 0; j < _meshes.Branches[i].Count; j++)
                 {
-                    if (!_mesh.Value.IsValid)
-                        return;
-
-                    // 4. Check for non-manifold Mesh
-                    if (!_mesh.Value.IsManifold(true, out bool _isOriented, out bool _hasBoundary))
-                        return;
-
-                    // 5. Check if the topology is valid
-                    string log = string.Empty;
-                    if (!_mesh.Value.IsValidWithLog(out log))
+                    if (!TopologyValidation.ValidateMesh(_meshes.Branches[i][j].Value, this, $"at branch {_meshes.Paths[i]}, item {j}"))
                         return;
                 }
             }
