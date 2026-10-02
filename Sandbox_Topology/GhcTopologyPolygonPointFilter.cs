@@ -54,20 +54,30 @@ namespace Sandbox
 
             // 2. Retrieve input data.
             if (!DA.GetDataTree(0, out _P))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Point list input could not be retrieved.");
                 return;
+            }
             if (!DA.GetDataTree(1, out _PF))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Point-Loop structure input could not be retrieved.");
                 return;
+            }
             if (!DA.GetData(2, ref _V))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Valency filter input could not be retrieved.");
                 return;
+            }
 
             // 3. Abort on invalid inputs.
             // 3.1. get the number of branches in the trees
-            if (!(_P.PathCount > 0))
-                return;
-            if (!(_PF.PathCount > 0))
+            if (!TopologyValidation.ValidateFilterTrees(_P, _PF, this))
                 return;
             if (!(_V > 0))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Valency filter must be greater than zero.");
                 return;
+            }
 
             // 4. Do something useful.
             var _idTree = new Grasshopper.DataTree<int>();
