@@ -90,6 +90,8 @@ namespace Sandbox
             for (int i = 0; i < _meshes.Branches.Count; i++)
             {
                 var e_path = new GH_Path(i);
+                int edgeOffset = 0;
+                int faceOffset = 0;
 
                 foreach (GH_Mesh _mesh in _meshes.Branches[i])
                 {
@@ -99,16 +101,18 @@ namespace Sandbox
                     for (int j = 0; j < _faceList.Count; j++)
                     {
                         var _faces = _faceList.AdjacentFaces(j);
-                        var ff_path = new GH_Path(i, j);
-                        _FFValues.AddRange(_faces, ff_path);
+                        var ff_path = new GH_Path(i, faceOffset + j);
+                        foreach (int face in _faces)
+                            _FFValues.Add(faceOffset + face, ff_path);
                     }
 
                     var _edgeList = _mesh.Value.TopologyEdges;
                     for (int j = 0; j < _edgeList.Count; j++)
                     {
                         var _faces = _edgeList.GetConnectedFaces(j);
-                        var ef_path = new GH_Path(i, j);
-                        _EFValues.AddRange(_faces, ef_path);
+                        var ef_path = new GH_Path(i, edgeOffset + j);
+                        foreach (int face in _faces)
+                            _EFValues.Add(faceOffset + face, ef_path);
                     }
 
                     var _edgeLines = new List<Line>();
@@ -116,6 +120,8 @@ namespace Sandbox
                         _edgeLines.Add(_edgeList.EdgeLine(j));
 
                     _E_tree.AddRange(_edgeLines, e_path);
+                    edgeOffset += _edgeList.Count;
+                    faceOffset += _faceList.Count;
                 }
             }
 

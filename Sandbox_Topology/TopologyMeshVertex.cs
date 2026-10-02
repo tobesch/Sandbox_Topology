@@ -91,6 +91,8 @@ namespace Sandbox
             for (int i = 0; i < _meshes.Branches.Count; i++)
             {
                 var v_path = new GH_Path(i);
+                int vertexOffset = 0;
+                int faceOffset = 0;
 
                 foreach (GH_Mesh _mesh in _meshes.Branches[i])
                 {
@@ -98,23 +100,26 @@ namespace Sandbox
                     for (int j = 0; j < _vertexList.Count; j++)
                     {
                         var _indices = _vertexList.GetConnectedVertices(j);
-                        var vv_path = new GH_Path(i, j);
+                        var vv_path = new GH_Path(i, vertexOffset + j);
                         foreach (int _vertex in _indices)
                         {
                             if (_vertex != j)
-                                _VVValues.Add(_vertex, vv_path);
+                                _VVValues.Add(vertexOffset + _vertex, vv_path);
                         }
                     }
 
                     for (int j = 0; j < _vertexList.Count; j++)
                     {
                         var _faces = _vertexList.GetVertexFaces(j);
-                        var vf_path = new GH_Path(i, j);
-                        _VFValues.AddRange(_faces, vf_path);
+                        var vf_path = new GH_Path(i, vertexOffset + j);
+                        foreach (int face in _faces)
+                            _VFValues.Add(faceOffset + face, vf_path);
                     }
 
                     var _vertices = _vertexList.ToPoint3dArray();
                     _V_tree.AddRange(_vertices, v_path);
+                    vertexOffset += _vertexList.Count;
+                    faceOffset += _mesh.Value.Faces.Count;
                 }
             }
 
