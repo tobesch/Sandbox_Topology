@@ -64,12 +64,13 @@ namespace Sandbox
 
             // 3. Abort on invalid inputs.
             // 3.1. get the number of branches in the trees
-            if (!(_V.PathCount > 0))
-                return;
-            if (!(_VF.PathCount > 0))
+            if (!TopologyValidation.ValidateFilterTrees(_V, _VF, this))
                 return;
             if (!(_Val > 0))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Valency filter must be greater than zero.");
                 return;
+            }
 
             // 4. Do something useful.
             var id_tree = new DataTree<int>();

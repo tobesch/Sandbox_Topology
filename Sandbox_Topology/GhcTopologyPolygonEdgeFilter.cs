@@ -62,12 +62,13 @@ namespace Sandbox
 
             // 3. Abort on invalid inputs.
             // 3.1. get the number of branches in the trees
-            if (!(_E.PathCount > 0))
-                return;
-            if (!(_EL.PathCount > 0))
+            if (!TopologyValidation.ValidateFilterTrees(_E, _EL, this))
                 return;
             if (!(_V > 0))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Valency filter must be greater than zero.");
                 return;
+            }
 
             // 4. Do something useful.
             var _idTree = new Grasshopper.DataTree<int>();

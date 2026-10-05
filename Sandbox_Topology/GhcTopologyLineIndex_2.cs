@@ -69,25 +69,33 @@ namespace Sandbox
 
             // 3. Abort on invalid inputs.
             if (_L.PathCount < 1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "List of lines must contain at least one branch.");
                 return;
+            }
             if (!(_T > 0d))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Tolerance must be greater than zero.");
                 return;
+            }
 
             // 4. Do something useful.
             var _polyTree = new Grasshopper.DataTree<Polyline>();
 
             // 4.1 get inputs
-            int count = 0;
-            foreach (List<GH_Line> _branch in _L.Branches)
+            for (int i = 0; i < _L.Branches.Count; i++)
             {
-                var path = new GH_Path(count);
-                foreach (GH_Line _goo in _branch)
+                var path = new GH_Path(i);
+                for (int j = 0; j < _L.Branches[i].Count; j++)
                 {
+                    GH_Line _goo = _L.Branches[i][j];
+                    if (!TopologyValidation.ValidateLine(_goo, this, $"at branch {_L.Paths[i]}, item {j}"))
+                        return;
+
                     var _line = _goo.Value;
                     var _poly = new Polyline(new Point3d[] { _line.From, _line.To });
                     _polyTree.Add(_poly, path);
                 }
-                count += 1;
             }
 
             var _PValues = new Grasshopper.DataTree<Point3d>();

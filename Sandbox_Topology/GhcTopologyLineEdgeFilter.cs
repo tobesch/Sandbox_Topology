@@ -63,12 +63,15 @@ namespace Sandbox
                 return;
 
             // 3. Abort on invalid inputs.
-            if (_L.Branches.Count < 1)
+            if (!TopologyValidation.ValidateFilterTrees(_L, _PL, this))
                 return;
-            if (_PL.Branches.Count < 1)
+            if (!TopologyValidation.ValidateElementReferences(_PL, _L, this))
                 return;
             if (!(_V > 0))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Valency filter must be greater than zero.");
                 return;
+            }
 
             // 4. Do something useful.
             // 4.1 Filter based on Valency parameter

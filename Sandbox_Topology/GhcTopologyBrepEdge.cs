@@ -65,24 +65,17 @@ namespace Sandbox
 
             // 3. Abort on invalid inputs.
             if (!(_breps.PathCount > 0))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Breps input must contain at least one branch.");
                 return;
+            }
 
             for (int i = 0; i < _breps.Branches.Count; i++)
             {
-                foreach (GH_Brep _brep in _breps.Branches[i])
+                for (int j = 0; j < _breps.Branches[i].Count; j++)
                 {
-                    // 3.1. Check for non-manifold Breps
-                    if (!_brep.Value.IsManifold)
-                    {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "One of the input breps is non-manifold!");
+                    if (!TopologyValidation.ValidateBrep(_breps.Branches[i][j], this, $"at branch {_breps.Paths[i]}, item {j}"))
                         return;
-                    }
-                    // 3.2. Check if the topology is valid
-                    if (!_brep.Value.IsValidTopology(out _))
-                    {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "One of the input breps has invalid topology!");
-                        return;
-                    }
                 }
             }
 
