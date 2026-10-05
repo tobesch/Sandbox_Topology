@@ -85,6 +85,9 @@ namespace Sandbox
             for (int i = 0; i < _meshes.Branches.Count; i++)
             {
                 var v_path = new GH_Path(i);
+                _V_tree.EnsurePath(v_path);
+                _VVValues.EnsurePath(v_path);
+                _VFValues.EnsurePath(v_path);
                 int vertexOffset = 0;
                 int faceOffset = 0;
 

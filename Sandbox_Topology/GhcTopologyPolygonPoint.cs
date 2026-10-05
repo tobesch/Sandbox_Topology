@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Grasshopper.Kernel;
 
 using Grasshopper.Kernel.Data;
@@ -69,31 +70,25 @@ namespace Sandbox
                 return;
             }
 
-            // 4. Do something useful.
-            var _polyTree = new Grasshopper.DataTree<Polyline>();
+            var _PValues = new Grasshopper.DataTree<Point3d>();
+            var _FPValues = new Grasshopper.DataTree<int>();
+            var _PFValues = new Grasshopper.DataTree<int>();
 
-            // 4.1. check inputs
-            for (int i = 0; i < _C.Branches.Count; i ++)
+            for (int i = 0; i < _C.Branches.Count; i++)
             {
-                var path = new GH_Path(i);
+                var mainpath = new GH_Path(i);
+                _PValues.EnsurePath(mainpath);
+                _FPValues.EnsurePath(mainpath);
+                _PFValues.EnsurePath(mainpath);
+
+                var branch = new List<Polyline>();
                 for (int j = 0; j < _C.Branches[i].Count; j++)
                 {
                     Polyline _poly;
                     if (!TopologyValidation.TryGetClosedPolyline(_C.Branches[i][j], this, $"at branch {_C.Paths[i]}, item {j}", out _poly))
                         return;
-                    _polyTree.Add(_poly, path);
+                    branch.Add(_poly);
                 }
-            }
-
-            var _PValues = new Grasshopper.DataTree<Point3d>();
-            var _FPValues = new Grasshopper.DataTree<int>();
-            var _PFValues = new Grasshopper.DataTree<int>();
-
-            for (int i = 0; i < _polyTree.Branches.Count; i++)
-            {
-
-                var branch = _polyTree.Branch(i);
-                var mainpath = new GH_Path(i);
 
                 // 4.2. get topology
                 var _ptList = TopologyShared.GetPointTopo(branch, _T);

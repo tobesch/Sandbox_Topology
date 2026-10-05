@@ -69,31 +69,25 @@ namespace Sandbox
                 return;
             }
 
-            // 4. Do something useful.
-            var _polyTree = new Grasshopper.DataTree<Polyline>();
+            var _EValues = new Grasshopper.DataTree<Line>();
+            var _FEValues = new Grasshopper.DataTree<int>();
+            var _EFValues = new Grasshopper.DataTree<int>();
 
-            // 4.1. check inputs
             for (int i = 0; i < _C.Branches.Count; i++)
             {
-                var path = new GH_Path(i);
+                var mainpath = new GH_Path(i);
+                _EValues.EnsurePath(mainpath);
+                _FEValues.EnsurePath(mainpath);
+                _EFValues.EnsurePath(mainpath);
+
+                var branch = new List<Polyline>();
                 for (int j = 0; j < _C.Branches[i].Count; j++)
                 {
                     Polyline _poly;
                     if (!TopologyValidation.TryGetClosedPolyline(_C.Branches[i][j], this, $"at branch {_C.Paths[i]}, item {j}", out _poly))
                         return;
-                    _polyTree.Add(_poly, path);
+                    branch.Add(_poly);
                 }
-            }
-
-            var _EValues = new Grasshopper.DataTree<Line>();
-            var _FEValues = new Grasshopper.DataTree<int>();
-            var _EFValues = new Grasshopper.DataTree<int>();
-
-            for (int i = 0; i < _polyTree.Branches.Count; i++)
-            {
-
-                var branch = _polyTree.Branch(i);
-                var mainpath = new GH_Path(i);
 
                 // 4.2. get topology
                 var _edgeDict = getEdgeDict(branch, _T);

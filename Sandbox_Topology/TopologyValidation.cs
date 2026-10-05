@@ -100,6 +100,16 @@ namespace Sandbox
             for (int i = 0; i < adjacency.PathCount; i++)
             {
                 GH_Path path = adjacency.Paths[i];
+                if (path.Indices.Length == 1)
+                {
+                    int rootNetwork = path.Indices[0];
+                    if (rootNetwork < 0 || rootNetwork >= elements.Branches.Count || adjacency.Branches[i].Count != 0)
+                    {
+                        component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"Adjacency branch {path} must be an empty {{network}} path or use the {{network; element}} path format.");
+                        return false;
+                    }
+                    continue;
+                }
                 if (path.Indices.Length != 2)
                 {
                     component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"Adjacency branch {path} must use the {{network; element}} path format.");
@@ -123,6 +133,8 @@ namespace Sandbox
             for (int i = 0; i < adjacency.PathCount; i++)
             {
                 GH_Path path = adjacency.Paths[i];
+                if (path.Indices.Length == 1)
+                    continue;
                 int network = path.Indices[0];
                 foreach (GH_Integer reference in adjacency.Branches[i])
                 {
