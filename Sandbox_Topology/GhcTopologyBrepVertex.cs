@@ -75,13 +75,18 @@ namespace Sandbox
                 }
             }
 
-            // 4. Now do something productive
-            var _polyTree = new Grasshopper.DataTree<Polyline>();
+            var _VValues = new Grasshopper.DataTree<Point3d>();
+            var _FVValues = new Grasshopper.DataTree<int>();
+            var _VFValues = new Grasshopper.DataTree<int>();
 
-            // 4.1. check inputs
             for (int i = 0; i < _breps.Branches.Count; i++)
             {
-                var path = new GH_Path(i);
+                var mainpath = new GH_Path(i);
+                _VValues.EnsurePath(mainpath);
+                _FVValues.EnsurePath(mainpath);
+                _VFValues.EnsurePath(mainpath);
+
+                var branch = new List<Polyline>();
                 foreach (GH_Brep _brep in _breps.Branches[i])
                 {
                     for (int j = 0; j < _brep.Value.Loops.Count; j++)
@@ -92,20 +97,9 @@ namespace Sandbox
                             AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"Brep loop at branch {_breps.Paths[i]}, item {j} cannot be converted to a polyline.");
                             return;
                         }
-                        _polyTree.Add(_poly, path);
+                        branch.Add(_poly);
                     }
                 }
-            }
-
-            var _VValues = new Grasshopper.DataTree<Point3d>();
-            var _FVValues = new Grasshopper.DataTree<int>();
-            var _VFValues = new Grasshopper.DataTree<int>();
-
-            for (int i = 0; i < _polyTree.Branches.Count; i++)
-            {
-
-                var branch = _polyTree.Branch(i);
-                var mainpath = new GH_Path(i);
 
                 // 4.2. get topology
                 double _T = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;

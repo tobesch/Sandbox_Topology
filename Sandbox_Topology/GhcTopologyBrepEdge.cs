@@ -86,13 +86,16 @@ namespace Sandbox
 
             for (int i = 0; i < _breps.Branches.Count; i++)
             {
+                var e_path = new GH_Path(i);
+                e_tree.EnsurePath(e_path);
+                fe_tree.EnsurePath(e_path);
+                ef_tree.EnsurePath(e_path);
                 int edgeOffset = 0;
                 int faceOffset = 0;
 
                 foreach (GH_Brep _brep in _breps.Branches[i])
                 {
                     var _edges = _brep.Value.Edges;
-                    var e_path = new GH_Path(i);
                     e_tree.AddRange(_edges, e_path);
 
                     for (int j = 0; j < _brep.Value.Faces.Count; j++)

@@ -79,13 +79,22 @@ namespace Sandbox
                 return;
             }
 
-            // 4. Do something useful.
-            var _polyTree = new Grasshopper.DataTree<Polyline>();
+            var _PValues = new Grasshopper.DataTree<Point3d>();
+            var _LValues = new Grasshopper.DataTree<Line>();
+            var _LPValues = new Grasshopper.DataTree<int>();
+            var _PPValues = new Grasshopper.DataTree<int>();
+            var _PLValues = new Grasshopper.DataTree<int>();
 
-            // 4.1 get inputs
             for (int i = 0; i < _L.Branches.Count; i++)
             {
-                var path = new GH_Path(i);
+                var main_path = new GH_Path(i);
+                _PValues.EnsurePath(main_path);
+                _LValues.EnsurePath(main_path);
+                _LPValues.EnsurePath(main_path);
+                _PPValues.EnsurePath(main_path);
+                _PLValues.EnsurePath(main_path);
+
+                var branch = new List<Polyline>();
                 for (int j = 0; j < _L.Branches[i].Count; j++)
                 {
                     GH_Line _goo = _L.Branches[i][j];
@@ -93,24 +102,8 @@ namespace Sandbox
                         return;
 
                     var _line = _goo.Value;
-                    var _poly = new Polyline(new Point3d[] { _line.From, _line.To });
-                    _polyTree.Add(_poly, path);
+                    branch.Add(new Polyline(new Point3d[] { _line.From, _line.To }));
                 }
-            }
-
-            var _PValues = new Grasshopper.DataTree<Point3d>();
-            var _LValues = new Grasshopper.DataTree<Line>();
-            var _LPValues = new Grasshopper.DataTree<int>();
-            var _PPValues = new Grasshopper.DataTree<int>();
-            var _PLValues = new Grasshopper.DataTree<int>();
-
-            for (int i = 0; i < _polyTree.Branches.Count; i++)
-            {
-
-                var branch = _polyTree.Branch(i);
-                var curr_path = _polyTree.Paths[i]; // the path of the current branch
-                var main_path = new GH_Path(curr_path.Indices[0]);
-                //var main_path = new GH_Path(i);
 
                 // 4.2 get topology
                 var _ptList = TopologyShared.GetPointTopo(branch, _T);
