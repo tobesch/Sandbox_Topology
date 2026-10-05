@@ -88,29 +88,11 @@ namespace Sandbox
         public static bool ValidateFilterTrees<T>(GH_Structure<T> elements, GH_Structure<GH_Integer> adjacency, GH_Component component)
             where T : IGH_Goo
         {
-            if (elements.PathCount == 0)
-            {
-                component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Element list must contain at least one branch.");
-                return false;
-            }
-
-            if (adjacency.PathCount == 0)
-            {
-                component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Adjacency structure must contain at least one branch.");
-                return false;
-            }
-
             for (int i = 0; i < elements.PathCount; i++)
             {
                 if (elements.Paths[i].Indices.Length != 1 || elements.Paths[i].Indices[0] != i)
                 {
                     component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"Element list branch {elements.Paths[i]} must use the {{network}} path format.");
-                    return false;
-                }
-
-                if (elements.Branches[i].Count == 0)
-                {
-                    component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"Element list branch {elements.Paths[i]} must contain at least one element.");
                     return false;
                 }
             }
