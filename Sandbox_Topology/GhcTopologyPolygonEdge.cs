@@ -53,15 +53,9 @@ namespace Sandbox
 
             // 2. Retrieve input data.
             if (!DA.GetDataTree(0, out _C))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "List of polylines input could not be retrieved.");
                 return;
-            }
             if (!DA.GetData(1, ref _T))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Tolerance input could not be retrieved.");
                 return;
-            }
 
             // 3. Abort on invalid inputs.
             if (!(_C.PathCount > 0))

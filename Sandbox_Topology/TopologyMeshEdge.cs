@@ -58,10 +58,7 @@ namespace Sandbox
             
             // 2. Retrieve input data.
             if (!DA.GetDataTree(0, out _meshes))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Mesh input could not be retrieved.");
                 return;
-            }
 
             // 3. Abort on invalid inputs.
             if (!(_meshes.PathCount > 0))

@@ -56,20 +56,11 @@ namespace Sandbox
 
             // 2. Retrieve input data.
             if (!DA.GetDataTree(0, out _L))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "List of lines input could not be retrieved.");
                 return;
-            }
             if (!DA.GetDataTree(1, out _PL))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Point-Line structure input could not be retrieved.");
                 return;
-            }
             if (!DA.GetData(2, ref _V))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Valency filter input could not be retrieved.");
                 return;
-            }
 
             // 3. Abort on invalid inputs.
             if (!TopologyValidation.ValidateFilterTrees(_L, _PL, this))

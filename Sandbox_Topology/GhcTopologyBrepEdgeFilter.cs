@@ -60,20 +60,11 @@ namespace Sandbox
 
             // 2. Retrieve input data.
             if (!DA.GetDataTree(0, out _E))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Edge list input could not be retrieved.");
                 return;
-            }
             if (!DA.GetDataTree(1, out _EF))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Edge-Face structure input could not be retrieved.");
                 return;
-            }
             if (!DA.GetData(2, ref _Val))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Valency filter input could not be retrieved.");
                 return;
-            }
 
             // 3. Abort on invalid inputs.
             // 3.1. get the number of branches in the trees

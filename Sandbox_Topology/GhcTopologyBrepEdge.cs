@@ -61,10 +61,7 @@ namespace Sandbox
 
             // 2. Retrieve input data.
             if (!DA.GetDataTree(0, out _breps))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Breps input could not be retrieved.");
                 return;
-            }
 
             // 3. Abort on invalid inputs.
             if (!(_breps.PathCount > 0))
