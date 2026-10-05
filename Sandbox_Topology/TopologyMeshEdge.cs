@@ -71,7 +71,7 @@ namespace Sandbox
             {
                 for (int j = 0; j < _meshes.Branches[i].Count; j++)
                 {
-                    if (!TopologyValidation.ValidateMesh(_meshes.Branches[i][j].Value, this, $"at branch {_meshes.Paths[i]}, item {j}"))
+                    if (!TopologyValidation.ValidateMesh(_meshes.Branches[i][j], this, $"at branch {_meshes.Paths[i]}, item {j}"))
                         return;
                 }
             }

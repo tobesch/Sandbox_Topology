@@ -74,7 +74,7 @@ namespace Sandbox
             {
                 for (int j = 0; j < _breps.Branches[i].Count; j++)
                 {
-                    if (!TopologyValidation.ValidateBrep(_breps.Branches[i][j].Value, this, $"at branch {_breps.Paths[i]}, item {j}"))
+                    if (!TopologyValidation.ValidateBrep(_breps.Branches[i][j], this, $"at branch {_breps.Paths[i]}, item {j}"))
                         return;
                 }
             }
