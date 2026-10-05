@@ -79,16 +79,8 @@ namespace Sandbox
                 for (int j = 0; j < _C.Branches[i].Count; j++)
                 {
                     Polyline _poly;
-                    if (!_C.Branches[i][j].Value.TryGetPolyline(out _poly))
-                    {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"Input at branch {_C.Paths[i]}, item {j} cannot be converted to a polyline.");
+                    if (!TopologyValidation.TryGetClosedPolyline(_C.Branches[i][j], this, $"at branch {_C.Paths[i]}, item {j}", out _poly))
                         return;
-                    }
-                    if (!_poly.IsClosed || _poly.SegmentCount < 3)
-                    {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"Polyline at branch {_C.Paths[i]}, item {j} must be closed and have at least 3 segments.");
-                        return;
-                    }
                     _polyTree.Add(_poly, path);
                 }
             }
